@@ -278,6 +278,22 @@ const frameIn = [
       { path: 'index', name: `${pre}index`, component: () => import('@/pages/demo/business/index'), meta: { ...meta, title: '示例首页' } },
       { path: 'table/1', name: `${pre}table-1`, component: () => import('@/pages/demo/business/table/1'), meta: { ...meta, title: '表格 1' } }
     ])('demo-business-')
+  },
+
+  // {
+  //    path: '/yljs/ry',
+  //    name: 'yljs-ry',
+  //    component: () =>import('@/pages/yljs/ry')
+  // },
+  {
+    path: '/yljs/ry',
+    name: 'yljs-ry',
+    meta,
+    redirect: { name: 'yljs-ry-index' },
+    component: layoutHeaderAside,
+    children: (pre => [
+      { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/ry'), meta: { ...meta, title: '示例首页' } }
+    ])('yljs-ry-')
   }
 ]
 
