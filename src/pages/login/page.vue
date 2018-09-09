@@ -114,9 +114,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions('d2admin/account', [
-      'login'
-    ]),
+    //...mapActions('d2admin/account', [
+    //  'login'
+    //]),
+
+      ...mapActions('OidcService',['login']),
+
     /**
      * @description 接收选择一个用户快速登录的事件
      * @param {Object} user 用户信息

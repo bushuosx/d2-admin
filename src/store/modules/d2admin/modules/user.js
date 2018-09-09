@@ -37,5 +37,8 @@ export default {
         user: true
       })
     }
+  },
+  getters: {
+    userInfo: s => { return s.info }
   }
 }

@@ -12,6 +12,7 @@ Vue.use(VueRouter)
 
 // 导出路由 在 main.js 里使用
 const router = new VueRouter({
+  mode: 'history',
   routes
 })
 
@@ -24,10 +25,15 @@ router.beforeEach((to, from, next) => {
   store.commit('d2admin/search/set', false)
   // 验证当前路由所有的匹配中是否需要有登录验证的
   if (to.matched.some(r => r.meta.requiresAuth)) {
-    // 这里暂时将cookie里是否存有token作为验证是否登录的条件
-    // 请根据自身业务需要修改
-    const token = util.cookies.get('token')
-    if (token && token !== 'undefined') {
+    /// / 这里暂时将cookie里是否存有token作为验证是否登录的条件
+    /// / 请根据自身业务需要修改
+    // const token = util.cookies.get('token')
+    // if (token && token !== 'undefined') {
+    //  next()
+    // } else {
+
+    const userInfo = store.state.d2admin.user.info
+    if (userInfo && userInfo !== 'undefined') {
       next()
     } else {
       // 将当前预计打开的页面完整地址临时存储 登录后继续跳转
