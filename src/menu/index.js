@@ -14,6 +14,8 @@ import demoBusiness from './modules/demo-business'
 import demoD2Crud from './modules/demo-d2-crud'
 // 第三方网页
 import demoFrame from './modules/demo-frame'
+// 医疗技术管理
+import yljsBusiness from './modules/yljs'
 
 // 菜单 侧边栏
 export const menuAside = [
@@ -24,7 +26,8 @@ export const menuAside = [
   demoPlayground,
   demoBusiness,
   demoD2Crud,
-  demoFrame
+  demoFrame,
+  yljsBusiness
 ]
 
 // 菜单 顶栏
@@ -38,6 +41,7 @@ export const menuHeader = [
     title: '功能',
     icon: 'puzzle-piece',
     children: [
+      yljsBusiness,
       demoD2Crud,
       demoComponents,
       demoElement,

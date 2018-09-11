@@ -1,12 +1,26 @@
-import request from '@/plugin/axios'
-import BaseURL from '../index'
+import axiosService from '@/plugin/axios'
+import parent from '../index'
 
-var myUrl = BaseURL + '/ry'
+const BaseURL = parent.BaseURL + '/ry'
 
 export default {
-  getbyname (name) {
-    return request({
-      url: myUrl + '/getbyname/' + name
+  BaseURL,
+  getbyname (name, pageIndex = 1) {
+    if (!name || name === undefined) {
+      let msg = '用户名不能为空！'
+      this.$message({
+        message: msg,
+        type: 'danger'
+      })
+      this.$log.danger(msg)
+      return
+    }
+    let url = this.BaseURL + '/getbyname/' + name
+    if (pageIndex && pageIndex !== undefined) {
+      url += '/' + pageIndex
+    }
+    return axiosService.request({
+      url
     })
   }
 }
