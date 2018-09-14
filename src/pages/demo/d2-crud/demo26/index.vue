@@ -1,32 +1,24 @@
 <template>
   <d2-container>
     <template slot="header">表单自定义组件</template>
-    <d2-crud
-      ref="d2Crud"
-      :columns="columns"
-      :data="data"
-      :rowHandle="rowHandle"
-      :form-template="formTemplate"
-      @d2-data-change="handleDataChange"
-      @row-edit="handleRowEdit"
-      @dialog-cancel="handleDialogCancel"/>
+    <d2-crud ref="d2Crud" :columns="columns" :data="data" :rowHandle="rowHandle" :form-template="formTemplate" @d2-data-change="handleDataChange" @row-edit="handleRowEdit" @dialog-cancel="handleDialogCancel" />
     <el-card shadow="never" class="d2-mb">
-      <d2-markdown :source="doc"/>
+      <d2-markdown :source="doc" />
     </el-card>
     <el-card shadow="never" class="d2-mb">
       <h4>全局注册写法：</h4>
-      <d2-highlight :code="codeOverall"/>
+      <d2-highlight :code="codeOverall" />
     </el-card>
     <el-card shadow="never" class="d2-mb">
       <h4>局部注册写法：</h4>
-      <d2-highlight :code="codePart"/>
+      <d2-highlight :code="codePart" />
     </el-card>
     <el-card shadow="never" class="d2-mb">
       <h4>自定义组件 MyTag 代码：</h4>
-      <d2-highlight :code="codeComponent"/>
+      <d2-highlight :code="codeComponent" />
     </el-card>
     <template slot="footer">
-      <d2-link-btn title="文档" link="https://d2-projects.github.io/d2-admin-doc/zh/ecosystem-d2-crud/"/>
+      <d2-link-btn title="文档" link="https://d2-projects.github.io/d2-admin-doc/zh/ecosystem-d2-crud/" />
     </template>
   </d2-container>
 </template>
@@ -137,7 +129,7 @@ export default {
     handleDataChange (data) {
       console.log(data)
     },
-    handleRowEdit ({index, row}, done) {
+    handleRowEdit ({ index, row }, done) {
       this.formOptions.saveLoading = true
       setTimeout(() => {
         console.log(index)

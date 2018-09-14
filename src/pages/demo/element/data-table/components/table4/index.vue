@@ -1,21 +1,10 @@
 <template>
-  <el-table
-    :data="tableData2"
-    style="width: 100%"
-    :row-class-name="tableRowClassName">
-    <el-table-column
-      prop="date"
-      label="日期"
-      width="180">
+  <el-table :data="tableData2" style="width: 100%" :row-class-name="tableRowClassName">
+    <el-table-column prop="date" label="日期" width="180">
     </el-table-column>
-    <el-table-column
-      prop="name"
-      label="姓名"
-      width="180">
+    <el-table-column prop="name" label="姓名" width="180">
     </el-table-column>
-    <el-table-column
-      prop="address"
-      label="地址">
+    <el-table-column prop="address" label="地址">
     </el-table-column>
   </el-table>
 </template>
@@ -25,7 +14,7 @@ export default {
   title: '带状态表格',
   index: 4,
   methods: {
-    tableRowClassName ({row, rowIndex}) {
+    tableRowClassName ({ row, rowIndex }) {
       if (rowIndex === 1) {
         return 'warning-row'
       } else if (rowIndex === 3) {

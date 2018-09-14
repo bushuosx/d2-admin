@@ -74,7 +74,7 @@ export default {
         return (this.baidupan && bandupan(quote, this.$baseUrl)) || `<blockquote>${quote}</blockquote>`
       }
       return marked(data, {
-        ...this.highlight ? {highlight: (code) => highlight.highlightAuto(code).value} : {},
+        ...this.highlight ? { highlight: (code) => highlight.highlightAuto(code).value } : {},
         renderer
       })
     }
@@ -83,7 +83,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '~@/assets/style/public.scss';
+@import "~@/assets/style/public.scss";
 .component-markdown {
   .spin-group {
     height: 100px;

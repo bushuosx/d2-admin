@@ -1,24 +1,16 @@
 <template>
   <d2-container>
     <template slot="header">表单组件渲染</template>
-    <d2-crud
-      :columns="columns"
-      :data="data"
-      title="D2 CRUD"
-      :rowHandle="rowHandle"
-      :form-template="formTemplate"
-      :form-options="formOptions"
-      @row-edit="handleRowEdit"
-      @dialog-cancel="handleDialogCancel">
+    <d2-crud :columns="columns" :data="data" title="D2 CRUD" :rowHandle="rowHandle" :form-template="formTemplate" :form-options="formOptions" @row-edit="handleRowEdit" @dialog-cancel="handleDialogCancel">
     </d2-crud>
     <el-card shadow="never" class="d2-mb">
-      <d2-markdown :source="doc"/>
+      <d2-markdown :source="doc" />
     </el-card>
     <el-card shadow="never" class="d2-mb">
-      <d2-highlight :code="code"/>
+      <d2-highlight :code="code" />
     </el-card>
     <template slot="footer">
-      <d2-link-btn title="文档" link="https://d2-projects.github.io/d2-admin-doc/zh/ecosystem-d2-crud/"/>
+      <d2-link-btn title="文档" link="https://d2-projects.github.io/d2-admin-doc/zh/ecosystem-d2-crud/" />
     </template>
   </d2-container>
 </template>
@@ -124,7 +116,7 @@ export default {
     }
   },
   methods: {
-    handleRowEdit ({index, row}, done) {
+    handleRowEdit ({ index, row }, done) {
       this.formOptions.saveLoading = true
       setTimeout(() => {
         console.log(index)
