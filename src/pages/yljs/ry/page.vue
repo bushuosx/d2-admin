@@ -19,13 +19,19 @@
       <el-table-column prop="xm" label="姓名">
       </el-table-column>
     </el-table>
+
+    <fastupload></fastupload>
+
   </d2-container>
 </template>
 
 <script>
 import ryapi from '@/api/yljs/ry'
 
+import fastupload from '@/components/fast-upload/index.vue'
+
 export default {
+  components: { fastupload },
   data () {
     return { rys: null, name: null, selected: '1' }
   },
