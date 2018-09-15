@@ -1,20 +1,20 @@
-// import axiosService from '@/plugin/axios'
+import axiosService from '@/plugin/axios'
 import parent from '../index'
 
 const BaseURL = parent.BaseURL + '/file'
 
 export default {
   BaseURL,
-  post () {
-
+  post ({ filename, filelength, filesha1 }) {
+    axiosService.post(BaseURL, { filename, filelength, filesha1 })
   },
-  put () {
-
+  put ({ writetoken, position, file, length }) {
+    axiosService.put(BaseURL, { writetoken, position, file, length })
   },
-  complite () {
-
+  complite (writetoken) {
+    axiosService.get(BaseURL + '/' + writetoken)
   },
-  get (id) {
-
+  get (fileid) {
+    axiosService.get(BaseURL + '/' + fileid)
   }
 }

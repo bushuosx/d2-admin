@@ -4,17 +4,19 @@
     <input @change="change" ref="selectfiledialog" type="file" hidden/>
     <div class="fileselector" v-for="(item,index) in uploadfiles" v-bind:item="item" v-bind:key="item.key" v-bind:index="index">
       <span>{{item.file.name}} </span>
-      <span v-if="item.reading">
+      <span v-if="item.status === 0">
         <i class="el-icon-loading" />文件准备中……</span>
-      <el-button v-else size="mini" type="primary">
+      <el-button v-else-if="item.status ===1" size="mini" type="primary">
         <i class="el-icon-upload" />上传</el-button>
-      <el-button size="mini" type="danger" @click="uploadfiles.splice(index, 1)">
+      <el-button v-else size="mini" type="danger" @click="uploadfiles.splice(index, 1)">
         <i class="el-icon-close" />移除</el-button>
     </div>
   </div>
 </template>
 
 <script>
+import fileapi from '@/api/yljs/file'
+
 export default {
   name: 'fast-upload',
   data () {
@@ -28,7 +30,8 @@ export default {
       var file = this.$refs.selectfiledialog.files[0]
       if (file && file !== undefined) {
         this.filekey++
-        this.uploadfiles.push({ file, key: this.filekey, sha1: '', reading: true })
+        this.uploadfiles.push({ file, key: this.filekey, sha1: '', status: 0 })
+        // status: 0待hash，1待上传，2上传完毕，other未定义
         this.hashfile(file, this.filekey)
       } else {
         this.$message({ message: '已取消上传', type: 'warning' })
@@ -71,7 +74,8 @@ export default {
       for (let i in this.uploadfiles) {
         if (this.uploadfiles[i].key === key) {
           this.uploadfiles[i].sha1 = sha1
-          this.uploadfiles[i].reading = false
+          this.uploadfiles[i].status = 1
+          break
         }
       }
     },
@@ -88,6 +92,41 @@ export default {
         return blob.webkitSlice(startByte, endByte)
       }
       return null
+    },
+    upload (key) {
+      for (let i in this.uploadfiles) {
+        if (this.uploadfiles[i].key === key) {
+          let uploadfile = this.uploadfiles[i]
+          if (uploadfile.status !== 1) {
+            this.$message({ message: '文件此时不能上传', type: 'danger' })
+          } else {
+            // 第一步，尝试快传
+            let postrst = fileapi.post({ filename: uploadfile.name, filelength: uploadfile.size, filesha1: uploadfile.sha1 })
+            if (postrst && postrst !== undefined) {
+              if (postrst.code === 1) {
+                if (postrst.data.code === 1) {
+                  this.$message({ message: '秒传成功', type: 'success' })
+                  uploadfile.fileid = postrst.data.data
+                  uploadfile.status = 2
+                  return
+                } else if (postrst.data.code === 2) {
+                  // 上传准备就绪，开始传递数据
+                  // let writetoken = postrst.data.data
+                  // let offset = postrst.data.position
+                } else {
+                  this.$message({ message: postrst.msg, type: 'danger' })
+                }
+              } else {
+                this.$logError('文件上传失败：服务器返回错误，' + postrst.msg)
+              }
+            } else {
+              this.$logError('文件上传失败：调用PostApi时发生错误，' + uploadfile.name)
+            }
+
+            break
+          }
+        }
+      }
     }
   }
 }

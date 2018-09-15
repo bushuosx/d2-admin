@@ -19,8 +19,6 @@ export default {
     if (pageIndex && pageIndex !== undefined) {
       url += '/' + pageIndex
     }
-    return axiosService.request({
-      url
-    })
+    return axiosService.get(url)
   }
 }

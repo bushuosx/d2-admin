@@ -1,5 +1,6 @@
 import store from '@/store'
 import util from '@/libs/util'
+import { Message } from 'element-ui'
 
 export default {
   install (Vue, options) {
@@ -16,6 +17,24 @@ export default {
       if (show && process.env.NODE_ENV === 'development') {
         util.log.default(info)
       }
+    }
+
+    Vue.prototype.$logError = function (errmsg, show = true) {
+      // 添加到日志
+      store.dispatch('d2admin/log/add', {
+        type: 'error',
+        errmsg
+      })
+      // 打印到控制台
+      if (show && process.env.NODE_ENV === 'development') {
+        util.log.danger('>>>>>> Error >>>>>>')
+        console.log(errmsg)
+      }
+      // 显示提示
+      Message({
+        message: errmsg,
+        type: 'error'
+      })
     }
   }
 }
