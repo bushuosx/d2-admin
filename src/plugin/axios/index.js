@@ -3,12 +3,12 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 import util from '@/libs/util'
 
-// 创建一个错误
-function errorCreat (msg) {
-  const err = new Error(msg)
-  errorLog(err)
-  throw err
-}
+// // 创建一个错误
+// function errorCreat (msg) {
+//   const err = new Error(msg)
+//   errorLog(err)
+//   throw err
+// }
 
 // 记录和显示错误
 function errorLog (err) {
@@ -59,32 +59,34 @@ service.interceptors.request.use(
 
 // 响应拦截器
 service.interceptors.response.use(
-  response => {
-    // dataAxios 是 axios 返回数据中的 data
-    const dataAxios = response.data
-    // 这个状态码是和后端约定的
-    const { code } = dataAxios
-    // 根据 code 进行判断
-    if (code === undefined) {
-      // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
-      return dataAxios
-    } else {
-      // 有 code 代表这是一个后端接口 可以进行进一步的判断
-      switch (code) {
-        case 1:
-          // [ 示例 ] code === 0 代表没有错误
-          return dataAxios.data
-        case 'xxx':
-          // [ 示例 ] 其它和后台约定的 code
-          errorCreat(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`)
-          break
-        default:
-          // 不是正确的 code
-          errorCreat(`${dataAxios.msg}: ${response.config.url}`)
-          break
-      }
-    }
-  },
+  // response => {
+  //   // dataAxios 是 axios 返回数据中的 data
+  //   const dataAxios = response.data
+  //   // 这个状态码是和后端约定的
+  //   const { code } = dataAxios
+  //   // 根据 code 进行判断
+  //   if (code === undefined) {
+  //     // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
+  //     return dataAxios
+  //   } else {
+  //     // 有 code 代表这是一个后端接口 可以进行进一步的判断
+  //     switch (code) {
+  //       case 1:
+  //         // [ 示例 ] code === 0 代表没有错误
+  //         return dataAxios.data
+  //       case 'xxx':
+  //         // [ 示例 ] 其它和后台约定的 code
+  //         errorCreat(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`)
+  //         break
+  //       default:
+  //         // 不是正确的 code
+  //         errorCreat(`${dataAxios.msg}: ${response.config.url}`)
+  //         break
+  //     }
+  //   }
+  // },
+  response => { return response.data },
+
   error => {
     if (error && error.response) {
       switch (error.response.status) {
