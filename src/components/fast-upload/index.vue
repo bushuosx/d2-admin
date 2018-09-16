@@ -35,8 +35,19 @@ import { Message } from 'element-ui'
 export default {
   name: 'fast-upload',
   data () {
-    // uploadfile.status:0，准备中；1，待上传；2，上传中；3，上传完毕；4上传失败
+    // uploadfile.status:0待hash，1待上传，2正在上传,3上传成功，4上传失败,other未定义
     return { uploadfiles: [], filekey: 0 }
+  },
+  computed: {
+    files: function () {
+      let fileids = []
+      for (let i in this.$uploadfiles) {
+        if (this.uploadfiles[i].status === 3) {
+          fileids.push(this.uploadfiles[i].fileid)
+        }
+      }
+      return fileids
+    }
   },
   methods: {
     add () {
@@ -47,7 +58,6 @@ export default {
       if (file && file !== undefined) {
         this.filekey++
         this.uploadfiles.push({ file, key: this.filekey, sha1: '', status: 0, pos: 0, fileid: null })
-        // status: 0待hash，1待上传，2上传完毕，other未定义
         this.hashfile(file, this.filekey)
       } else {
         this.$message({ message: '已取消上传', type: 'warning' })
@@ -116,8 +126,8 @@ export default {
       for (let i in this.uploadfiles) {
         if (this.uploadfiles[i].key === key) {
           let uploadfile = this.uploadfiles[i]
-          if (uploadfile.status !== 1) {
-            this.$message({ message: '文件此时不能上传', type: 'danger' })
+          if (uploadfile.status !== 1 && uploadfile.status !== 4) {
+            this.$message({ message: '文件此时不能上传', type: 'error' })
             return
           } else {
             let BuildError = (msg) => { return new Error('上传文件失败：' + msg) }
@@ -238,7 +248,7 @@ export default {
             }).catch(
               err => {
                 uploadfile.status = 4// 上传失败
-                Message({ message: err.msg, type: 'danger' })
+                Message({ message: err.message ? err.message : err, type: 'error' })
               }
             )
           }

@@ -20,7 +20,7 @@
       </el-table-column>
     </el-table>
 
-    <fastupload></fastupload>
+    <fast-upload></fast-upload>
 
   </d2-container>
 </template>
@@ -28,10 +28,10 @@
 <script>
 import ryapi from '@/api/yljs/ry'
 
-import fastupload from '@/components/fast-upload/index.vue'
+// import fastupload from '@/components/fast-upload/index.vue'
 
 export default {
-  components: { fastupload },
+  // components: { fastupload },
   data () {
     return { rys: null, name: null, selected: '1' }
   },
