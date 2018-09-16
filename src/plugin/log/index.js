@@ -23,7 +23,7 @@ export default {
       // 添加到日志
       store.dispatch('d2admin/log/add', {
         type: 'error',
-        errmsg
+        err: new Error(errmsg)
       })
       // 打印到控制台
       if (show && process.env.NODE_ENV === 'development') {

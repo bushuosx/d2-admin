@@ -1,15 +1,29 @@
 <template>
-  <div>
-    <el-button size="small" type="primary" @click="add">选取文件</el-button>
+  <div style="margin:4px">
+    <el-button size="small" type="primary" @click="add">点击选择要上传的文件</el-button>
     <input @change="change" ref="selectfiledialog" type="file" hidden/>
     <div class="fileselector" v-for="(item,index) in uploadfiles" v-bind:item="item" v-bind:key="item.key" v-bind:index="index">
-      <span>{{item.file.name}} </span>
+      <div style="min-width:200px;display:inline-block">{{item.file.name}} </div>
       <span v-if="item.status === 0">
-        <i class="el-icon-loading" />文件准备中……</span>
-      <el-button v-else-if="item.status ===1" @click="upload(item.key)" size="mini" type="primary">
-        <i class="el-icon-upload" />上传</el-button>
-      <el-button v-else size="mini" type="danger" @click="uploadfiles.splice(index, 1)">
-        <i class="el-icon-close" />移除</el-button>
+        <i class="el-icon-loading" />
+        <span>文件准备中……</span>
+      </span>
+      <span v-else-if="item.status ===1 || item.status===4" style="margin:auto auto auto 4px">
+        <el-button @click="upload(item.key)" size="mini" type="primary">
+          <i class="el-icon-upload" />上传</el-button>
+      </span>
+      <div v-else-if="item.status === 2" style="width:20%;display:inline-block">
+        <i class="el-icon-loading" />
+        <el-progress :text-inside="true" :stroke-width="18" :percentage="item.pos === undefined ? 0 : Math.round((item.pos / item.file.size)*100)"></el-progress>
+      </div>
+      <span v-else-if="item.status === 3">
+        <el-tooltip content="已上传" placement="top">
+          <i class="el-icon-check" style="color:#67C23A;width:20px" />
+        </el-tooltip>
+      </span>
+      <el-button style="margin:auto auto auto 4px" size="mini" type="danger" @click="uploadfiles.splice(index, 1)" circle>
+        <i class="el-icon-close " />
+      </el-button>
     </div>
   </div>
 </template>
@@ -21,6 +35,7 @@ import { Message } from 'element-ui'
 export default {
   name: 'fast-upload',
   data () {
+    // uploadfile.status:0，准备中；1，待上传；2，上传中；3，上传完毕；4上传失败
     return { uploadfiles: [], filekey: 0 }
   },
   methods: {
@@ -31,7 +46,7 @@ export default {
       var file = this.$refs.selectfiledialog.files[0]
       if (file && file !== undefined) {
         this.filekey++
-        this.uploadfiles.push({ file, key: this.filekey, sha1: '', status: 0 })
+        this.uploadfiles.push({ file, key: this.filekey, sha1: '', status: 0, pos: 0, fileid: null })
         // status: 0待hash，1待上传，2上传完毕，other未定义
         this.hashfile(file, this.filekey)
       } else {
@@ -97,12 +112,7 @@ export default {
       return null
     },
     upload (key) {
-      // let postfile = () => {
-      //   return new Promise((resolve, reject) => {
-
-      //   })
-      // }
-
+      // let LogError = this.$logError
       for (let i in this.uploadfiles) {
         if (this.uploadfiles[i].key === key) {
           let uploadfile = this.uploadfiles[i]
@@ -112,8 +122,8 @@ export default {
           } else {
             let BuildError = (msg) => { return new Error('上传文件失败：' + msg) }
             let blobSlice = this.blobSlice
-
             // 第一步，尝试快传
+            uploadfile.status = 2
             fileapi.post({
               filename: uploadfile.file.name,
               filelength: uploadfile.file.size,
@@ -127,22 +137,20 @@ export default {
                     reject(new Error('PostApi,' + postrst.msg))
                   } else {
                     if (postrst.data.code === 1) {
-                      // 已经上传成功了
-                      uploadfile.fileid = postrst.data.data
-                      uploadfile.status = 2
-                      Message({ message: '秒传成功', type: 'success' })
+                      // 秒传了。。。
+                      resolve({ fileid: postrst.data.data })
                     } else if (postrst.data.code === 2) {
                       resolve({ writetoken: postrst.data.data, position: postrst.data.position })
                     }
                   }
                 }
               })
-            }).then(function ({ writetoken, position }) {
+            }).then(function ({ fileid, writetoken, position }) {
               // 上传准备就绪，开始传递数据
               const putSize = 1024 * 1024
               let file = uploadfile.file
               let start = position
-
+              // 需要递归使用，所以声明
               let putfile = (pos) => {
                 let end = Math.min(file.size, pos + putSize)
                 return new Promise((resolve, reject) => {
@@ -153,7 +161,6 @@ export default {
                     // data: file,
                     size: end - pos
                   }).then(function (putrst) {
-                    // debugger
                     if (!putrst || putrst === undefined) {
                       return reject(BuildError('PutApi,未知错误'))
                     } else {
@@ -162,28 +169,45 @@ export default {
                       } else {
                         if (putrst.data.code !== 3) {
                           return reject(BuildError('PutApi，' + putrst.data.msg))
-                        }
-                        if (putrst.data.position === end && putrst.data.data === writetoken) {
-                          if (putrst.data.position === file.size) {
-                            resolve({ writetoken, pos: putrst.data.position })
-                          } else {
-                            return putfile(putrst.data.position)
-                          }
-                          // 继续上传
                         } else {
-                          // 服务器写入位置与预期不一致，抛弃
-                          return reject(BuildError('文件上传失败：PutApi返回的结果与预期不一致,' + file.name))
+                          // debugger
+                          if (putrst.data.position !== end || putrst.data.data !== writetoken) {
+                            // 服务器写入位置与预期不一致，抛弃
+                            return reject(BuildError('PutApi返回的结果与预期不一致,' + file.name))
+                          } else {
+                            uploadfile.pos = putrst.data.position
+                            if (putrst.data.position === file.size) {
+                              return resolve({ writetoken, pos: putrst.data.position })
+                            } else {
+                              // 继续上传
+                              return putfile(putrst.data.position)
+                                .then(res => { resolve(res) })
+                                .catch(err => { return reject(err) })
+                            }
+                          }
                         }
                       }
                     }
                   })
                 })
               }
-
-              return putfile(start)
-            }).then(function ({ writetoken, pos }) {
-              // debugger
+              if (fileid !== undefined && fileid) {
+                return Promise.resolve({ fileid })
+              } else {
+                return putfile(start)
+              }
+            }).then(function ({ fileid, writetoken, pos }) {
+              // if (fileid !== undefined && fileid) {
+              //   return Promise.resolve({ fileid })
+              // }
               return new Promise((resolve, reject) => {
+                // debugger
+                if (fileid !== undefined && fileid) {
+                  return resolve({ fileid })
+                }
+                if (!writetoken || writetoken === undefined) {
+                  return reject(BuildError('要求完成上传，但writetoken未知'))
+                }
                 if (pos !== uploadfile.file.size) {
                   return reject(BuildError('要求完成上传，但结束点' + pos + '与预期' + uploadfile.file.size + '不一致。' + uploadfile.file.name))
                 } else {
@@ -192,19 +216,31 @@ export default {
                       return reject(BuildError('CompliteApi,未知错误'))
                     } else {
                       if (crst.code === 1) {
-                        uploadfile.fileid = crst.data.id
-                        uploadfile.status = 2
-                        console.log(uploadfile.fileid)
-                        Message({ message: '文件上传成功', type: 'success' })
-                        resolve()
+                        // 文件上传成功
+                        return resolve({ fileid: crst.data.id })
                       } else {
                         return reject(BuildError('文件上传失败：调用CompliteApi时服务器返回错误，' + crst.msg))
                       }
                     }
-                  })
+                  }).catch(err => { return reject(err) })
                 }
               })
-            })
+            }).then(function ({ fileid }) {
+              return new Promise((resolve, reject) => {
+                if (fileid !== undefined && fileid) {
+                  uploadfile.fileid = fileid
+                  uploadfile.status = 3 // 上传已成功
+                  Message({ message: '文件上传成功：' + uploadfile.file.name, type: 'success' })
+                } else {
+                  return reject(BuildError('未预知的错误'))
+                }
+              })
+            }).catch(
+              err => {
+                uploadfile.status = 4// 上传失败
+                Message({ message: err.msg, type: 'danger' })
+              }
+            )
           }
           break // 退出for key
         }
