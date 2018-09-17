@@ -287,7 +287,7 @@ const frameIn = [
     component: layoutHeaderAside,
     children: (pre => [
       { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/index'), meta: { ...meta, title: '人员首页' } },
-      { path: 'ry', name: `${pre}ry`, component: () => import('@/pages/yljs/ry'), meta: { ...meta, title: '人员' } },
+      { path: 'ry', name: `${pre}ry-index`, component: () => import('@/pages/yljs/ry/index'), meta: { ...meta, title: '人员' } },
       { path: 'js', name: `${pre}js`, component: () => import('@/pages/yljs/js'), meta: { ...meta, title: '技术' } },
       { path: 'js/list', name: `${pre}js-list`, component: () => import('@/pages/yljs/js/list'), meta: { ...meta, title: '技术列表' } },
       { path: 'ryjs/list/:ryid', name: `${pre}ryjs-list`, component: () => import('@/pages/yljs/ryjs/list'), props: true, meta: { ...meta, title: '人员技术列表' } }
