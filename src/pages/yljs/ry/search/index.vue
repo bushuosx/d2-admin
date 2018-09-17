@@ -18,25 +18,15 @@
       </el-table-column>
       <el-table-column prop="xm" label="姓名">
       </el-table-column>
-          <el-table-column label="查看技术">
-      <template slot-scope="scope">
-        <el-button
-          size="mini"
-          @click="handleSearchJS(scope.$index)">技术列表</el-button>
-      </template>
-    </el-table-column>
     </el-table>
+
   </d2-container>
 </template>
 
 <script>
 import ryapi from '@/api/yljs/ry'
 
-// import fastupload from '@/components/fast-upload/index.vue'
-
 export default {
-  name: 'yljs-ry-index',
-  // components: { fastupload },
   data () {
     return { rys: null, name: null, selected: '1' }
   },
@@ -46,16 +36,9 @@ export default {
         this.$message({ message: '搜索内容不能为空', type: 'warning' })
         return
       }
-      ryapi.getbyname(this.name).then(t => {
-        if (t.code === 1) {
-          this.rys = t.data
-        } else {
-          this.$message({ message: t.msg, type: 'error' })
-        }
+      ryapi.getbyname(this.name).then(function (t) {
+        this.rys = t
       })
-    },
-    handleSearchJS (index) {
-      this.$router.push({ name: 'yljs-ryjs-list', params: { ryid: this.rys[index].id } })
     }
   }
 }
