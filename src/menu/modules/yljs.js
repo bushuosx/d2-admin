@@ -9,6 +9,14 @@ export default {
       icon: 'table',
       children: [
         { path: `${pre}ry`, title: '人员信息' }
+
+      ]
+    },
+    {
+      title: '人员技术',
+      icon: 'table',
+      children: [
+        { path: `${pre}ryjs/create`, title: '申请技术' }
       ]
     }
   ])('/yljs/')

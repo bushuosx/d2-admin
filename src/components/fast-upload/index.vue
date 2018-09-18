@@ -1,8 +1,13 @@
 <template>
-  <div style="margin:4px">
-    <el-button size="small" type="primary" @click="add">点击选择要上传的文件</el-button>
+  <el-card style="margin:4px 0px">
+    <div slot="header" class="clearfix">
+      <slot name="title" />
+      <div>
+        <el-button size="small" type="primary" @click="add">点击选择要上传的文件</el-button>
+      </div>
+    </div>
     <input @change="change" ref="selectfiledialog" type="file" hidden/>
-    <div class="fileselector" v-for="(item,index) in uploadfiles" v-bind:item="item" v-bind:key="item.key" v-bind:index="index">
+    <div style="margin:2px" class="fileselector" v-for="(item,index) in uploadfiles" v-bind:item="item" v-bind:key="item.key" v-bind:index="index">
       <div style="min-width:200px;display:inline-block">{{item.file.name}} </div>
       <span v-if="item.status === 0">
         <i class="el-icon-loading" />
@@ -25,7 +30,7 @@
         <i class="el-icon-close " />
       </el-button>
     </div>
-  </div>
+  </el-card>
 </template>
 
 <script>
