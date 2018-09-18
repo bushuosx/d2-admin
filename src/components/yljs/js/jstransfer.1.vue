@@ -9,12 +9,12 @@
           </el-input>
         </el-col>
         <el-col style="margin-right:6px" :span="6">
-          <el-input v-model="jsfilter.bm" placeholder="输入技术编码" clearable>
+          <el-input @change="filterjs" v-model="jsfilter.bm" placeholder="输入技术编码" clearable>
             <span slot="prepend">按编码</span>
           </el-input>
         </el-col>
         <el-col style="margin-right:6px" :span="6">
-          <el-input v-model="jsfilter.dj" placeholder="输入技术等级" clearable>
+          <el-input @change="filterjs" v-model="jsfilter.dj" type="Number" placeholder="输入技术等级" clearable>
             <span slot="prepend">按等级</span>
           </el-input>
         </el-col>
@@ -22,10 +22,10 @@
     </div>
     <el-row style="margin-top:10px">
       <el-col :span="12">
-        <div style="text-align: center">尚未申请的技术</div>
-        <div>
-          <div v-for="js in jslist" v-show="!js.hidden" v-bind:key="js.id">
-            <span><input type="checkbox" v-model="js.checked" @change="changeselect(js,$event)"></span>
+        <div style="text-align: center">尚未申请的技术{{jslist.length}}</div>
+        <div style="overflow-y:auto;height:400px;">
+          <div class="jslistrow" v-for="js in jslist" v-show="!js.hidden" v-bind:key="js.id" @click="clickcheck(js)">
+            <span><input type="checkbox" v-model="js.checked"></span>
             <span>{{js.mc}}</span>
           </div>
         </div>
@@ -35,9 +35,7 @@
         <el-table size="mini" border :data="selectedjslist">
           <el-table-column width="40">
             <template slot-scope="scope">
-              <span>
-                <i class="el-icon-close removeselected" @click="removeselected(scope.row,scope.$index)"></i>
-              </span>
+              <el-button class="removeselected" type="danger" size="mini" icon="el-icon-close" @click="removeselected(scope.row)" circle></el-button>
             </template>
           </el-table-column>
           <el-table-column label="技术名称" sortable prop="mc">
@@ -72,47 +70,75 @@ export default {
     }
   },
   methods: {
-    changeselect (key, event) {
-      let checked = event.target.checked
+    clickcheck (item) {
+      if (item.checked !== true) {
+        item.checked = true
+      } else {
+        item.checked = false
+      }
+      let checked = item.checked
       let index = -1
       for (let i = 0; i < this.selectedjslist.length; i++) {
-        if (this.selectedjslist[i].id === key) {
+        if (this.selectedjslist[i].id === item.id) {
           index = i
           break
         }
       }
 
       if (index === -1) {
-        if (checked) this.selectedjslist.push(key)
+        if (checked) this.selectedjslist.push(item)
       } else if (!checked) {
         this.selectedjslist.splice(index, 1)
       }
     },
-    removeselected (r, index) {
+    // changeselect (key, event) {
+    //   let checked = event.target.checked
+    //   let index = -1
+    //   for (let i = 0; i < this.selectedjslist.length; i++) {
+    //     if (this.selectedjslist[i].id === key) {
+    //       index = i
+    //       break
+    //     }
+    //   }
+
+    //   if (index === -1) {
+    //     if (checked) this.selectedjslist.push(key)
+    //   } else if (!checked) {
+    //     this.selectedjslist.splice(index, 1)
+    //   }
+    // },
+    removeselected (r) {
       for (let i = 0; i < this.jslist.length; i++) {
         if (this.jslist[i].id === r.id) {
           this.jslist[i].checked = false
           break
         }
       }
-      this.selectedjslist.splice(index, 1)
+      let removeindex = -1
+      for (let i = 0; i < this.selectedjslist.length; i++) {
+        if (this.selectedjslist[i].id === r.id) {
+          removeindex = i
+          break
+        }
+      }
+      if (removeindex !== -1) this.selectedjslist.splice(removeindex, 1)
     },
     filterjs () {
       // debugger
       let mc = this.jsfilter.mc
-      // let bm = this.jsfilter.bm
-      // let dj = this.jsfilter.dj
+      let bm = this.jsfilter.bm
+      let dj = this.jsfilter.dj
       this.$props.jslist.forEach(js => {
         let show = true
         if (show && mc && mc !== '') {
           show = js.mc.indexOf(mc) !== -1
         }
-        // if (show && bm && bm !== '') {
-        //   show = js.bm.indexOf(bm) !== -1
-        // }
-        // if (show && dj && dj !== '') {
-        //   show = js.dj === dj
-        // }
+        if (show && bm && bm !== '') {
+          show = js.bm.indexOf(bm) !== -1
+        }
+        if (show && dj) {
+          show = js.dj === Number(dj)
+        }
         js.hidden = !show
       })
     }
@@ -121,9 +147,11 @@ export default {
 </script>
 
 <style scope>
-i.removeselected {
-  display: block;
-  font-size: 1em;
-  color: #f56c6c;
+button.el-button.removeselected {
+  padding: 2px;
+}
+div.jslistrow:hover {
+  background-color: darkgray;
+  cursor: pointer;
 }
 </style>

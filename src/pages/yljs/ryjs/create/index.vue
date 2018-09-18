@@ -40,7 +40,7 @@ export default {
     return {
       selectvalue: null,
       selected: '1',
-      jslist: [{ id: '1', mc: '胸腔闭式引流术', dj: 2, decs: 'xqbsyys', disabled: false }, { id: '2', mc: '导尿术', decs: 'dns', dj: 1, disabled: false }],
+      jslist: [{ id: '1', mc: '胸腔闭式引流术', dj: 2, decs: 'xqbsyys', hidden: false }, { id: '2', mc: '导尿术', decs: 'dns', dj: 1, hidden: false }],
       ksjslist: null,
       yyjslist: null
     }
@@ -51,8 +51,8 @@ export default {
     },
     testjs () {
       let count = this.jslist.length
-      for (let i = 0; i < 1000; i++) {
-        this.jslist.push({ id: count + i + 1, mc: '胸腔闭式引流术' + i, dj: 2, decs: 'xqbsyys', disabled: false })
+      for (let i = 0; i < 10000; i++) {
+        this.jslist.push({ id: count + i + 1, mc: '胸腔闭式引流术' + i, dj: 2, decs: 'xqbsyys', hidden: false })
       }
     }
   }

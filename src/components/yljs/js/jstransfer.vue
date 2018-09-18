@@ -26,10 +26,10 @@
         <el-table ref="jslisttable" size="mini" border @selection-change="handleSelectionChange" :data="jslist">
           <el-table-column type="selection" width="40">
           </el-table-column>
-          <el-table-column label="技术名称" sortable prop="mc"></el-table-column>
-          <el-table-column label="编码" sortable prop="bm"></el-table-column>
-          <el-table-column label="等级" sortable prop="dj"></el-table-column>
-          <el-table-column label="专业类别" sortable prop="lb"></el-table-column>
+          <el-table-column label="技术名称" prop="mc"></el-table-column>
+          <el-table-column label="编码" prop="bm"></el-table-column>
+          <el-table-column label="等级" prop="dj"></el-table-column>
+          <el-table-column label="专业类别" prop="lb"></el-table-column>
           <el-table-column label="描述" prop="ms"></el-table-column>
         </el-table>
       </el-col>
@@ -38,10 +38,12 @@
         <el-table size="mini" border :data="selectedjslist">
           <el-table-column width="40">
             <template slot-scope="scope">
-              <span><i class="el-icon-close removeselected"  @click="removeselected(scope.row)"></i></span>
+              <span>
+                <i class="el-icon-close removeselected" @click="removeselected(scope.row)"></i>
+              </span>
             </template>
           </el-table-column>
-          <el-table-column label="技术名称" sortable prop="mc">
+          <el-table-column label="技术名称" prop="mc">
           </el-table-column>
         </el-table>
       </el-col>
@@ -104,8 +106,8 @@ export default {
 
 <style scope>
 i.removeselected {
-    display: block;
-    font-size: 1em;
-    color: #F56C6C;
+  display: block;
+  font-size: 1em;
+  color: #f56c6c;
 }
 </style>
