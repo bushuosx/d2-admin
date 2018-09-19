@@ -7,7 +7,7 @@ export default {
   BaseURL,
   getbyname (name, pageIndex = 1) {
     if (!name || name === undefined) {
-      let msg = '用户名不能为空！'
+      let msg = '技术名称不能为空！'
       Message({
         message: msg,
         type: 'error'

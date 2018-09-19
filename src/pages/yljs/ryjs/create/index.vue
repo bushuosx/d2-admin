@@ -2,36 +2,44 @@
     <d2-container>
         <el-card>
             <div slot="header">
+                <h2>申请技术授权</h2>
+            </div>
+            <div>使用相同支撑材料的授权申请可以批量进行</div>
+        </el-card>
+        <el-card style="margin-top:10px">
+            <div slot="header">
                 <h2>步骤 1：选择要申请的技术</h2>
             </div>
             <div style="width:50%;">
-                <el-input v-model="selectvalue" placeholder="请输入要搜索的内容" class="input-with-select">
+                <el-input v-model="selectvalue" placeholder="请输入要查询的技术名称" class="input-with-select">
                     <el-select v-model="selected" slot="prepend" placeholder="请选择">
-                        <el-option label="加载全院技术" value="1"></el-option>
-                        <el-option label="加载科室技术" value="2"></el-option>
+                        <el-option label="在全院技术中查询" value="1"></el-option>
+                        <el-option label="在科室技术中查询" value="2"></el-option>
                     </el-select>
-                    <el-button @click="getjslist" slot="append" icon="el-icon-search" type="primary">查询</el-button>
+                    <el-button @click="getjslist" slot="append" icon="el-icon-search" type="primary">开始加载</el-button>
                 </el-input>
             </div>
 
-            <jstransfer v-bind:jslist="jslist"></jstransfer>
+            <jstransfer ref="jsselector" v-bind:jslist="jslist"></jstransfer>
 
-            <el-button @click="testjs">性能测试</el-button>
+            <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button>
         </el-card>
-        <fast-upload>
-            <h2 slot="title">步骤 2：选择申请上述技术授权的支撑文件</h2>
+        <fast-upload ref="fileselector">
+            <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料</h2>
         </fast-upload>
         <el-card>
             <div slot="header">
                 <h2>步骤 3：提交申请，并等待审核</h2>
             </div>
-            <el-button type="primary">提交</el-button>
+            <el-button type="primary" @click="applyAll">提交</el-button>
         </el-card>
     </d2-container>
 </template>
 
 <script>
 import jstransfer from '@/components/yljs/js/jstransfer.1.vue'
+import ryjsapi from '@/api/yljs/ryjs'
+import jsapi from '@/api/yljs/js'
 
 export default {
   name: 'yljs-ryjs-create',
@@ -39,15 +47,54 @@ export default {
   data () {
     return {
       selectvalue: null,
-      selected: '1',
-      jslist: [{ id: '1', mc: '胸腔闭式引流术', dj: 2, decs: 'xqbsyys', hidden: false }, { id: '2', mc: '导尿术', decs: 'dns', dj: 1, hidden: false }],
+      selected: '2',
+      //   jslist: [{ id: '1', mc: '胸腔闭式引流术', dj: 2, decs: 'xqbsyys', hidden: false }, { id: '2', mc: '导尿术', decs: 'dns', dj: 1, hidden: false }],
+      jslist: [],
       ksjslist: null,
       yyjslist: null
     }
   },
   methods: {
+    applyAll () {
+      let jsids = this.$refs.jsselector.jsidlist
+      if (!jsids || jsids === undefined || jsids.length === 0) {
+        this.$msgbox({ message: '请先选择要申请授权的技术', title: '未选择授权技术', type: 'info' })
+        return
+      }
+      let fileids = this.$refs.fileselector.fileidlist
+      if (!fileids || fileids === undefined || fileids.length === 0) {
+        this.$msgbox({ message: '请上传申请所需的支撑材料', title: '未选择支撑材料', type: 'info' })
+        return
+      }
+      let log = this.$logError
+      let router = this.$router
+      let message = this.$message
+      ryjsapi.createryjs(jsids, fileids, this).then(function (res) {
+        if (res.code === 1) {
+          router.push({ name: 'yljr-ry-index' })
+        } else {
+          message({ message: res.msg, type: 'error' })
+        }
+      }).catch(function (err) {
+        log(!err.message ? err : err.message)
+      })
+    },
     getjslist () {
-
+      // 从服务器加载
+      let msg = this.$message
+      if (!this.selectvalue || setInterval === undefined) {
+        msg({ message: '请输入查询条件', type: 'error' })
+      }
+      let data = this.$data
+      jsapi.getbyname(this.selectvalue).then(function (res) {
+        if (res.code === 1) {
+          data.jslist = res.data
+        } else {
+          msg({ message: res.msg, type: 'error' })
+        }
+      }).catch(function (err) {
+        msg({ message: err, type: 'error' })
+      })
     },
     testjs () {
       let count = this.jslist.length
@@ -63,7 +110,7 @@ export default {
 </script>
 
 <style>
-div.js-transfer div.el-transfer-panel {
-  width: 300px;
+.el-select .el-input {
+  width: 180px;
 }
 </style>

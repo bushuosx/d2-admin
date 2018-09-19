@@ -44,9 +44,9 @@ export default {
     return { uploadfiles: [], filekey: 0 }
   },
   computed: {
-    files: function () {
+    fileidlist: function () {
       let fileids = []
-      for (let i in this.$uploadfiles) {
+      for (let i in this.uploadfiles) {
         if (this.uploadfiles[i].status === 3) {
           fileids.push(this.uploadfiles[i].fileid)
         }
@@ -161,6 +161,10 @@ export default {
                 }
               })
             }).then(function ({ fileid, writetoken, position }) {
+              if (fileid !== undefined && fileid) {
+                return Promise.resolve({ fileid })
+              }
+
               // 上传准备就绪，开始传递数据
               const putSize = 1024 * 1024
               let file = uploadfile.file
@@ -206,11 +210,8 @@ export default {
                   })
                 })
               }
-              if (fileid !== undefined && fileid) {
-                return Promise.resolve({ fileid })
-              } else {
-                return putfile(start)
-              }
+
+              return putfile(start)
             }).then(function ({ fileid, writetoken, pos }) {
               // if (fileid !== undefined && fileid) {
               //   return Promise.resolve({ fileid })

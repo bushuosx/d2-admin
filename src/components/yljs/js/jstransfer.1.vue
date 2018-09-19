@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h4>技术选择器</h4>
-    <div style="margin-top:10px">
+  <div style="margin-top:10px">
+    <strong>筛选器</strong>
+    <div>
       <el-row style="margin-top:6px">
         <el-col style="margin-right:6px" :span="6">
           <el-input @change="filterjs" v-model="jsfilter.mc" placeholder="输入技术名称" clearable>
@@ -29,9 +29,9 @@
             <span>{{js.mc}}</span>
           </div>
         </div> -->
-        <div style="overflow-y:auto;height:600px;">
+        <div style="overflow:auto;height:600px;">
           <table class="jslisttable">
-            <caption>尚未申请的技术 {{jslist.length}}项</caption>
+            <caption>尚未申请的技术 <strong>{{jslist.length}}</strong>项</caption>
             <thead>
               <tr>
                 <th></th>
@@ -56,9 +56,9 @@
         </div>
       </el-col>
       <el-col :span="6" style="margin-left:16px">
-        <div style="text-align: center">准备申请的技术 {{selectedjslist.length}}项</div>
-        <el-table size="mini" border :data="selectedjslist">
-          <el-table-column>
+        <div style="text-align: center;">准备申请的技术 <strong>{{selectedjslist.length}}</strong>项</div>
+        <el-table class="selectedtable" size="mini" border :data="selectedjslist">
+          <el-table-column width="40">
             <template slot-scope="scope">
               <el-button class="removeselected" type="danger" size="mini" icon="el-icon-close" @click="removeselected(scope.row)" circle></el-button>
             </template>
@@ -77,7 +77,7 @@ export default {
     jslist: Array
   },
   computed: {
-    jsidlist: () => {
+    jsidlist: function () {
       let rst = []
       this.selectedjslist.forEach(
         res => {
@@ -86,6 +86,7 @@ export default {
           }
         }
       )
+      return rst
     }
   },
   data () {
@@ -171,9 +172,14 @@ export default {
 }
 </script>
 
-<style scope>
+<style>
 button.el-button.removeselected {
   padding: 2px;
+  margin: 0px;
+}
+
+div.el-table.selectedtable div.el-table__header-wrapper th{
+  color: #409EFF
 }
 
 table.jslisttable tr:hover {
