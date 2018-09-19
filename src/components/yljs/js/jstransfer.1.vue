@@ -22,18 +22,43 @@
     </div>
     <el-row style="margin-top:10px">
       <el-col :span="12">
-        <div style="text-align: center">尚未申请的技术{{jslist.length}}</div>
+        <!-- <div style="text-align: center">尚未申请的技术{{jslist.length}}</div>
         <div style="overflow-y:auto;height:400px;">
           <div class="jslistrow" v-for="js in jslist" v-show="!js.hidden" v-bind:key="js.id" @click="clickcheck(js)">
             <span><input type="checkbox" v-model="js.checked"></span>
             <span>{{js.mc}}</span>
           </div>
+        </div> -->
+        <div style="overflow-y:auto;height:600px;">
+          <table class="jslisttable">
+            <caption>尚未申请的技术 {{jslist.length}}项</caption>
+            <thead>
+              <tr>
+                <th></th>
+                <th>技术名称</th>
+                <th>等级</th>
+                <th>编码</th>
+                <th>专业</th>
+                <th>说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="js in jslist" v-bind:key="js.id" v-show="!js.hidden" @click="clickcheck(js)" class="jslistrow">
+                <td><input type="checkbox" v-model="js.checked"></td>
+                <td>{{js.mc}}</td>
+                <td>{{js.dj}}</td>
+                <td>{{js.bm}}</td>
+                <td>{{js.zylb}}</td>
+                <td>{{js.sm}}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </el-col>
       <el-col :span="6" style="margin-left:16px">
-        <div style="text-align: center">准备申请的技术</div>
+        <div style="text-align: center">准备申请的技术 {{selectedjslist.length}}项</div>
         <el-table size="mini" border :data="selectedjslist">
-          <el-table-column width="40">
+          <el-table-column>
             <template slot-scope="scope">
               <el-button class="removeselected" type="danger" size="mini" icon="el-icon-close" @click="removeselected(scope.row)" circle></el-button>
             </template>
@@ -150,8 +175,31 @@ export default {
 button.el-button.removeselected {
   padding: 2px;
 }
-div.jslistrow:hover {
-  background-color: darkgray;
+
+table.jslisttable tr:hover {
+  background-color: #EAF2D3;
   cursor: pointer;
+}
+
+table.jslisttable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.jslisttable td,
+table.jslisttable th {
+  font-size: 1em;
+  border: 1px solid #98bf21;
+  padding: 3px 7px 2px 7px;
+}
+
+table.jslisttable th {
+  font-size: 1.1em;
+  text-align: left;
+  padding-top: 5px;
+  padding-bottom: 4px;
+  background-color: #a7c942;
+  color: #ffffff;
 }
 </style>

@@ -51,8 +51,11 @@ export default {
     },
     testjs () {
       let count = this.jslist.length
+      let j = 0
       for (let i = 0; i < 10000; i++) {
-        this.jslist.push({ id: count + i + 1, mc: '胸腔闭式引流术' + i, dj: 2, decs: 'xqbsyys', hidden: false })
+        j++
+        this.jslist.push({ id: count + i + 1, mc: '胸腔闭式引流术' + i, dj: j, decs: 'xqbsyys', hidden: false })
+        if (j === 4) j = 0
       }
     }
   }
