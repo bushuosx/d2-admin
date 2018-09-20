@@ -32,6 +32,9 @@
           </el-form>
         </el-card>
       </div>
+      <div>
+        <el-button type="error" @click="logincallbackaa">logincallback</el-button>
+      </div>
       <!-- 快速登录按钮 -->
       <el-button type="info" class="button-help" @click="dialogVisible = true">
         快速选择用户（测试功能）
@@ -114,11 +117,11 @@ export default {
     }
   },
   methods: {
-    //...mapActions('d2admin/account', [
-    //  'login'
-    //]),
+    ...mapActions('d2admin/account', [
+     'login','logincallback'
+    ]),
 
-      ...mapActions('OidcService',['login']),
+    // ...mapActions('OidcService',['login']),
 
     /**
      * @description 接收选择一个用户快速登录的事件
@@ -149,6 +152,10 @@ export default {
           this.$message.error('表单校验失败')
         }
       })
+    },
+    logincallbackaa()
+    {
+      this.logincallback({vm:this})
     }
   }
 }
