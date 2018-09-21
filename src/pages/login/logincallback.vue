@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>已完成登录</h2>
+    <h2>正在完成登录……</h2>
   </div>
 </template>
 
@@ -13,10 +13,7 @@ export default {
   methods: {
     ...mapActions('d2admin/account', [
       'logincallback'
-    ]),
-    getToken () { return this.$route.params.sid },
-    getSub () { return this.$route.params.sub },
-    getName () { return this.$route.params.name }
+    ])
   }
 }
 </script>

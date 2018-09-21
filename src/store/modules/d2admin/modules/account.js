@@ -1,64 +1,13 @@
 import util from '@/libs/util.js'
-import { AccountLogin } from '@/api/sys/login'
 import Cookies from 'js-cookie'
 export default {
   namespaced: true,
   actions: {
-    /**
-     * @description 登录
-     * @param {Object} param context
-     * @param {Object} param vm {Object} vue 实例
-     * @param {Object} param username {String} 用户账号
-     * @param {Object} param password {String} 密码
-     * @param {Object} param route {Object} 登录成功后定向的路由对象
-     */
-    login ({
-      commit
-    }, {
-      vm,
-      username,
-      password,
-      route = {
-        name: 'index'
-      }
-    }) {
-      debugger
-      // 开始请求登录接口
-      AccountLogin({
-        username,
-        password
-      })
-        .then(res => {
-          // 设置 cookie 一定要存 uuid 和 token 两个 cookie
-          // 整个系统依赖这两个数据进行校验和存储
-          // uuid 是用户身份唯一标识 用户注册的时候确定 并且不可改变 不可重复
-          // token 代表用户当前登录状态 建议在网络请求中携带 token
-          // 如有必要 token 需要定时更新，默认保存一天
-          util.cookies.set('uuid', res.uuid)
-          util.cookies.set('token', res.token)
-          // 设置 vuex 用户信息
-          commit('d2admin/user/set', {
-            name: res.name
-          }, { root: true })
-          // 用户登录后从持久化数据加载一系列的设置
-          commit('load')
-          // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址
-          const path = util.cookies.get('redirect')
-          // 根据是否存有重定向页面判断如何重定向
-          vm.$router.replace(path ? { path } : route)
-          // 删除 cookie 中保存的重定向页面
-          util.cookies.remove('redirect')
-        })
-        .catch(err => {
-          console.group('登录结果')
-          console.log('err: ', err)
-          console.groupEnd()
-        })
-    },
     logincallback ({
       commit
     }, {
       vm,
+      debug = false,
       route = {
         name: 'index'
       } }) {
@@ -66,15 +15,22 @@ export default {
       debugger
 
       // 查看Cookie，是否已完成登录
-      let token = Cookies.get('sid')
+      let token = Cookies.get('spasid')
+      let uuid = Cookies.get('spasub')
+      let name = Cookies.get('spaname')
+
+      if (debug === true) {
+        token = 'guesttoken'
+        uuid = 'guest000'
+        name = 'guest'
+      }
+
       if (!token || token === '') {
         return
       }
-      let uuid = Cookies.get('sub')
       if (!uuid || uuid === '') {
         return
       }
-      let name = Cookies.get('name')
       if (!name || name === '') {
         return
       }
@@ -93,39 +49,6 @@ export default {
       vm.$router.replace(path ? { path } : route)
       // 删除 cookie 中保存的重定向页面
       util.cookies.remove('redirect')
-      // // 查看Cookie，是否已完成登录
-      // let accessToken = util.cookies.get('accessToken')
-      // if (!accessToken || accessToken === '') {
-      //   // 登录失败
-
-      // } else {
-      //   // 登录成功
-      //   let uuid = util.cookies.get('sid')
-      //   if (!uuid || uuid === '') {
-      //     // error,与预期不一致
-      //     return
-      //   }
-      //   let name = util.cookies.get('name')
-      //   if (!name || name === '') {
-      //     // error,与预期不一致
-      //     return
-      //   }
-
-      //   util.cookies.set('uuid', uuid)
-      //   util.cookies.set('token', accessToken)
-      //   // 设置 vuex 用户信息
-      //   commit('d2admin/user/set', {
-      //     name: name
-      //   }, { root: true })
-      //   // 用户登录后从持久化数据加载一系列的设置
-      //   commit('load')
-      //   // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址
-      //   const path = util.cookies.get('redirect')
-      //   // 根据是否存有重定向页面判断如何重定向
-      //   vm.$router.replace(path ? { path } : route)
-      //   // 删除 cookie 中保存的重定向页面
-      //   util.cookies.remove('redirect')
-      // }
     },
     /**
      * @description 注销用户并返回登录页面
