@@ -312,8 +312,8 @@ const frameOut = [
     component: () => import('@/pages/oidc/callback')
   },
   {
-    path: '/logincallback',
-    name: 'logincallback',
+    path: '/yljs/logincallback',
+    name: 'yljs-logincallback',
     component: () => import('@/pages/login/logincallback.vue')
   }
 ]
