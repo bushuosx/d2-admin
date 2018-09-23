@@ -27,7 +27,8 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some(r => r.meta.requiresAuth)) {
     // 这里暂时将cookie里是否存有token作为验证是否登录的条件
     // 请根据自身业务需要修改
-    const token = util.cookies.get('token')
+    // const token = util.cookies.get('token')
+    const token = util.cookies.get('uuid')
     if (token && token !== 'undefined') {
       next()
     } else {
@@ -43,7 +44,7 @@ router.beforeEach((to, from, next) => {
       // next({
       //   name: 'login'
       // })
-      window.location.href = '/account/login'
+      window.location.href = '/account/login/yljs'
     }
   } else {
     // 不需要身份校验 直接通过

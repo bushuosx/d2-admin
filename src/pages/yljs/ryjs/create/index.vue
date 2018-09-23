@@ -1,39 +1,39 @@
 <template>
-    <d2-container>
-        <el-card>
-            <div slot="header">
-                <h2>申请技术授权</h2>
-            </div>
-            <div>使用相同支撑材料的授权申请可以批量进行</div>
-        </el-card>
-        <el-card style="margin-top:10px">
-            <div slot="header">
-                <h2>步骤 1：选择要申请的技术</h2>
-            </div>
-            <div style="width:50%;">
-                <el-input v-model="selectvalue" placeholder="请输入要查询的技术名称" class="input-with-select">
-                    <el-select v-model="selected" slot="prepend" placeholder="请选择">
-                        <el-option label="在全院技术中查询" value="1"></el-option>
-                        <el-option label="在科室技术中查询" value="2"></el-option>
-                    </el-select>
-                    <el-button @click="getjslist" slot="append" icon="el-icon-search" type="primary">开始加载</el-button>
-                </el-input>
-            </div>
+  <d2-container>
+    <el-card>
+      <div slot="header">
+        <h2>申请技术授权</h2>
+      </div>
+      <div>使用相同支撑材料的授权申请可以批量进行</div>
+    </el-card>
+    <el-card style="margin-top:10px">
+      <div slot="header">
+        <h2>步骤 1：选择要申请的技术</h2>
+      </div>
+      <div style="width:50%;">
+        <el-input v-model="selectvalue" placeholder="请输入要查询的技术名称" class="input-with-select">
+          <el-select v-model="selected" slot="prepend" placeholder="请选择">
+            <el-option label="在全院技术中查询" value="1"></el-option>
+            <el-option label="在科室技术中查询" value="2"></el-option>
+          </el-select>
+          <el-button @click="getjslist" slot="append" icon="el-icon-search">开始加载</el-button>
+        </el-input>
+      </div>
 
-            <jstransfer ref="jsselector" v-bind:jslist="jslist"></jstransfer>
+      <jstransfer ref="jsselector" v-bind:jslist="jslist"></jstransfer>
 
-            <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button>
-        </el-card>
-        <fast-upload ref="fileselector">
-            <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料</h2>
-        </fast-upload>
-        <el-card>
-            <div slot="header">
-                <h2>步骤 3：提交申请，并等待审核</h2>
-            </div>
-            <el-button type="primary" @click="applyAll">提交</el-button>
-        </el-card>
-    </d2-container>
+      <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button>
+    </el-card>
+    <fast-upload ref="fileselector">
+      <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料</h2>
+    </fast-upload>
+    <el-card>
+      <div slot="header">
+        <h2>步骤 3：提交申请，并等待审核</h2>
+      </div>
+      <el-button type="primary" @click="applyAll">提交</el-button>
+    </el-card>
+  </d2-container>
 </template>
 
 <script>
@@ -69,19 +69,20 @@ export default {
       let log = this.$logError
       let router = this.$router
       let message = this.$message
-      ryjsapi.createryjs(jsids, fileids, this).then(function (res) {
+      ryjsapi.createryjs(jsids, fileids).then(function (res) {
         if (res.code === 1) {
           router.push({ name: 'yljr-ry-index' })
         } else {
-          message({ message: res.msg, type: 'error' })
+          log(res.msg)
         }
       }).catch(function (err) {
-        log(!err.message ? err : err.message)
+        message(!err.message ? err : err.message)
       })
     },
     getjslist () {
       // 从服务器加载
       let msg = this.$message
+      let log = this.$logError
       if (!this.selectvalue || setInterval === undefined) {
         msg({ message: '请输入查询条件', type: 'error' })
       }
@@ -90,10 +91,8 @@ export default {
         if (res.code === 1) {
           data.jslist = res.data
         } else {
-          msg({ message: res.msg, type: 'error' })
+          log(res.msg)
         }
-      }).catch(function (err) {
-        msg({ message: err, type: 'error' })
       })
     },
     testjs () {
@@ -111,6 +110,6 @@ export default {
 
 <style>
 .el-select .el-input {
-  width: 180px;
+  width: 160px;
 }
 </style>

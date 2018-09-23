@@ -1,4 +1,3 @@
-import axiosService from '@/plugin/axios'
 import parent from '../index'
 import { Message } from 'element-ui'
 const BaseURL = parent.BaseURL + '/ryjs'
@@ -18,7 +17,7 @@ export default {
     if (pageIndex && pageIndex !== undefined) {
       url += '/' + pageIndex
     }
-    return axiosService.get(url)
+    return parent.axios.get(url)
   },
   getbyryandjs (ryid, jsname, pageIndex = 1) {
     if (!ryid || ryid === undefined) {
@@ -41,31 +40,17 @@ export default {
     if (pageIndex && pageIndex !== undefined) {
       url += '/' + pageIndex
     }
-    return axiosService.get(url)
+    return parent.axios.get(url)
   },
-  createryjs (jsids, fileids, vm) {
+  createryjs (jsids, fileids) {
     if (!jsids || jsids === undefined || jsids.length === 0) {
       return Promise.reject(new Error('技术id不能为空'))
     }
     if (!fileids || fileids === undefined || fileids.length === 0) {
       return Promise.reject(new Error('支撑材料不能为空'))
     }
-    // let logError = vm.$logError
-    // vm.$store.dispatch('d2admin/user/load').then(
-    //   function (res) {
-    //     console.log(res)
-    //     let url = this.BaseURL + '/postlist'
-    //     return axiosService.post(url, { jsidlist: jsids, fileidlist: fileids, userid: res.name })
-    //   },
-    //   function (err) {
-    //     return Promise.reject(err)
-    //   }
-    // )
-
-    let user = vm.$store.state.d2admin.user.info
-    console.log(user)
 
     let url = this.BaseURL + '/postlist'
-    return axiosService.post(url, { jsidlist: jsids, fileidlist: fileids, userid: user.name })
+    return parent.axios.post(url, { jsidlist: jsids, fileidlist: fileids, ryid: parent.getUserId() })
   }
 }

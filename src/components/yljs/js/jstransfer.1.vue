@@ -3,17 +3,17 @@
     <strong>筛选器</strong>
     <div>
       <el-row style="margin-top:6px">
-        <el-col style="margin-right:6px" :span="6">
+        <el-col :span="6">
           <el-input @change="filterjs" v-model="jsfilter.mc" placeholder="输入技术名称" clearable>
             <span slot="prepend">按名称</span>
           </el-input>
         </el-col>
-        <el-col style="margin-right:6px" :span="6">
+        <el-col style="margin-left:6px" :span="6">
           <el-input @change="filterjs" v-model="jsfilter.bm" placeholder="输入技术编码" clearable>
             <span slot="prepend">按编码</span>
           </el-input>
         </el-col>
-        <el-col style="margin-right:6px" :span="6">
+        <el-col style="margin-left:6px" :span="6">
           <el-input @change="filterjs" v-model="jsfilter.dj" type="Number" placeholder="输入技术等级" clearable>
             <span slot="prepend">按等级</span>
           </el-input>
@@ -31,7 +31,8 @@
         </div> -->
         <div style="overflow:auto;height:600px;">
           <table class="jslisttable">
-            <caption>尚未申请的技术 <strong>{{jslist.length}}</strong>项</caption>
+            <caption>尚未申请的技术
+              <strong>{{jslist.length}}</strong>项</caption>
             <thead>
               <tr>
                 <th></th>
@@ -56,7 +57,8 @@
         </div>
       </el-col>
       <el-col :span="6" style="margin-left:16px">
-        <div style="text-align: center;">准备申请的技术 <strong>{{selectedjslist.length}}</strong>项</div>
+        <div style="text-align: center;">准备申请的技术
+          <strong>{{selectedjslist.length}}</strong>项</div>
         <el-table class="selectedtable" size="mini" border :data="selectedjslist">
           <el-table-column width="40">
             <template slot-scope="scope">
@@ -178,12 +180,12 @@ button.el-button.removeselected {
   margin: 0px;
 }
 
-div.el-table.selectedtable div.el-table__header-wrapper th{
-  color: #409EFF
+div.el-table.selectedtable div.el-table__header-wrapper th {
+  color: #409eff;
 }
 
 table.jslisttable tr:hover {
-  background-color: #EAF2D3;
+  background-color: #eaf2d3;
   cursor: pointer;
 }
 

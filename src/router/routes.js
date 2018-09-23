@@ -289,7 +289,7 @@ const frameIn = [
       { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/index'), meta: { ...meta, title: '人员首页' } },
       { path: 'ry', name: `${pre}ry-index`, component: () => import('@/pages/yljs/ry/index'), meta: { ...meta, title: '人员' } },
       { path: 'js', name: `${pre}js`, component: () => import('@/pages/yljs/js'), meta: { ...meta, title: '技术' } },
-      { path: 'js/list', name: `${pre}js-list`, component: () => import('@/pages/yljs/js/list'), meta: { ...meta, title: '技术列表' } },
+      { path: 'js/search', name: `${pre}js-search`, component: () => import('@/pages/yljs/js/search'), meta: { ...meta, title: '搜索技术' } },
       { path: 'ryjs/list/:ryid', name: `${pre}ryjs-list`, component: () => import('@/pages/yljs/ryjs/list'), props: true, meta: { ...meta, title: '人员技术列表' } },
       { path: 'ryjs/create', name: `${pre}ryjs-create`, component: () => import('@/pages/yljs/ryjs/create'), meta: { ...meta, title: '创建技术授权申请' } }
     ])('yljs-')

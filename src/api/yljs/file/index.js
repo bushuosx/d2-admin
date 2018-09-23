@@ -14,11 +14,11 @@ export default {
     form.append('Position', position)
     form.append('File', data, 'sss')
     form.append('Length', size)
-    form.append('UserToken', 'Test')
+    form.append('UserToken', parent.getUserId())
     return axiosService.put(BaseURL, form)
   },
   complite (writetoken) {
-    return axiosService.post(BaseURL + '/complite', { writetoken, UserToken: 'Test' })
+    return axiosService.post(BaseURL + '/complite', { writetoken, userToken: parent.getUserId() })
   },
   get (fileid) {
     return axiosService.get(BaseURL + '/ ' + fileid)

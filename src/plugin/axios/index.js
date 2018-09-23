@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/store/index'
 import axios from 'axios'
 import { Message } from 'element-ui'
 import util from '@/libs/util'
@@ -39,13 +39,25 @@ const service = axios.create({
 
 // 请求拦截器
 service.interceptors.request.use(
+  // config => {
+  //   // 在请求发送之前做一些处理
+  //   if (!(/^https:\/\/|http:\/\//.test(config.url))) {
+  //     const token = util.cookies.get('token')
+  //     if (token && token !== 'undefined') {
+  //       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
+  //       config.headers['X-Token'] = token
+  //     }
+  //   }
+  //   return config
+  // },
   config => {
+    debugger
     // 在请求发送之前做一些处理
-    if (!(/^https:\/\/|http:\/\//.test(config.url))) {
-      const token = util.cookies.get('token')
+    if ((/^https:\/\/|http:\/\//.test(config.url))) {
+      let token = store.state.d2admin.user.info.token
       if (token && token !== 'undefined') {
         // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-        config.headers['X-Token'] = token
+        config.headers['Authorization'] = 'Bearer ' + token
       }
     }
     return config

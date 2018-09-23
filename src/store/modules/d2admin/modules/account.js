@@ -9,37 +9,60 @@ export default {
       vm,
       debug = false,
       route = {
-        name: 'index'
+        name: 'yljs'
       } }) {
       console.log(Cookies.get())
       debugger
 
-      // 查看Cookie，是否已完成登录
-      let token = Cookies.get('spasid')
-      let uuid = Cookies.get('spasub')
-      let name = Cookies.get('spaname')
+      // 要检索的值
+      let token
+      let uuid
+      let name
+      let roles
 
+      // debug登录
       if (debug === true) {
-        token = 'guesttoken'
-        uuid = 'guest000'
+        // token = 'guesttoken'
+        uuid = '0520411e-7bae-4d05-9e06-b7d056a16fd3' // 这是无意义的guid
         name = 'guest'
+      } else {
+        // 查看Cookie，是否已完成登录
+        token = Cookies.get('spatoken')
+        uuid = Cookies.get('spasub')
+        name = Cookies.get('spaname')
+        roles = Cookies.get('sparoles')
+
+        if (!token || token === '') {
+          return
+        }
+        if (!uuid || uuid === '') {
+          return
+        }
+        if (!name || name === '') {
+          return
+        }
+        if (!roles && roles !== undefined) {
+          roles = JSON.parse(roles)
+        } else {
+          roles = []
+        }
       }
 
-      if (!token || token === '') {
-        return
-      }
-      if (!uuid || uuid === '') {
-        return
-      }
-      if (!name || name === '') {
-        return
-      }
+      // 移除不必要的token
+      Cookies.remove('spatoken')
+      Cookies.remove('spasub')
+      Cookies.remove('spaname')
+      Cookies.remove('sparoles')
 
+      // 设置自留cookie
       util.cookies.set('uuid', uuid)
-      util.cookies.set('token', token)
+      // util.cookies.set('token', token) // 这里是jj删除的
       // 设置 vuex 用户信息
       commit('d2admin/user/set', {
-        name: name
+        name: name,
+        uuid,
+        token,
+        roles
       }, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
       commit('load')
@@ -62,11 +85,11 @@ export default {
        */
       function logout () {
         // 删除cookie
-        util.cookies.remove('token')
+        // util.cookies.remove('token') // 这里是jj删除的
         util.cookies.remove('uuid')
         // 跳转路由
         vm.$router.push({
-          name: 'login'
+          name: 'yljs'
         })
       }
       // 判断是否需要确认
