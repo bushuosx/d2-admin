@@ -1,38 +1,36 @@
-import axiosService from '@/plugin/axios'
 import parent from '../index'
-import { Message } from 'element-ui'
 const BaseURL = parent.BaseURL + '/js'
+
+function reject (msg) {
+  return Promise.reject(new Error('JSApi：' + msg))
+}
 
 export default {
   BaseURL,
   getbyname (name, pageIndex = 1) {
     if (!name || name === undefined) {
-      let msg = '技术名称不能为空！'
-      Message({
-        message: msg,
-        type: 'error'
-      })
-      return Promise.reject(msg)
+      return reject('要查询的技术名称不能为空！')
     }
     let url = this.BaseURL + '/getbyname/' + name
-    if (pageIndex && pageIndex !== undefined) {
+    if (pageIndex !== null && pageIndex !== undefined) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
       url += '/' + pageIndex
     }
-    return axiosService.get(url)
+    return parent.axios.get(url)
   },
   getbycode (code, pageIndex = 1) {
     if (!code || code === undefined) {
-      let msg = '技术编码不能为空！'
-      Message({
-        message: msg,
-        type: 'error'
-      })
-      return Promise.reject(msg)
+      return reject('要查询的技术编码不能为空！')
     }
     let url = this.BaseURL + '/getbycode/' + code
-    if (pageIndex && pageIndex !== undefined) {
+    if (pageIndex !== null && pageIndex !== undefined) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
       url += '/' + pageIndex
     }
-    return axiosService.get(url)
+    return parent.axios.get(url)
   }
 }

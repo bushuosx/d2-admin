@@ -1,24 +1,26 @@
-import axiosService from '@/plugin/axios'
 import parent from '../index'
 
 const BaseURL = parent.BaseURL + '/ry'
 
+function reject (msg) {
+  return Promise.reject(new Error('RYApi：' + msg))
+}
+
 export default {
   BaseURL,
   getbyname (name, pageIndex = 1) {
-    if (!name || name === undefined) {
-      let msg = '用户名不能为空！'
-      this.$message({
-        message: msg,
-        type: 'danger'
-      })
-      this.$log.danger(msg)
-      return
+    if (name === null || name === undefined || name === '') {
+      return reject('要查询的用户名不能为空！')
     }
     let url = this.BaseURL + '/getbyname/' + name
-    if (pageIndex && pageIndex !== undefined) {
+    if (pageIndex !== null && pageIndex !== undefined) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
       url += '/' + pageIndex
     }
-    return axiosService.get(url)
-  }
+    return parent.axios.get(url)
+  },
+  getbyid (ryid) { },
+  getbygh (rygh) { }
 }
