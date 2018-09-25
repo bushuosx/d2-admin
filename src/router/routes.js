@@ -292,7 +292,7 @@ const frameIn = [
       { path: 'js/search', name: `${pre}js-search`, component: () => import('@/pages/yljs/js/search'), meta: { ...meta, title: '搜索技术' } },
       { path: 'ryjs/list/:ryid', name: `${pre}ryjs-list`, component: () => import('@/pages/yljs/ryjs/list'), props: true, meta: { ...meta, title: '人员技术列表' } },
       { path: 'ryjs/create', name: `${pre}ryjs-create`, component: () => import('@/pages/yljs/ryjs/create'), meta: { ...meta, title: '创建技术授权申请' } },
-      { path: 'ryrole/suppertome/:ryid', name: `${pre}ryrole-suppertome`, component: () => import('@/pages/yljs/ryrole/suppertome'), props: true, meta: { ...meta, title: '给我力量吧' } },
+      { path: 'ryrole/supertome', name: `${pre}ryrole-supertome`, component: () => import('@/pages/yljs/ryrole/supertome'), meta: { ...meta, title: '给我力量吧' } },
       { path: 'ryrole/manage/:ryid', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), props: true, meta: { ...meta, title: '人员权限分配' } }
     ])('yljs-')
   }

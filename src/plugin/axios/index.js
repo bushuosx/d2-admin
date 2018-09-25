@@ -51,7 +51,7 @@ service.interceptors.request.use(
   //   return config
   // },
   config => {
-    debugger
+    // debugger
     // 在请求发送之前做一些处理
     if ((/^https:\/\/|http:\/\//.test(config.url))) {
       let token = store.state.d2admin.user.info.token

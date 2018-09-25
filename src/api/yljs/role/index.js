@@ -15,8 +15,5 @@ export default {
       return reject('roleid不能为空')
     }
     return parent.axios.get(BaseURL + '/' + roleid)
-  },
-  getall () {
-    return parent.axios.get(BaseURL + '/getall')
   }
 }

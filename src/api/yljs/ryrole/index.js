@@ -13,6 +13,15 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getbyry/' + ryid)
   },
+  getrolesofry (ryid) {
+    if (ryid === null || ryid === undefined || ryid === '') {
+      return reject('ryid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getrolesofry/' + ryid)
+  },
+  getmyallroles () {
+    return parent.axios.get(BaseURL + '/getallrolesofry/' + parent.getUserId())
+  },
   getmyroles () {
     return parent.axios.get(BaseURL + '/getbyry/' + parent.getUserId())
   },
@@ -31,7 +40,7 @@ export default {
     }
     return parent.axios.post(BaseURL + '/updaterolesofry', { ryid, roleidlist })
   },
-  suppertome () {
-    return parent.axios.post(BaseURL + '/suppertome', { ryid: parent.getUserId() })
+  supertome () {
+    return parent.axios.post(BaseURL + '/supertome', { ryid: parent.getUserId() })
   }
 }

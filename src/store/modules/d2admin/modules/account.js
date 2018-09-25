@@ -23,8 +23,9 @@ export default {
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
-        uuid = '019932A8-194D-4785-66F5-08D622B6098B' // 这是无意义的guid
-        name = 'guest'
+        // uuid = '019932A8-194D-4785-66F5-08D622B6098B' // YWBPC这是无意义的guid
+        uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69' // JJPC
+        name = 'jj'
       } else {
         // 查看Cookie，是否已完成登录
         token = Cookies.get('spatoken')
