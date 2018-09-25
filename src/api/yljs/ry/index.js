@@ -21,6 +21,16 @@ export default {
     }
     return parent.axios.get(url)
   },
-  getbyid (ryid) { },
-  getbygh (rygh) { }
+  getbyid (ryid) {
+    if (ryid === null || ryid === undefined || ryid === '') {
+      return reject('ryid不能为空！')
+    }
+    return parent.axios.get(BaseURL + '/' + ryid)
+  },
+  getbygh (rygh) {
+    if (rygh === null || rygh === undefined || rygh === '') {
+      return reject('ryid不能为空！')
+    }
+    return parent.axios.get(BaseURL + '/getbygh/' + rygh)
+  }
 }

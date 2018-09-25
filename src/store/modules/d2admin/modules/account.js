@@ -23,7 +23,7 @@ export default {
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
-        uuid = '0520411e-7bae-4d05-9e06-b7d056a16fd3' // 这是无意义的guid
+        uuid = '019932A8-194D-4785-66F5-08D622B6098B' // 这是无意义的guid
         name = 'guest'
       } else {
         // 查看Cookie，是否已完成登录

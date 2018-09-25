@@ -13,6 +13,9 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getbyry/' + ryid)
   },
+  getmyroles () {
+    return parent.axios.get(BaseURL + '/getbyry/' + parent.getUserId())
+  },
   getbyrole (roleid) {
     if (roleid === null || roleid === undefined || roleid === '') {
       return reject('roleid不能为空')
@@ -27,5 +30,8 @@ export default {
       return reject('roleidlist不能为空')
     }
     return parent.axios.post(BaseURL + '/updaterolesofry', { ryid, roleidlist })
+  },
+  suppertome () {
+    return parent.axios.post(BaseURL + '/suppertome', { ryid: parent.getUserId() })
   }
 }
