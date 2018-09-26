@@ -42,7 +42,7 @@ import ryjsapi from '@/api/yljs/ryjs'
 import jsapi from '@/api/yljs/js'
 
 export default {
-  name: 'yljs-ryjs-create',
+  name: 'yljs-ry-js-create',
   components: { jstransfer },
   data () {
     return {
@@ -71,7 +71,7 @@ export default {
       let message = this.$message
       ryjsapi.createryjs(jsids, fileids).then(function (res) {
         if (res.code === 1) {
-          router.push({ name: 'yljr-ry-index' })
+          router.push({ name: 'yljs-ry-index' })
         } else {
           log(res.msg)
         }

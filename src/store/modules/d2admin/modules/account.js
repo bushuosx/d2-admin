@@ -23,8 +23,8 @@ export default {
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
-        // uuid = '019932A8-194D-4785-66F5-08D622B6098B' // YWBPC这是无意义的guid
-        uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69' // JJPC
+        uuid = '019932A8-194D-4785-66F5-08D622B6098B' // YWBPC
+        // uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69' // JJPC
         name = 'jj'
       } else {
         // 查看Cookie，是否已完成登录
@@ -82,16 +82,18 @@ export default {
      */
     logout ({ commit }, { vm, confirm = false }) {
       /**
-       * @description 注销
-       */
+      * @description 注销
+      */
       function logout () {
         // 删除cookie
         // util.cookies.remove('token') // 这里是jj删除的
         util.cookies.remove('uuid')
-        // 跳转路由
-        vm.$router.push({
-          name: 'yljs'
-        })
+        // // 跳转路由
+        // vm.$router.push({
+        //   name: 'yljs'
+        // })
+
+        window.location.href = '/account/logout/yljs'
       }
       // 判断是否需要确认
       if (confirm) {
@@ -114,6 +116,7 @@ export default {
       }
     }
   },
+
   mutations: {
     /**
      * @description 用户登录后从持久化数据加载一系列的设置

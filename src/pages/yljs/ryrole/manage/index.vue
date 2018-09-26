@@ -46,8 +46,7 @@ export default {
   data () {
     return {
       ryinfo: { xm: '', gh: '' },
-      rolelist: [],
-      selectedrole: []
+      rolelist: []
     }
   },
   created: function () {
@@ -63,11 +62,14 @@ export default {
 
     Promise.all([ryroleapi.getrolesofry(this.ryid), ryroleapi.getmyallroles()])
       .then(values => {
-        if (values[0].code !== 1) {
-          this.$message({ message: values[0].msg, type: 'error' })
-        } else if (values[1].code !== 1) {
+        if (values[1].code !== 1) {
           this.$message({ message: values[1].msg, type: 'error' })
         } else {
+          if (values[0].code !== 1) {
+            // 用户尚没有任何角色
+            this.rolelist = values[1].data
+            return
+          }
           let rst = []
           let oldroles = values[0].data
           let newroles = values[1].data
@@ -106,7 +108,24 @@ export default {
   },
   methods: {
     saveroles () {
-      console.log('saveroles')
+      if (this.rolelist === null || this.rolelist === undefined || this.rolelist.length === undefined) {
+        return
+      }
+      let roleidlist = []
+      for (let i in this.rolelist) {
+        if (this.rolelist[i].checked === true) {
+          roleidlist.push(this.rolelist[i].id)
+        }
+      }
+      ryroleapi.updaterolesofry(this.ryid, roleidlist).then(
+        res => {
+          if (res.code !== 1) {
+            this.$message({ message: res.msg, type: 'error' })
+          } else {
+            this.$message({ message: '角色修改成功', type: 'success' })
+          }
+        }
+      )
     }
   }
 }

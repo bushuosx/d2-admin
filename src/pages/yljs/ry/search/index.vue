@@ -27,6 +27,7 @@
 import ryapi from '@/api/yljs/ry'
 
 export default {
+  name: 'yljs-ry-search',
   data () {
     return { rys: null, name: null, selected: '1' }
   },

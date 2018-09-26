@@ -1,7 +1,9 @@
 <template>
-  <div>
-    <button @click="supertome">SupperToMe</button>
-  </div>
+  <d2-container>
+    <div>
+      <button @click="supertome">SupperToMe</button>
+    </div>
+  </d2-container>
 </template>
 
 <script>

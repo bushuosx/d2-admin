@@ -1,5 +1,5 @@
 <template>
     <d2-container>
-        <div>所有科室列表</div>
+        <div>创建、维护入科申请</div>
     </d2-container>
 </template>

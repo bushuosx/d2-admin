@@ -119,22 +119,6 @@ export default {
         this.selectedjslist.splice(index, 1)
       }
     },
-    // changeselect (key, event) {
-    //   let checked = event.target.checked
-    //   let index = -1
-    //   for (let i = 0; i < this.selectedjslist.length; i++) {
-    //     if (this.selectedjslist[i].id === key) {
-    //       index = i
-    //       break
-    //     }
-    //   }
-
-    //   if (index === -1) {
-    //     if (checked) this.selectedjslist.push(key)
-    //   } else if (!checked) {
-    //     this.selectedjslist.splice(index, 1)
-    //   }
-    // },
     removeselected (r) {
       for (let i = 0; i < this.jslist.length; i++) {
         if (this.jslist[i].id === r.id) {

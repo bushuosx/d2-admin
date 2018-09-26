@@ -287,13 +287,24 @@ const frameIn = [
     component: layoutHeaderAside,
     children: (pre => [
       { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/index'), meta: { ...meta, title: '人员首页' } },
-      { path: 'ry', name: `${pre}ry-index`, component: () => import('@/pages/yljs/ry/index'), meta: { ...meta, title: '人员' } },
-      { path: 'js', name: `${pre}js`, component: () => import('@/pages/yljs/js'), meta: { ...meta, title: '技术' } },
+      { path: 'ry', name: `${pre}ry-index`, component: () => import('@/pages/yljs/ry'), meta: { ...meta, title: '人员' } },
+      { path: 'ry/js', name: `${pre}ry-js`, component: () => import('@/pages/yljs/ry/js'), meta: { ...meta, title: '技术列表' } },
+      { path: 'ry/js/create', name: `${pre}ry-js-create`, component: () => import('@/pages/yljs/ry/js/create'), meta: { ...meta, title: '创建技术授权申请' } },
+      { path: 'ry/ks', name: `${pre}ry-ks`, component: () => import('@/pages/yljs/ry/ks'), meta: { ...meta, title: '科室列表' } },
+      { path: 'ry/ks/rksq', name: `${pre}ry-ks-rksq`, component: () => import('@/pages/yljs/ry/ks/rksq'), meta: { ...meta, title: '入科申请' } },
+      { path: 'ry/search', name: `${pre}ry-search`, component: () => import('@/pages/yljs/ry/search'), meta: { ...meta, title: '查询人员' } },
+      { path: 'js', name: `${pre}js-index`, component: () => import('@/pages/yljs/js'), meta: { ...meta, title: '技术' } },
       { path: 'js/search', name: `${pre}js-search`, component: () => import('@/pages/yljs/js/search'), meta: { ...meta, title: '搜索技术' } },
-      { path: 'ryjs/list/:ryid', name: `${pre}ryjs-list`, component: () => import('@/pages/yljs/ryjs/list'), props: true, meta: { ...meta, title: '人员技术列表' } },
-      { path: 'ryjs/create', name: `${pre}ryjs-create`, component: () => import('@/pages/yljs/ryjs/create'), meta: { ...meta, title: '创建技术授权申请' } },
+      { path: 'ks', name: `${pre}ks-index`, component: () => import('@/pages/yljs/ks'), meta: { ...meta, title: '科室' } },
+      { path: 'ks/js', name: `${pre}ks-js`, component: () => import('@/pages/yljs/ks/js'), meta: { ...meta, title: '科室技术列表' } },
+      { path: 'ks/js/create', name: `${pre}ks-js-create`, component: () => import('@/pages/yljs/ks/js/create'), meta: { ...meta, title: '科室技术维护' } },
+      { path: 'ks/list', name: `${pre}ks-list`, component: () => import('@/pages/yljs/ks/list'), meta: { ...meta, title: '科室列表' } },
+      { path: 'ks/ry', name: `${pre}ks-ry`, component: () => import('@/pages/yljs/ks/ry'), meta: { ...meta, title: '科室人员列表' } },
+      { path: 'ksjs', name: `${pre}ksjs`, component: () => import('@/pages/yljs/ksjs'), meta: { ...meta, title: '科室技术报表' } },
+      { path: 'ryjs/:ryid', name: `${pre}ryjs-index`, component: () => import('@/pages/yljs/ryjs'), props: true, meta: { ...meta, title: '人员技术列表' } },
+      { path: 'ryrole', name: `${pre}ryrole-index`, component: () => import('@/pages/yljs/ryrole'), meta: { ...meta, title: '人员角色信息' } },
       { path: 'ryrole/supertome', name: `${pre}ryrole-supertome`, component: () => import('@/pages/yljs/ryrole/supertome'), meta: { ...meta, title: '给我力量吧' } },
-      { path: 'ryrole/manage/:ryid', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), props: true, meta: { ...meta, title: '人员权限分配' } }
+      { path: 'ryrole/manage/:ryid', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), meta: { ...meta, title: '人员权限分配' } }
     ])('yljs-')
   }
 ]
