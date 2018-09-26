@@ -1,14 +1,10 @@
 <template>
   <d2-container>
     <el-card>
-      <h3 slot="header">个人首页</h3>
+      <h3 slot="header">科室信息一览</h3>
       <div>
-        <span>姓名：{{username}}</span>
         <div>
           <span>科室：XX</span>
-        </div>
-        <div>
-          <a href="/">详细信息</a>
         </div>
       </div>
     </el-card>

@@ -11,12 +11,15 @@
       </el-input>
     </div>
 
-    <el-table :data="rys" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="300">
-      </el-table-column>
+    <el-table :data="rylist" style="width: 100%">
       <el-table-column prop="gh" label="工号" width="180">
       </el-table-column>
       <el-table-column prop="xm" label="姓名">
+      </el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="showryjs(scope.row)">查看技术信息</el-button>
+        </template>
       </el-table-column>
     </el-table>
 
@@ -29,7 +32,7 @@ import ryapi from '@/api/yljs/ry'
 export default {
   name: 'yljs-ry-search',
   data () {
-    return { rys: null, name: null, selected: '1' }
+    return { rylist: [{ id: 1, gh: 'e11057', xm: 'jj' }], name: null, selected: '1' }
   },
   methods: {
     getuser () {
@@ -38,8 +41,11 @@ export default {
         return
       }
       ryapi.getbyname(this.name).then(function (t) {
-        this.rys = t
+        this.rylist = t
       })
+    },
+    showryjs (row) {
+      this.$router.push({ name: 'yljs-ryjs-listbyry', params: { ryid: row.id } })
     }
   }
 }

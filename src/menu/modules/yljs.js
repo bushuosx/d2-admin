@@ -39,7 +39,7 @@ export default {
       title: '人员技术',
       icon: 'table',
       children: [
-        { path: `${pre}ryjs`, title: '人员技术' }
+        { path: `${pre}ryjs/search`, title: '查询人员技术' }
       ]
     },
     {

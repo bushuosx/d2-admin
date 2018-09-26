@@ -13,10 +13,10 @@
         <el-col :span="8">
           <el-card>技术展示</el-card>
         </el-col>
-                <el-col :span="8">
+        <el-col :span="8">
           <el-card>年资</el-card>
         </el-col>
-                <el-col :span="8">
+        <el-col :span="8">
           <el-card>学历</el-card>
         </el-col>
       </el-row>
@@ -53,9 +53,6 @@ export default {
           this.$message({ message: t.msg, type: 'error' })
         }
       })
-    },
-    handleSearchJS (index) {
-      this.$router.push({ name: 'yljs-ryjs-list', params: { ryid: this.rys[index].id } })
     }
   }
 }
