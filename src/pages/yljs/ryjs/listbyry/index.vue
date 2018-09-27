@@ -8,7 +8,7 @@
         <el-button @click="search" slot="append" icon="el-icon-search" type="primary">查询</el-button>
       </el-input>
     </div>
-    <ryjstable :data="ryjslist" v-bind:options="{ryinfo:true}"></ryjstable>
+    <ryjstable :ryjslist="ryjslist" :options="{ryinfo:true}"></ryjstable>
   </d2-container>
 </template>
 

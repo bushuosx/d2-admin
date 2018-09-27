@@ -4,7 +4,7 @@
             <h3 slot="header">科室信息一览</h3>
             <div>
                 <div>
-                    <span>科室：XX</span>
+                    <span>科室：{{ksid}}</span>
                 </div>
                 <div>
                     <span>人数：{{rylist.length}}</span>
@@ -44,6 +44,10 @@
 
 <script>
 export default {
+  name: 'yljs-ks-index',
+  props: {
+    ksid: String
+  },
   data () {
     return {
       rylist: [
