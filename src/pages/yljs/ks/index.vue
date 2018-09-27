@@ -4,7 +4,7 @@
             <h3 slot="header">科室信息一览</h3>
             <div>
                 <div>
-                    <span>科室：{{ksid}}</span>
+                    <span>科室：我的科室</span>
                 </div>
                 <div>
                     <span>人数：{{rylist.length}}</span>
@@ -23,12 +23,12 @@
                 </el-col>
                 <el-col :span="8">
                     <el-card>职称
-                        <ve-pie :data="zcData"></ve-pie>
+                        <mypie :data="rylist" :filter="zcfilter"></mypie>
                     </el-card>
                 </el-col>
                 <el-col :span="8">
                     <el-card>学历
-                        <ve-pie :data="xlData"></ve-pie>
+                        <mypie :data="rylist" :filter="xlfilter"></mypie>
                     </el-card>
                 </el-col>
                 <el-col :span="8">
@@ -44,9 +44,8 @@
 
 <script>
 export default {
-  name: 'yljs-ks-index',
-  props: {
-    ksid: String
+  components: {
+    mypie: () => import('@/components/mypievchart')
   },
   data () {
     return {
@@ -60,34 +59,32 @@ export default {
       ]
     }
   },
-  computed: {
-    zcData () {
-      let rst = [{ zc: '初级', count: 0 }, { zc: '中级', count: 0 }, { zc: '高级', count: 0 }]
-      for (let i in this.rylist) {
-        switch (this.rylist[i].zc) {
-          case 1:
-            rst[0].count += 1
-            break
-          case 2:
-            rst[1].count += 1
-            break
-          default:
-            rst[2].count += 1
-            break
-        }
-      }
-      return {
-        columns: ['zc', 'count'],
-        rows: rst
+  methods: {
+    zcfilter (item) {
+      switch (item.zc) {
+        case 1:
+          return { key: '初级', index: 1 }
+        case 2:
+          return { key: '中级', index: 2 }
+        case 3:
+          return { key: '高级', index: 3 }
+        default:
+          return { key: '其它', index: 4 }
       }
     },
-    xlData () {
-      return {
-        columns: ['xl', 'id'],
-        rows: this.rylist
+    xlfilter (item) {
+      switch (item.xl) {
+        case 1:
+          return { key: '专科', index: 1 }
+        case 2:
+          return { key: '本科', index: 2 }
+        case 3:
+          return { key: '硕士', index: 3 }
+        default:
+          return { key: '其它', index: 4 }
       }
     }
   }
-
 }
+
 </script>

@@ -117,7 +117,7 @@ service.interceptors.response.use(
       }
     }
     errorLog(error)
-    return Promise.reject(error.response.data)
+    return Promise.reject(error)
   }
 )
 

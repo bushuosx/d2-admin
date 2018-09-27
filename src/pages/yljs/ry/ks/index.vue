@@ -1,89 +1,70 @@
 <template>
     <d2-container>
-        <el-card>
-            <h3 slot="header">科室信息一览</h3>
-            <div>
-                <div>
-                    <span>科室：我的科室</span>
+        <el-card v-loading="loading">
+            <div v-if="loading">等待加载信息……</div>
+            <div v-else-if="err">
+                <h3>科室信息加载出错，请稍后重试</h3>
+                <div>{{err.message}}</div>
+            </div>
+            <div v-else-if="myryks===null">
+                <h2>你还不属于任何科室</h2>
+                <el-button type="primary">点击这里申请加入一个科室</el-button>
+            </div>
+            <div v-else>
+                <div>你已经申请加入科室：<strong>{{myryks.ks.mc}}</strong></div>
+                <div v-if="myryks.kjshinfo.operateCode===4">
+                    <div>但申请已被驳回</div>
+                    <div>驳回理由：{{myryks.ks.kjshinfo.operateReason}}</div>
+                    <div>操作人员：{{myryks.ks.kjshinfo.operateName}}</div>
+                    <div>操作时间：{{myryks.ks.kjshinfo.operateTime}}</div>
+                    <el-button>点击此处修改申请</el-button>
                 </div>
-                <div>
-                    <span>人数：{{rylist.length}}</span>
+                <div v-else-if="myryks.kjshinfo.operateCode===2">
+                    <div>等待科室管理员审核</div>
                 </div>
+                <div v-else>出现错误，请联系网站管理员</div>
             </div>
         </el-card>
-        <el-card>
-            <el-row>
-                <el-col :span="8">
-                    <el-card>人员
-                        <el-table :data="rylist">
-                            <el-table-column prop="id" label="工号"></el-table-column>
-                            <el-table-column prop="xm" label="姓名"></el-table-column>
-                        </el-table>
-                    </el-card>
-                </el-col>
-                <el-col :span="8">
-                    <el-card>职称
-                        <mypie :data="rylist" :filter="zcfilter"></mypie>
-                    </el-card>
-                </el-col>
-                <el-col :span="8">
-                    <el-card>学历
-                        <mypie :data="rylist" :filter="xlfilter"></mypie>
-                    </el-card>
-                </el-col>
-                <el-col :span="8">
-                    <el-card>年龄</el-card>
-                </el-col>
-                <el-col :span="8">
-                    <el-card>性别</el-card>
-                </el-col>
-            </el-row>
-        </el-card>
+
     </d2-container>
 </template>
 
 <script>
+import ryksapi from '@/api/yljs/ryks'
 export default {
   components: {
     mypie: () => import('@/components/mypievchart')
   },
   data () {
     return {
-      rylist: [
-        { id: 1, xm: '张三', xb: 1, xl: 2, zc: 3 },
-        { id: 2, xm: '李四', xb: 1, xl: 2, zc: 2 },
-        { id: 3, xm: '王花', xb: 2, xl: 3, zc: 1 },
-        { id: 4, xm: '张三二', xb: 1, xl: 1, zc: 1 },
-        { id: 5, xm: '李四二', xb: 1, xl: 2, zc: 2 },
-        { id: 6, xm: '王花二', xb: 2, xl: 3, zc: 1 }
-      ]
+      myryks: null,
+      loading: true,
+      err: null
     }
   },
+  created () {
+    ryksapi.getmine().then(res => {
+      if (res.code === 1) {
+        if (res.data.ks.operateCode === 3) {
+          // 已审核,跳转至相应科室
+          this.$router.replace({ name: 'yljs-ks-index', params: { ksid: res.data.ks.id } })
+        } else {
+          // 未审核
+          this.myryks = res.data
+        }
+      } else if (res.code === 2) {
+        // 还没有入科申请
+        this.myryks = null
+      } else {
+        this.$message({ message: res.msg, type: 'error' })
+      }
+      this.loading = false
+    }).catch((err) => {
+      this.err = err
+      this.loading = false
+    })
+  },
   methods: {
-    zcfilter (item) {
-      switch (item.zc) {
-        case 1:
-          return { key: '初级', index: 1 }
-        case 2:
-          return { key: '中级', index: 2 }
-        case 3:
-          return { key: '高级', index: 3 }
-        default:
-          return { key: '其它', index: 4 }
-      }
-    },
-    xlfilter (item) {
-      switch (item.xl) {
-        case 1:
-          return { key: '专科', index: 1 }
-        case 2:
-          return { key: '本科', index: 2 }
-        case 3:
-          return { key: '硕士', index: 3 }
-        default:
-          return { key: '其它', index: 4 }
-      }
-    }
   }
 }
 
