@@ -288,6 +288,7 @@ const frameIn = [
     children: (pre => [
       { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/index'), meta: { ...meta, title: '人员首页' } },
       { path: 'ry', name: `${pre}ry-index`, component: () => import('@/pages/yljs/ry'), meta: { ...meta, title: '人员' } },
+      { path: 'ry/profile', name: `${pre}ry-profile`, component: () => import('@/pages/yljs/ry/profile'), meta: { ...meta, title: '人员资料' } },
       { path: 'ry/js', name: `${pre}ry-js`, component: () => import('@/pages/yljs/ry/js'), meta: { ...meta, title: '技术列表' } },
       { path: 'ry/js/create', name: `${pre}ry-js-create`, component: () => import('@/pages/yljs/ry/js/create'), meta: { ...meta, title: '创建技术授权申请' } },
       { path: 'ry/ks', name: `${pre}ry-ks`, component: () => import('@/pages/yljs/ry/ks'), meta: { ...meta, title: '科室列表' } },

@@ -9,6 +9,7 @@ export default {
       icon: 'table',
       children: [
         { path: `${pre}ry`, title: '我的信息' },
+        { path: `${pre}ry/profile`, title: '人员资料' },
         { path: `${pre}ry/js`, title: '我的技术' },
         { path: `${pre}ry/js/create`, title: '申请技术授权' },
         { path: `${pre}ry/ks`, title: '我的科室' },
