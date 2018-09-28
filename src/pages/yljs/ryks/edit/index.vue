@@ -1,6 +1,6 @@
 <template>
     <d2-container>
-        <div>创建入科申请</div>
+        <div>编辑入科申请</div>
         <div>
             <span>申请加入的科室：</span>
             <el-select v-model="ksid" filterable placeholder="请选择要加入的科室">
@@ -21,20 +21,39 @@
 import ksapi from '@/api/yljs/ks'
 import ryksapi from '@/api/yljs/ryks'
 export default {
+  name: 'yljs-ryks-edit',
+  props: {
+    ryksid: String
+  },
   data () {
     return {
       kslist: [],
       ksid: null,
-      reason: null
+      reason: null,
+      ryks: null
     }
   },
   created () {
     // fetch data
-    ksapi.getallks().then(res => {
+    ryksapi.get(this.ryksid).then(res => {
       if (res.code === 1) {
-        this.kslist = res.data
+        this.ryks = res.data
+        if (res.data.kjshInfo.operateCode === 0 || res.data.kjshInfo.operateCode === 1) {
+          ksapi.getallks().then(res2 => {
+            if (res2.code === 1) {
+              this.kslist = res2.data
+              this.ksid = res.data.ks.id
+            } else {
+              this.$message({ message: res2.msg, type: 'error' })
+            }
+          })
+        } else if (res.data.kjshInfo.operateCode === 2) {
+          // 已提交，未审核，可以撤回
+        } else {
+          this.$message.error('此信息不允许编辑')
+        }
       } else {
-        this.$message({ message: res.msg, type: 'error' })
+        this.$message.error(res.msg)
       }
     })
   },
@@ -43,15 +62,13 @@ export default {
       if (this.ksid === null || this.ksid === undefined || this.ksid === '') {
         this.$message({ message: '请选择一个科室', type: 'error' })
       } else {
-        console.log(this.ksid)
-        ryksapi.createryks(this.ksid, this.reason).then(res => {
+        ryksapi.editryks(this.ryksid, this.ksid, this.reason).then(res => {
           if (res.code === 1) {
-            this.$message({ message: '申请成功，等待审核', type: 'success' })
+            this.$message.success('编辑成功，等待审核')
           } else {
-            this.$message({ message: res.msg, type: 'error' })
+            this.$message.error(res.msg)
           }
-        }
-        )
+        })
       }
     }
   }

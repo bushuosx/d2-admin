@@ -42,7 +42,7 @@ import ryjsapi from '@/api/yljs/ryjs'
 import jsapi from '@/api/yljs/js'
 
 export default {
-  name: 'yljs-ry-js-create',
+  name: 'yljs-ryjs-create',
   components: { jstransfer },
   data () {
     return {

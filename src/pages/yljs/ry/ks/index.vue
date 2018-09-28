@@ -1,37 +1,50 @@
 <template>
-    <d2-container>
-        <el-card v-loading="loading">
-            <div v-if="loading">等待加载信息……</div>
-            <div v-else-if="err">
-                <h3>科室信息加载出错，请稍后重试</h3>
-                <div>{{err.message}}</div>
-            </div>
-            <div v-else-if="myryks===null">
-                <h2>你还不属于任何科室</h2>
-                <el-button type="primary">点击这里申请加入一个科室</el-button>
-            </div>
-            <div v-else>
-                <div>你已经申请加入科室：<strong>{{myryks.ks.mc}}</strong></div>
-                <div v-if="myryks.kjshinfo.operateCode===4">
-                    <div>但申请已被驳回</div>
-                    <div>驳回理由：{{myryks.ks.kjshinfo.operateReason}}</div>
-                    <div>操作人员：{{myryks.ks.kjshinfo.operateName}}</div>
-                    <div>操作时间：{{myryks.ks.kjshinfo.operateTime}}</div>
-                    <el-button>点击此处修改申请</el-button>
-                </div>
-                <div v-else-if="myryks.kjshinfo.operateCode===2">
-                    <div>等待科室管理员审核</div>
-                </div>
-                <div v-else>出现错误，请联系网站管理员</div>
-            </div>
-        </el-card>
+  <d2-container>
+    <el-card v-loading="loading">
+      <div v-if="loading">等待加载信息……</div>
+      <div v-else-if="err">
+        <h3>科室信息加载出错，请稍后重试</h3>
+        <div>{{err.message}}</div>
+      </div>
+      <div v-else-if="myryks===null">
+        <h2>你还不属于任何科室</h2>
+        <el-button type="primary" @click="handleCreate">点击这里申请加入一个科室</el-button>
+      </div>
+      <div v-else>
+        <div>你已经申请加入科室：<strong>{{myryks.ks.mc}}</strong></div>
+        <div>申请理由：{{myryks.createLog.operateReason}}</div>
+        <div>申请时间：{{myryks.createLog.operateTime}}</div>
+        <div v-if="myryks.kjshInfo.operateCode===1 || myryks.kjshInfo.operateCode===0">
+          <div>等待提交至科室审核</div>
+          <div>
+            <el-button @click="handleSubmit">直接提交</el-button>
+            <el-button @click="handleEdit">重新编辑此申请</el-button>
+          </div>
+        </div>
+        <div v-else-if="myryks.kjshInfo.operateCode===2">
+          <div>等待科室管理员审核</div>
+        </div>
+        <div v-else-if="myryks.kjshInfo.operateCode===3">
+          <div>审核已通过</div>
+        </div>
+        <div v-else-if="myryks.kjshInfo.operateCode===4">
+          <div>申请已被驳回</div>
+          <div>驳回理由：{{myryks.kjshInfo.operateReason}}</div>
+          <div>操作人员：{{myryks.kjshInfo.operatorName}}</div>
+          <div>操作时间：{{myryks.kjshInfo.operatorTime}}</div>
+          <el-button @click="handleEdit">点击此处修改申请</el-button>
+        </div>
+        <div v-else>出现错误，请联系网站管理员</div>
+      </div>
+    </el-card>
 
-    </d2-container>
+  </d2-container>
 </template>
 
 <script>
 import ryksapi from '@/api/yljs/ryks'
 export default {
+  name: 'yljs-ry-ks',
   components: {
     mypie: () => import('@/components/mypievchart')
   },
@@ -45,9 +58,9 @@ export default {
   created () {
     ryksapi.getmine().then(res => {
       if (res.code === 1) {
-        if (res.data.ks.operateCode === 3) {
+        if (res.data.kjshInfo.operateCode === 3) {
           // 已审核,跳转至相应科室
-          this.$router.replace({ name: 'yljs-ks-index', params: { ksid: res.data.ks.id } })
+          this.$router.replace({ name: 'yljs-ks', params: { ksid: res.data.ks.id } })
         } else {
           // 未审核
           this.myryks = res.data
@@ -56,7 +69,7 @@ export default {
         // 还没有入科申请
         this.myryks = null
       } else {
-        this.$message({ message: res.msg, type: 'error' })
+        this.$message.error(res.msg)
       }
       this.loading = false
     }).catch((err) => {
@@ -65,6 +78,15 @@ export default {
     })
   },
   methods: {
+    handleEdit () {
+      this.$router.replacePlus({ name: 'yljs-ryks-edit', params: { ryksid: this.myryks.id } })
+    },
+    handleCreate () {
+      this.$router.replacePlus({ name: 'yljs-ryks-create' })
+    },
+    handleSubmit () {
+
+    }
   }
 }
 

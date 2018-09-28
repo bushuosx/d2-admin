@@ -21,5 +21,26 @@ export default {
   },
   getmine () {
     return this.getbyry(parent.getUserId())
+  },
+  get (ryksid) {
+    if (ryksid === null || ryksid === undefined || ryksid === '') {
+      return reject('ryksid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/' + ryksid)
+  },
+  editryks (ryksid, ksid, reason) {
+    if (ryksid === null || ryksid === undefined || ryksid === '') {
+      return reject('ryksid不能为空')
+    }
+    if (ksid === null || ksid === undefined || ksid === '') {
+      return reject('ksid不能为空')
+    }
+    return parent.axios.put(BaseURL + '/editryks/', { ryksid, ksid, reason })
+  },
+  getneedkjsh (ksid) {
+    if (ksid === null || ksid === undefined || ksid === '') {
+      return reject('ksid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
   }
 }

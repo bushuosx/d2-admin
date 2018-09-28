@@ -56,10 +56,18 @@ router.afterEach(to => {
   // 需要的信息
   const app = router.app
   const { name, params, query } = to
+
   // 多页控制 打开新的页面
   app.$store.commit('d2admin/page/open', { name, params, query })
   // 更改标题
   util.title(to.meta.title)
 })
+
+router.replacePlus = function (localtion, onComplite, onAbort) {
+  // replacePlus
+  let tagName = router.app.$store.state.d2admin.page.current
+  router.app.$store.commit('d2admin/page/remove', { tagName })
+  router.replace(localtion, onComplite, onAbort)
+}
 
 export default router

@@ -12,6 +12,9 @@
             </div>
         </el-card>
         <el-card>
+            <div>管理模块</div>
+        </el-card>
+        <el-card>
             <el-row>
                 <el-col :span="8">
                     <el-card>人员
@@ -44,6 +47,7 @@
 
 <script>
 export default {
+  name: 'yljs-ks',
   components: {
     mypie: () => import('@/components/mypievchart')
   },

@@ -156,6 +156,21 @@ export default {
      * @param {Object} state vuex state
      * @param {Object} param { tagName: 要关闭的标签名字, vm: vue }
      */
+    remove (state, { tagName }) {
+      // 找到这个页面在已经打开的数据里是第几个
+      const index = state.opened.findIndex(page => page.name === tagName)
+      if (index >= 0) {
+        state.opened.splice(index, 1)
+        // 持久化
+        this.commit('d2admin/page/opend2db')
+      }
+    },
+    /**
+     * @class opened
+     * @description 关闭一个 tag (关闭一个页面)
+     * @param {Object} state vuex state
+     * @param {Object} param { tagName: 要关闭的标签名字, vm: vue }
+     */
     close (state, { tagName, vm }) {
       // 下个新的页面
       let newPage = state.opened[0]
@@ -182,6 +197,7 @@ export default {
       }
       // 持久化
       this.commit('d2admin/page/opend2db')
+
       // 最后需要判断是否需要跳到首页
       if (isCurrent) {
         const { name = '', params = {}, query = {} } = newPage

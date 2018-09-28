@@ -2,7 +2,7 @@ import store from '@/store/index'
 import axios from '@/plugin/axios'
 const YLJSBaseURL = 'http://localhost:5002/api/yljs'
 
-const debug = true
+const debug = false
 
 export default {
   BaseURL: YLJSBaseURL,
