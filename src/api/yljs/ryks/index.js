@@ -42,5 +42,11 @@ export default {
       return reject('ksid不能为空')
     }
     return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
+  },
+  approvekjsh () {
+
+  },
+  rejectkjsh () {
+
   }
 }

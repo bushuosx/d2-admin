@@ -11,10 +11,12 @@
                 </div>
             </div>
         </el-card>
-        <el-card>
+        <el-card v-if="showManage">
             <div v-if="showRYSH">
                 人员审核模块
-                <div><el-button @click="handleRKSH">审核入科申请</el-button></div>
+                <div>
+                    <el-button @click="handleRKSH">审核入科申请</el-button>
+                </div>
             </div>
         </el-card>
         <el-card>
@@ -70,6 +72,9 @@ export default {
   computed: {
     showRYSH () {
       return role.hasRoles(role.Roles.科级审核)
+    },
+    showMangage () {
+      return role.hasRoles(role.Roles.科级审核) || role.hasRoles(role.Roles.超级管理权限)
     }
   },
   methods: {
