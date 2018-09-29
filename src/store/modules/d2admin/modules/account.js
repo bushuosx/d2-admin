@@ -11,7 +11,7 @@ export default {
       route = {
         name: 'yljs'
       } }) {
-      console.log(Cookies.get())
+      // console.log(Cookies.get())
       debugger
 
       // 要检索的值
@@ -19,6 +19,7 @@ export default {
       let uuid
       let name
       let roles
+      let ksid
 
       // debug登录
       if (debug === true) {
@@ -32,6 +33,7 @@ export default {
         uuid = Cookies.get('spasub')
         name = Cookies.get('spaname')
         roles = Cookies.get('sparoles')
+        ksid = Cookies.get('spaksid')
 
         if (!token || token === '') {
           return
@@ -42,11 +44,11 @@ export default {
         if (!name || name === '') {
           return
         }
-        if (!roles && roles !== undefined) {
-          roles = JSON.parse(roles)
-        } else {
-          roles = []
-        }
+        // if (!roles && roles !== undefined) {
+        //   roles = JSON.parse(roles)
+        // } else {
+        //   roles = []
+        // }
       }
 
       // 移除不必要的token
@@ -54,16 +56,18 @@ export default {
       Cookies.remove('spasub')
       Cookies.remove('spaname')
       Cookies.remove('sparoles')
+      Cookies.remove('spaksid')
 
       // 设置自留cookie
       util.cookies.set('uuid', uuid)
       // util.cookies.set('token', token) // 这里是jj删除的
       // 设置 vuex 用户信息
       commit('d2admin/user/set', {
-        name: name,
+        name,
         uuid,
         token,
-        roles
+        roles,
+        ksid
       }, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
       commit('load')

@@ -12,7 +12,10 @@
             </div>
         </el-card>
         <el-card>
-            <div>管理模块</div>
+            <div v-if="showRYSH">
+                人员审核模块
+                <div><el-button @click="handleRKSH">审核入科申请</el-button></div>
+            </div>
         </el-card>
         <el-card>
             <el-row>
@@ -46,6 +49,7 @@
 </template>
 
 <script>
+import role from '@/libs/util.role.js'
 export default {
   name: 'yljs-ks',
   components: {
@@ -61,6 +65,11 @@ export default {
         { id: 5, xm: '李四二', xb: 1, xl: 2, zc: 2 },
         { id: 6, xm: '王花二', xb: 2, xl: 3, zc: 1 }
       ]
+    }
+  },
+  computed: {
+    showRYSH () {
+      return role.hasRoles(role.Roles.科级审核)
     }
   },
   methods: {
@@ -87,6 +96,9 @@ export default {
         default:
           return { key: '其它', index: 4 }
       }
+    },
+    handleRKSH () {
+      this.$router.push({ name: 'yljs-ryks-kjsh', params: role.ksid })
     }
   }
 }
