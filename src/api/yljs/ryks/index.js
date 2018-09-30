@@ -65,12 +65,12 @@ export default {
     if (ryksid === null || ryksid === undefined || ryksid === '') {
       return reject('ryksid不能为空')
     }
-    return parent.axios.patch(BaseURL + '/reedit' + ryksid)
+    return parent.axios.patch(BaseURL + '/reedit/' + ryksid)
   },
   commit (ryksid) {
     if (ryksid === null || ryksid === undefined || ryksid === '') {
       return reject('ryksid不能为空')
     }
-    return parent.axios.patch(BaseURL + '/commit' + ryksid)
+    return parent.axios.patch(BaseURL + '/commit/' + ryksid)
   }
 }

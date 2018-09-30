@@ -6,6 +6,7 @@
     </div>
     <el-card v-loading='loading'>
       <el-table :data="rykslist" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="工号" prop="ry.gh"></el-table-column>
         <el-table-column label="姓名" prop="ry.xm"></el-table-column>
         <el-table-column v-if="isSuper" label="科室" prop="ks.mc"></el-table-column>
@@ -101,8 +102,9 @@ export default {
           for (let i in response) {
             let index = -1
             for (let j in this.rykslist) {
-              if (this.rykslist[j].id === response[i]) {
+              if (this.rykslist[j].id === response[i].id) {
                 index = j
+                break
               }
             }
             if (index !== -1) {

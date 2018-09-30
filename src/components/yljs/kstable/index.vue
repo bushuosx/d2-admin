@@ -39,7 +39,7 @@ export default {
   methods: {
     showks (ksid) {
       if (ksid !== null && ksid !== undefined && ksid !== '') {
-        this.$router.push({ name: 'yljs-ks', params: { ksid } })
+        this.$router.push({ name: 'yljs-ks-index', params: { ksid } })
       }
     },
     rksh (ksid) {
