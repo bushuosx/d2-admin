@@ -14,25 +14,25 @@
         <div>你已经申请加入科室：<strong>{{myryks.ks.mc}}</strong></div>
         <div>申请理由：{{myryks.createLog.operateReason}}</div>
         <div>申请时间：{{myryks.createLog.operateTime}}</div>
-        <div v-if="myryks.kjshInfo.operateCode===1 || myryks.kjshInfo.operateCode===0">
+        <div v-if="myryks.kjshInfo.operateCode===0">
           <div>等待提交至科室审核</div>
           <div>
             <el-button @click="handleSubmit">直接提交</el-button>
             <el-button @click="handleEdit">重新编辑此申请</el-button>
           </div>
         </div>
-        <div v-else-if="myryks.kjshInfo.operateCode===2">
+        <div v-else-if="myryks.kjshInfo.operateCode===1">
           <div>等待科室管理员审核</div>
         </div>
-        <div v-else-if="myryks.kjshInfo.operateCode===3">
+        <div v-else-if="myryks.kjshInfo.operateCode===2">
           <div>审核已通过</div>
         </div>
-        <div v-else-if="myryks.kjshInfo.operateCode===4">
+        <div v-else-if="myryks.kjshInfo.operateCode===3">
           <div>申请已被驳回</div>
           <div>驳回理由：{{myryks.kjshInfo.operateReason}}</div>
           <div>操作人员：{{myryks.kjshInfo.operatorName}}</div>
           <div>操作时间：{{myryks.kjshInfo.operatorTime}}</div>
-          <el-button @click="handleEdit">点击此处修改申请</el-button>
+          <el-button @click="handleReEdit">点击此处修改申请</el-button>
         </div>
         <div v-else>出现错误，请联系网站管理员</div>
       </div>
@@ -58,11 +58,11 @@ export default {
   created () {
     ryksapi.getmine().then(res => {
       if (res.code === 1) {
-        if (res.data.kjshInfo.operateCode === 3) {
+        if (res.data.kjshInfo.operateCode === 2) {
           // 已审核,跳转至相应科室
           this.$router.replace({ name: 'yljs-ks', params: { ksid: res.data.ks.id } })
         } else {
-          // 未审核
+          // 未提交、未审核、已驳回
           this.myryks = res.data
         }
       } else if (res.code === 2) {
@@ -84,8 +84,23 @@ export default {
     handleCreate () {
       this.$router.replacePlus({ name: 'yljs-ryks-create' })
     },
+    handleReEdit () {
+      ryksapi.reedit(this.myryks.id).then(res => {
+        if (res.code === 1) {
+          this.handleEdit()
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
     handleSubmit () {
-
+      ryksapi.commit(this.myryks.id).then(res => {
+        if (res.code === 1) {
+          this.myryks = res.data
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     }
   }
 }

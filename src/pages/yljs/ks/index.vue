@@ -24,7 +24,7 @@
                 <el-col :span="8">
                     <el-card>人员
                         <el-table :data="rylist">
-                            <el-table-column prop="id" label="工号"></el-table-column>
+                            <el-table-column prop="gh" label="工号"></el-table-column>
                             <el-table-column prop="xm" label="姓名"></el-table-column>
                         </el-table>
                     </el-card>
@@ -52,22 +52,36 @@
 
 <script>
 import role from '@/libs/util.role.js'
+import ryksapi from '@/api/yljs/ryks'
 export default {
   name: 'yljs-ks',
+  props: {
+    ksid: String
+  },
   components: {
     mypie: () => import('@/components/mypievchart')
   },
   data () {
     return {
-      rylist: [
-        { id: 1, xm: '张三', xb: 1, xl: 2, zc: 3 },
-        { id: 2, xm: '李四', xb: 1, xl: 2, zc: 2 },
-        { id: 3, xm: '王花', xb: 2, xl: 3, zc: 1 },
-        { id: 4, xm: '张三二', xb: 1, xl: 1, zc: 1 },
-        { id: 5, xm: '李四二', xb: 1, xl: 2, zc: 2 },
-        { id: 6, xm: '王花二', xb: 2, xl: 3, zc: 1 }
-      ]
+    //   rylist: [
+    //     { id: 1, xm: '张三', xb: 1, xl: 2, zc: 3 },
+    //     { id: 2, xm: '李四', xb: 1, xl: 2, zc: 2 },
+    //     { id: 3, xm: '王花', xb: 2, xl: 3, zc: 1 },
+    //     { id: 4, xm: '张三二', xb: 1, xl: 1, zc: 1 },
+    //     { id: 5, xm: '李四二', xb: 1, xl: 2, zc: 2 },
+    //     { id: 6, xm: '王花二', xb: 2, xl: 3, zc: 1 }
+    //   ],
+      rylist: []
     }
+  },
+  created () {
+    ryksapi.getbyks(this.ksid).then(res => {
+      if (res.code === 1) {
+        this.rykslist = res.data
+      } else {
+        this.$messaga.error(res.msg)
+      }
+    })
   },
   computed: {
     showRYSH () {
@@ -103,7 +117,7 @@ export default {
       }
     },
     handleRKSH () {
-      this.$router.push({ name: 'yljs-ryks-kjsh', params: role.ksid })
+      this.$router.push({ name: 'yljs-ryks-kjsh', params: { ksid: this.ksid } })
     }
   }
 }

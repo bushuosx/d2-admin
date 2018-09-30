@@ -43,10 +43,28 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
   },
-  approvekjsh () {
-
+  approvekjsh (ryksidlist) {
+    if (ryksidlist === null || ryksidlist === undefined || !ryksidlist.length) {
+      return reject('ryksidlist不能为空')
+    }
+    return parent.axios.put(BaseURL + '/approvekjsh', { ryksidlist })
   },
-  rejectkjsh () {
-
+  rejectkjsh (ryksidlist) {
+    if (ryksidlist === null || ryksidlist === undefined || !ryksidlist.length) {
+      return reject('ryksidlist不能为空')
+    }
+    return parent.axios.put(BaseURL + '/rejectkjsh', { ryksidlist })
+  },
+  reedit (ryksid) {
+    if (ryksid === null || ryksid === undefined || ryksid === '') {
+      return reject('ryksid不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/reedit/' + ryksid)
+  },
+  commit (ryksid) {
+    if (ryksid === null || ryksid === undefined || ryksid === '') {
+      return reject('ryksid不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/commit/' + ryksid)
   }
 }

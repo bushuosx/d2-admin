@@ -38,7 +38,7 @@ export default {
     ryksapi.get(this.ryksid).then(res => {
       if (res.code === 1) {
         this.ryks = res.data
-        if (res.data.kjshInfo.operateCode === 0 || res.data.kjshInfo.operateCode === 1) {
+        if (res.data.kjshInfo.operateCode === 0) {
           ksapi.getallks().then(res2 => {
             if (res2.code === 1) {
               this.kslist = res2.data
@@ -47,8 +47,8 @@ export default {
               this.$message({ message: res2.msg, type: 'error' })
             }
           })
-        } else if (res.data.kjshInfo.operateCode === 2) {
-          // 已提交，未审核，可以撤回
+        } else if (res.data.kjshInfo.operateCode === 1) {
+          // 未审核，可以撤回
         } else {
           this.$message.error('此信息不允许编辑')
         }
