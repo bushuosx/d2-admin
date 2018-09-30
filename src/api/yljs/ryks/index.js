@@ -19,6 +19,12 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getbyry/' + ryid)
   },
+  getbyks (ksid) {
+    if (ksid === null || ksid === undefined || ksid === '') {
+      return reject('ryid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getbyks/' + ksid)
+  },
   getmine () {
     return this.getbyry(parent.getUserId())
   },
@@ -47,24 +53,24 @@ export default {
     if (ryksidlist === null || ryksidlist === undefined || !ryksidlist.length) {
       return reject('ryksidlist不能为空')
     }
-    return parent.axios.put(BaseURL + '/approvekjsh', { ryksidlist })
+    return parent.axios.patch(BaseURL + '/approvekjsh', ryksidlist)
   },
   rejectkjsh (ryksidlist) {
     if (ryksidlist === null || ryksidlist === undefined || !ryksidlist.length) {
       return reject('ryksidlist不能为空')
     }
-    return parent.axios.put(BaseURL + '/rejectkjsh', { ryksidlist })
+    return parent.axios.patch(BaseURL + '/rejectkjsh', ryksidlist)
   },
   reedit (ryksid) {
     if (ryksid === null || ryksid === undefined || ryksid === '') {
       return reject('ryksid不能为空')
     }
-    return parent.axios.patch(BaseURL + '/reedit/' + ryksid)
+    return parent.axios.patch(BaseURL + '/reedit' + ryksid)
   },
   commit (ryksid) {
     if (ryksid === null || ryksid === undefined || ryksid === '') {
       return reject('ryksid不能为空')
     }
-    return parent.axios.patch(BaseURL + '/commit/' + ryksid)
+    return parent.axios.patch(BaseURL + '/commit' + ryksid)
   }
 }

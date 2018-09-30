@@ -31,16 +31,20 @@ const Roles = {
 
 export default {
   Roles,
+  userId: store.state.d2admin.user.info.uuid,
   userRoles: store.state.d2admin.user.info.roles,
   // ksid: store.state.d2admin.user.info.ksid,
-  hasRoles () {
-    if (this.userRoles === null || this.userRoles === undefined || this.userRoles.length === undefined) {
+  hasRoles (roles) {
+    if (roles === null || roles === undefined || !Array.isArray(roles) || roles.length === 0) {
       return false
     }
-    for (let i in arguments) {
+    if (this.userRoles === null || this.userRoles === undefined || !Array.isArray(this.userRoles)) {
+      return undefined
+    }
+    for (let i in roles) {
       let found = false
       for (let j in this.userRoles) {
-        if (arguments[i] === this.userRoles[j]) {
+        if (roles[i] === this.userRoles[j]) {
           found = true
           break
         }

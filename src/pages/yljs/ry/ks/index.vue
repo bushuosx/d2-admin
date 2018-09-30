@@ -60,7 +60,7 @@ export default {
       if (res.code === 1) {
         if (res.data.kjshInfo.operateCode === 2) {
           // 已审核,跳转至相应科室
-          this.$router.replace({ name: 'yljs-ks', params: { ksid: res.data.ks.id } })
+          this.$router.replacePlus({ name: 'yljs-ks-index', params: { ksid: res.data.ks.id } })
         } else {
           // 未提交、未审核、已驳回
           this.myryks = res.data

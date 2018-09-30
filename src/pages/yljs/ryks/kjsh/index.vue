@@ -46,7 +46,7 @@ export default {
   },
   computed: {
     isSuper () {
-      return role.hasRoles(role.Roles.超级管理权限)
+      return role.hasRoles([role.Roles.超级管理权限])
     },
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
@@ -93,6 +93,7 @@ export default {
       ryksapi.rejectkjsh(rst).then(this.processResponse).catch(() => { this.loading = false })
     },
     processResponse (res) {
+      this.loading = false
       if (res.code === 1) {
         this.$message.success('审核完成')
         let response = res.data

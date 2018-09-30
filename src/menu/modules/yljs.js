@@ -14,7 +14,8 @@ export default {
         { path: `${pre}ry/js/create`, title: '申请技术授权' },
         { path: `${pre}ry/ks`, title: '我的科室' },
         { path: `${pre}ry/ks/rksq`, title: '入科申请' },
-        { path: `${pre}ry/search`, title: '查找本院人员' }
+        { path: `${pre}ry/search`, title: '查找本院人员' },
+        { path: `${pre}ry/role`, title: '我的网站角色' }
       ]
     },
     {

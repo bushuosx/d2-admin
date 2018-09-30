@@ -54,7 +54,7 @@
 import role from '@/libs/util.role.js'
 import ryksapi from '@/api/yljs/ryks'
 export default {
-  name: 'yljs-ks',
+  name: 'yljs-ks-index',
   props: {
     ksid: String
   },
@@ -85,10 +85,10 @@ export default {
   },
   computed: {
     showRYSH () {
-      return role.hasRoles(role.Roles.科级审核)
+      return role.hasRoles([role.Roles.科级审核])
     },
-    showMangage () {
-      return role.hasRoles(role.Roles.科级审核) || role.hasRoles(role.Roles.超级管理权限)
+    showManage () {
+      return role.hasRoles([role.Roles.科级审核]) || role.hasRoles([role.Roles.超级管理权限])
     }
   },
   methods: {

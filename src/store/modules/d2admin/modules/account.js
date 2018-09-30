@@ -44,11 +44,11 @@ export default {
         if (!name || name === '') {
           return
         }
-        // if (!roles && roles !== undefined) {
-        //   roles = JSON.parse(roles)
-        // } else {
-        //   roles = []
-        // }
+        if (roles !== null && roles !== undefined && roles !== '') {
+          roles = JSON.parse(roles)
+        } else {
+          roles = []
+        }
       }
 
       // 移除不必要的token
