@@ -8,7 +8,7 @@
       </el-table-column>
       <el-table-column prop="mc" label="名称"></el-table-column>
       <el-table-column prop="bm" label="编码"></el-table-column>
-      <template v-if="showzy===true">
+      <template v-if="options && options.showzy===true">
         <el-table-column label="专业名称"><template slot-scope="scope"><span>{{scope.row.mc}}</span></template></el-table-column>
         <el-table-column label="专业编码"><template slot-scope="scope"><span>{{scope.row.bm}}</span></template></el-table-column>
       </template>
@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import role from '@/libs/util.role.js'
+import role from '@/libs/util.user.js'
 export default {
   props: {
     kslist: Array,
-    showzy: Boolean
+    options: Object
   },
   computed: {
     showmanage () {

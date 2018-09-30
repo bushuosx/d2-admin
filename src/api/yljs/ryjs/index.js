@@ -24,8 +24,8 @@ export default {
     if (ryid === null || ryid === undefined || ryid === '') {
       return reject('ryid不能为空！')
     }
-    if (ryid === null || ryid === undefined || ryid === '') {
-      return reject('技术名称不能为空！')
+    if (jsname === null || jsname === undefined || jsname === '') {
+      return reject('jsname不能为空！')
     }
     let url = this.BaseURL + '/getbyryandjs/' + ryid + '/' + jsname
     if (pageIndex !== null && pageIndex !== undefined) {
@@ -45,5 +45,11 @@ export default {
     }
     let url = this.BaseURL + '/postlist'
     return parent.axios.post(url, { jsidlist: jsids, fileidlist: fileids, ryid: parent.getUserId() })
+  },
+  getneedkjsh (ksid) {
+    if (ksid === null || ksid === undefined || ksid === '') {
+      return reject('ksid不能为空！')
+    }
+    return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
   }
 }

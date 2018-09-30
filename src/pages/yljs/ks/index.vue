@@ -13,7 +13,6 @@
     </el-card>
     <el-card v-if="showManage">
       <div v-if="showRYSH">
-        人员审核模块
         <div>
           <el-button @click="handleRKSH">审核入科申请</el-button>
         </div>
@@ -51,7 +50,7 @@
 </template>
 
 <script>
-import role from '@/libs/util.role.js'
+import role from '@/libs/util.user.js'
 import ryksapi from '@/api/yljs/ryks'
 export default {
   name: 'yljs-ks-index',

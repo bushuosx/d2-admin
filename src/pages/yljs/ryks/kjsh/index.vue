@@ -32,9 +32,9 @@
  * 此页面需科级审核权限
  */
 import ryksapi from '@/api/yljs/ryks'
-import role from '@/libs/util.role.js'
+import role from '@/libs/util.user.js'
 export default {
-  name: 'yljs-kjsh',
+  name: 'yljs-ryks-kjsh',
   props: {
     ksid: String
   },

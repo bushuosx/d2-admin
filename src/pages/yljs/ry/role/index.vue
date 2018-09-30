@@ -1,9 +1,9 @@
 <template>
-    <div></div>
+  <div></div>
 </template>
 
 <script>
-import role from '@/libs/util.role.js'
+import role from '@/libs/util.user.js'
 export default {
   created () {
     console.log(role)

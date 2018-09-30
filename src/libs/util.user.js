@@ -32,6 +32,7 @@ const Roles = {
 export default {
   Roles,
   userId: store.state.d2admin.user.info.uuid,
+  userName: store.state.d2admin.user.info.name,
   userRoles: store.state.d2admin.user.info.roles,
   // ksid: store.state.d2admin.user.info.ksid,
   hasRoles (roles) {
