@@ -11,12 +11,15 @@
         </div>
       </div>
     </el-card>
-    <el-card v-if="showManage">
-      <div v-if="showRYSH">
-        <div>
-          <el-button @click="handleRKSH">审核入科申请</el-button>
-        </div>
-      </div>
+    <el-card v-if="isksManager">
+      <el-row :gutter="10">
+        <el-col :span="8">
+          <el-button @click="handleJSSH" type="primary" plain>审核技术授权</el-button>
+        </el-col>
+        <el-col :span="8">
+          <el-button @click="handleRKSH" type="primary" plain>审核入科申请</el-button>
+        </el-col>
+      </el-row>
     </el-card>
     <el-card>
       <el-row>
@@ -86,11 +89,11 @@ export default {
     })
   },
   computed: {
-    showRYSH () {
-      return role.hasRoles([role.Roles.科级审核])
-    },
-    showManage () {
-      return role.hasRoles([role.Roles.科级审核]) || role.hasRoles([role.Roles.超级管理权限])
+    isksManager () {
+      if (!this.ksid) {
+        return false
+      }
+      return role.hasRoles([role.Roles.科级审核]) && role.ksid === this.ksid
     }
   },
   methods: {
@@ -120,6 +123,9 @@ export default {
     },
     handleRKSH () {
       this.$router.push({ name: 'yljs-ryks-kjsh', params: { ksid: this.ksid } })
+    },
+    handleJSSH () {
+      this.$router.push({ name: 'yljs-ryjs-listbyks', params: { ksid: this.ksid } })
     }
   }
 }

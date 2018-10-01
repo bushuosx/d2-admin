@@ -24,8 +24,9 @@ export default {
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
-        // uuid = '019932A8-194D-4785-66F5-08D622B6098B' // YWBPC
-        uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69' // JJPC
+        // uuid = '019932A8-194D-4785-66F5-08D622B6098B'.toLowerCase() // YWBPC
+        uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69'.toLowerCase() // JJPC
+        ksid = '96847FDC-0557-4B2B-1EC6-08D62091EF0E'.toLowerCase() // JJPC
         name = 'jj'
         roles = [101, 102, 103, 201, 202, 203, 301, 302, 303, 401, 402, 403, 9001, 9002, 9600, 9700, 9800, 9900]
       } else {

@@ -34,7 +34,7 @@ export default {
   userId: store.state.d2admin.user.info.uuid,
   userName: store.state.d2admin.user.info.name,
   userRoles: store.state.d2admin.user.info.roles,
-  // ksid: store.state.d2admin.user.info.ksid,
+  ksid: store.state.d2admin.user.info.ksid,
   hasRoles (roles) {
     if (roles === null || roles === undefined || !Array.isArray(roles) || roles.length === 0) {
       return false

@@ -2,13 +2,13 @@
   <d2-container>
     <div slot="header">
       <h3>人员技术</h3>
-      <div>以下是本科室人员申请的技术授权</div>
+      <div>以下是科室人员的技术授权申请</div>
     </div>
     <el-card v-loading='loading'>
-      <ryjs-table v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
-      <div>
-        <el-button :disabled='anySelected !== true' @click="handleResolveAll">批量通过</el-button>
-        <el-button :disabled='anySelected !== true' @click="handleRejectAll">批量拒绝</el-button>
+      <ryjs-table v-on:complite-sh="complitesh" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
+      <div v-if="isKjManager || isYjManager" style="margin-top:10px">
+        <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
+        <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
       </div>
     </el-card>
   </d2-container>
@@ -40,7 +40,10 @@ export default {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
     },
     isKjManager () {
-      return user.hasRoles([user.Roles.科级审核])
+      return user.hasRoles([user.Roles.科级审核]) && user.ksid === this.ksid
+    },
+    isYjManager () {
+      return user.hasRoles([user.Roles.院级审核])
     }
   },
   created () {
@@ -101,6 +104,23 @@ export default {
         rst.push(this.multipleSelection[i].id)
       }
       return rst
+    },
+    complitesh (rowid, rst) {
+      if (rst.code === 1) {
+        let index = -1
+        for (let i in this.ryjslist) {
+          if (rowid === this.ryjslist[i].id) {
+            index = i
+            break
+          }
+        }
+        if (index !== -1) {
+          this.$set(this.ryjslist, index, rst.data[0])
+        }
+        this.$message.success('审核成功')
+      } else {
+        this.$message.error(rst.msg)
+      }
     }
   }
 }

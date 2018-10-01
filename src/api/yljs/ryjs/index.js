@@ -51,5 +51,35 @@ export default {
       return reject('ksid不能为空！')
     }
     return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
+  },
+  approveKjsh (idlist, reason) {
+    if (!idlist || !Array.isArray(idlist)) {
+      return reject('idlist必须是数组！')
+    }
+    return parent.axios.put(BaseURL + '/approvekjsh', { idlist, reason })
+  },
+  rejectKjsh (idlist, reason) {
+    if (!idlist || !Array.isArray(idlist)) {
+      return reject('idlist必须是数组！')
+    }
+    return parent.axios.put(BaseURL + '/rejectkjsh', { idlist, reason })
+  },
+  approveYjsh (idlist, reason) {
+    if (!idlist || !Array.isArray(idlist)) {
+      return reject('idlist必须是数组！')
+    }
+    return parent.axios.put(BaseURL + '/approveyjsh', { idlist, reason })
+  },
+  rejectYjsh (idlist, reason) {
+    if (!idlist || !Array.isArray(idlist)) {
+      return reject('idlist必须是数组！')
+    }
+    return parent.axios.put(BaseURL + '/rejectyjsh', { idlist, reason })
+  },
+  commit (ryjsid) {
+    if (!ryjsid) {
+      return reject('ryjsid不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/commit/' + ryjsid)
   }
 }

@@ -1,15 +1,15 @@
 <template>
-    <d2-container>
-        <div>我的技术列表</div>
-        <ryjstable></ryjstable>
-    </d2-container>
+  <d2-container>
+    <div>我的技术列表</div>
+  </d2-container>
 </template>
 
 <script>
+import user from '@/libs/util.user.js'
 export default {
   name: 'yljs-ry-js-index',
-  components: {
-    ryjstable: () => import('@/components/yljs/ryjstable')
+  created () {
+    this.$router.replacePlus({ name: 'yljs-ryjs-listbyry', params: { ryid: user.userId } })
   }
 }
 </script>

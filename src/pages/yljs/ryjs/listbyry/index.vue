@@ -8,7 +8,7 @@
         <el-button @click="search" slot="append" icon="el-icon-search" type="primary">查询</el-button>
       </el-input>
     </div>
-    <ryjstable :ryjslist="ryjslist" :options="{ryinfo:true}"></ryjstable>
+    <ryjstable :ryjslist="ryjslist" v-on:complite-sh="complitesh"></ryjstable>
   </d2-container>
 </template>
 
@@ -31,7 +31,7 @@ export default {
   created () {
     // 组件创建完后获取数据，
     // 此时 data 已经被 observed 了
-    // this.fetchData()
+    this.fetchData()
   },
   // watch: {
   //   // 如果路由有变化，会再次执行该方法
@@ -69,6 +69,23 @@ export default {
 
       } else {
 
+      }
+    },
+    complitesh (rowid, rst) {
+      if (rst.code === 1) {
+        let index = -1
+        for (let i in this.ryjslist) {
+          if (rowid === this.ryjslist[i].id) {
+            index = i
+            break
+          }
+        }
+        if (index !== -1) {
+          this.$set(this.ryjslist, index, rst.data[0])
+        }
+        this.$message.success('审核成功')
+      } else {
+        this.$message.error(rst.msg)
       }
     }
   }
