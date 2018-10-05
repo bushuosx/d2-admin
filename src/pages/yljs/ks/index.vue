@@ -125,7 +125,7 @@ export default {
       this.$router.push({ name: 'yljs-ryks-kjsh', params: { ksid: this.ksid } })
     },
     handleJSSH () {
-      this.$router.push({ name: 'yljs-ryjs-listbyks', params: { ksid: this.ksid } })
+      this.$router.push({ name: 'yljs-ryjs-kjsh', params: { ksid: this.ksid } })
     }
   }
 }

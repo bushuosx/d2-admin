@@ -24,7 +24,7 @@
 
       <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button>
     </el-card>
-    <fast-upload ref="fileselector">
+    <fast-upload @file-changed="handleFileChanged">
       <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料</h2>
     </fast-upload>
     <el-card>
@@ -51,25 +51,25 @@ export default {
       //   jslist: [{ id: '1', mc: '胸腔闭式引流术', dj: 2, decs: 'xqbsyys', hidden: false }, { id: '2', mc: '导尿术', decs: 'dns', dj: 1, hidden: false }],
       jslist: [],
       ksjslist: null,
-      yyjslist: null
+      yyjslist: null,
+      fileidlist: null
     }
   },
   methods: {
     applyAll () {
       let jsids = this.$refs.jsselector.jsidlist
       if (!jsids || jsids === undefined || jsids.length === 0) {
-        this.$msgbox({ message: '请先选择要申请授权的技术', title: '未选择授权技术', type: 'info' })
+        this.$msgbox({ message: '请先选择要申请授权的技术', title: '未选择技术', type: 'info' })
         return
       }
-      let fileids = this.$refs.fileselector.fileidlist
-      if (!fileids || fileids === undefined || fileids.length === 0) {
-        this.$msgbox({ message: '请上传申请所需的支撑材料', title: '未选择支撑材料', type: 'info' })
+      if (!this.fileidlist || !this.fileidlist.length || this.fileidlist.length === 0) {
+        this.$msgbox({ message: '请上传所需的支撑材料', title: '无支撑材料', type: 'info' })
         return
       }
       let log = this.$logError
       let router = this.$router
       let message = this.$message
-      ryjsapi.createryjs(jsids, fileids).then(function (res) {
+      ryjsapi.createryjs(jsids, this.fileidlist).then(function (res) {
         if (res.code === 1) {
           router.push({ name: 'yljs-ry-index' })
         } else {
@@ -103,6 +103,9 @@ export default {
         this.jslist.push({ id: count + i + 1, mc: '胸腔闭式引流术' + i, dj: j, decs: 'xqbsyys', hidden: false })
         if (j === 4) j = 0
       }
+    },
+    handleFileChanged (val) {
+      this.fileidlist = val
     }
   }
 }

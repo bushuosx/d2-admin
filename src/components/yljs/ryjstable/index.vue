@@ -12,28 +12,50 @@
       <el-table-column prop="js.mc" label="技术名称"></el-table-column>
       <el-table-column prop="js.bm" label="编码"></el-table-column>
       <el-table-column prop="js.dj" label="等级"></el-table-column>
-      <el-table-column label="审核状态">
+      <el-table-column label="审核状态" width="180">
         <template slot-scope="scope">
-          <span v-if="approved(scope.row)"><i class="el-icon-success"></i>已审核</span>
+          <template v-if="isBanned(scope.row)">
+            <el-button icon="el-icon-delete" disabled size="mini">已禁用</el-button>
+          </template>
+          <template v-else-if="approved(scope.row)">
+            <el-button @click="showDetail(scope.row)" icon="el-icon-success" type="text" size="mini">已审核</el-button>
+          </template>
           <template v-else-if="rejected(scope.row)">
-            <el-button v-if="isMe(scope.row)" @click="handleReedit(scope.row)" size="mini">重新编辑</el-button>
+            <!-- <el-button v-if="isMe(scope.row)" @click="showEdit(scope.row)" icon="el-icon-error">已驳回</el-button> -->
+            <el-button v-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-error" size="mini">已驳回</el-button>
             <span v-else><i class="el-icon-error"></i>已驳回</span>
           </template>
           <template v-else-if="needkjsh(scope.row)">
             <el-button v-if="kjshManager(scope.row)" @click="handleKjsh(scope.row)" size="mini">科级审核</el-button>
+            <el-button v-else-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-question" type="text" size="mini">等待科级审核</el-button>
             <span v-else>等待科级审核</span>
           </template>
           <template v-else-if="needyjsh(scope.row)">
             <el-button v-if="yjshManager(scope.row)" @click="handleYjsh(scope.row)" size="mini"><strong>院级</strong>审核</el-button>
+            <el-button v-else-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-question" type="text" size="mini">等待<strong>院级</strong>审核</el-button>
             <span v-else>等待<strong>院级</strong>审核</span>
           </template>
           <template v-else-if="needcommit(scope.row)">
-            <el-button v-if="isMe(scope.row)" @click="handleCommit(scope.row)" size="mini">提交申请</el-button>
+            <template v-if="isMe(scope.row)">
+              <el-button @click="handleCommit(scope.row)" icon="el-icon-upload" size="mini">提交</el-button>
+              <el-button @click="showEdit(scope.row)" icon="el-icon-edit" size="mini">编辑</el-button>
+            </template>
             <span v-else>待提交</span>
           </template>
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog v-loading="loading" title="查看详细" :visible.sync="detailVisible" width="80%">
+      <ryjs-detail :ryjs="focusRyjs">
+        <span slot="footer" class="dialog-footer" slot-scope="scope">
+          <el-button @click="detailVisible = false">关闭</el-button>
+          <el-button v-if="rejected(scope.data) && isMe(scope.data)" @click="handleReedit" icon="el-icon-error" type="warning" plain>申请已被驳回,点击重新编辑</el-button>
+        </span>
+      </ryjs-detail>
+    </el-dialog>
+    <el-dialog v-loading="loading" title="编辑申请" :visible.sync="editVisible" width="80%">
+      <ryjs-edit :ryjs="focusRyjs" @save-edit="handleSaveEdit" @delete-edit="handleDeleteEdit" @cancel-edit="handleCancelEdit"></ryjs-edit>
+    </el-dialog>
     <el-dialog v-loading="loading" title="科级审核" :visible.sync="kjshVisible" width="80%">
       <ryjs-detail :ryjs="focusRyjs"></ryjs-detail>
       <span slot="footer" class="dialog-footer">
@@ -68,33 +90,53 @@ export default {
     }
   },
   components: {
-    'ryjs-detail': () => import('@/components/yljs/ryjsdetail')
+    'ryjs-detail': () => import('../ryjsdetail'),
+    'ryjs-edit': () => import('../ryjsedit')
   },
   data () {
     return {
       focusRyjs: null,
       kjshVisible: false,
       yjshVisible: false,
+      detailVisible: false,
+      editVisible: false,
       reason: null,
       loading: false
     }
   },
   methods: {
+    isBanned (row) {
+      return row.banned === true
+    },
+    showDetail (row) {
+      this.focusRyjs = row
+      this.detailVisible = true
+    },
     isMe (row) {
       if (!row.ry) {
         return false
       }
       return row.ry.id === user.userId
     },
-    handleReedit (row) {
-
+    handleReedit () {
+      // 先要求重新编辑
+      ryjsapi.reedit([this.focusRyjs.id]).then(res => {
+        this.emitRyjsChange(this.focusRyjs.id, res)
+      }).catch(err => {
+        this.emitRyjsChange(this.focusRyjs.id, { code: 3, msg: err.message })
+      })
+      // 启动编辑
     },
     handleCommit (row) {
-      ryjsapi.commit(row.id).then(res => {
-        this.reportsh(row, res)
+      ryjsapi.commit([row.id]).then(res => {
+        this.emitRyjsChange(row.id, res)
       }).catch(err => {
-        this.reportsh(row, { code: 3, msg: err.message })
+        this.emitRyjsChange(row.id, { code: 3, msg: err.message })
       })
+    },
+    showEdit (row) {
+      this.focusRyjs = row
+      this.editVisible = true
     },
     needcommit (row) {
       return row.kjshInfo.operateCode === 0
@@ -152,10 +194,10 @@ export default {
       let rst = null
       ryjsapi.approveKjsh([this.focusRyjs.id], this.reason).then(res => {
         rst = res
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       }).catch(err => {
         rst = { code: 3, msg: err.message }
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       })
     },
     rejectKjsh () {
@@ -163,10 +205,10 @@ export default {
       let rst = null
       ryjsapi.rejectKjsh([this.focusRyjs.id], this.reason).then(res => {
         rst = res
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       }).catch(err => {
         rst = { code: 3, msg: err.message }
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       })
     },
     rejectYjsh () {
@@ -174,10 +216,10 @@ export default {
       let rst = null
       ryjsapi.rejectYjsh([this.focusRyjs.id], this.reason).then(res => {
         rst = res
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       }).catch(err => {
         rst = { code: 3, msg: err.message }
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       })
     },
     approveYjsh () {
@@ -185,17 +227,31 @@ export default {
       let rst = null
       ryjsapi.approveYjsh([this.focusRyjs.id], this.reason).then(res => {
         rst = res
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       }).catch(err => {
         rst = { code: 3, msg: err.message }
-        this.reportsh(this.focusRyjs, rst)
+        this.emitRyjsChange(this.focusRyjs.id, rst)
       })
     },
-    reportsh (row, rst) {
+    emitRyjsChange (rowid, rst) {
       this.loading = false
-      this.$emit('complite-sh', row.id, rst)
+      this.$emit('ryjs-changed', rowid, rst)
       this.kjshVisible = false
       this.yjshVisible = false
+      this.editVisible = false
+      this.detailVisible = false
+    },
+    handleSaveEdit (rowid, rst) {
+      this.$emit('ryjs-changed', rowid, rst)
+      this.editVisible = false
+    },
+    handleCancelEdit (rowid, rst) {
+      // this.$emit('ryjs-changed', rowid, rst)
+      this.editVisible = false
+    },
+    handleDeleteEdit (rowid, rst) {
+      this.$emit('ryjs-changed', rowid, rst)
+      this.editVisible = false
     }
   }
 }

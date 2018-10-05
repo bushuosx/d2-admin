@@ -11,7 +11,7 @@ export default {
         { path: `${pre}ry`, title: '我的信息' },
         { path: `${pre}ry/profile`, title: '人员资料' },
         { path: `${pre}ry/js`, title: '我的技术' },
-        { path: `${pre}ry/js/create`, title: '申请技术授权' },
+        { path: `${pre}ryjs/create`, title: '申请技术授权' },
         { path: `${pre}ry/ks`, title: '我的科室' },
         { path: `${pre}ry/ks/rksq`, title: '入科申请' },
         { path: `${pre}ry/search`, title: '查找本院人员' },
@@ -41,7 +41,8 @@ export default {
       title: '人员技术',
       icon: 'table',
       children: [
-        { path: `${pre}ryjs/search`, title: '查询人员技术' }
+        { path: `${pre}ryjs/search`, title: '查询人员技术' },
+        { path: `${pre}ryjs/create`, title: '申请技术授权' }
       ]
     },
     {

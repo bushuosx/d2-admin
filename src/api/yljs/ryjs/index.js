@@ -20,6 +20,29 @@ export default {
     }
     return parent.axios.get(url)
   },
+  getbyks (ksid, pageIndex = 1) {
+    if (!ksid) {
+      return reject('ryid不能为空！')
+    }
+    let url = this.BaseURL + '/getbyks/' + ksid
+    if (pageIndex) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
+      url += '/' + pageIndex
+    }
+    return parent.axios.get(url)
+  },
+  getmine (pageIndex = 1) {
+    let url = this.BaseURL + '/getmine'
+    if (pageIndex) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
+      url += '/' + pageIndex
+    }
+    return parent.axios.get(url)
+  },
   getbyryandjs (ryid, jsname, pageIndex = 1) {
     if (ryid === null || ryid === undefined || ryid === '') {
       return reject('ryid不能为空！')
@@ -46,11 +69,18 @@ export default {
     let url = this.BaseURL + '/postlist'
     return parent.axios.post(url, { jsidlist: jsids, fileidlist: fileids, ryid: parent.getUserId() })
   },
-  getneedkjsh (ksid) {
-    if (ksid === null || ksid === undefined || ksid === '') {
+  getneedkjsh (ksid, pageIndex = 1) {
+    if (!ksid) {
       return reject('ksid不能为空！')
     }
-    return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
+    let url = BaseURL + '/getneedkjsh/' + ksid
+    if (pageIndex) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
+      url += '/' + pageIndex
+    }
+    return parent.axios.get(url)
   },
   approveKjsh (idlist, reason) {
     if (!idlist || !Array.isArray(idlist)) {
@@ -76,10 +106,46 @@ export default {
     }
     return parent.axios.put(BaseURL + '/rejectyjsh', { idlist, reason })
   },
-  commit (ryjsid) {
-    if (!ryjsid) {
+  commit (ryjsidlist) {
+    if (!Array.isArray(ryjsidlist) || ryjsidlist.length === 0) {
       return reject('ryjsid不能为空')
     }
-    return parent.axios.patch(BaseURL + '/commit/' + ryjsid)
+    return parent.axios.patch(BaseURL + '/commit', ryjsidlist)
+  },
+  reedit (ryjsidlist) {
+    if (!Array.isArray(ryjsidlist) || ryjsidlist.length === 0) {
+      return reject('ryjsid不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/reedit', ryjsidlist)
+  },
+  update (ryjsidlist, fileIdList) {
+    if (!Array.isArray(ryjsidlist) || ryjsidlist.length === 0) {
+      return reject('ryjsid不能为空')
+    }
+    if (!Array.isArray(fileIdList) || fileIdList.length === 0) {
+      return reject('支撑文件不能为空')
+    }
+    return parent.axios.put(BaseURL, { ryjsidlist, fileIdList })
+  },
+  delete (ryjsidlist) {
+    if (!Array.isArray(ryjsidlist) || ryjsidlist.length === 0) {
+      return reject('ryjsid不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/delete', ryjsidlist)
+  },
+  getneedyjsh (ksid, pageIndex = 1) {
+    let url
+    if (ksid) {
+      url = BaseURL + '/getneedyjsh/' + ksid
+    } else {
+      url = BaseURL + '/getallneedyjsh'
+    }
+    if (pageIndex) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
+      url += '/' + pageIndex
+    }
+    return parent.axios.get(url)
   }
 }
