@@ -11,7 +11,7 @@ export default {
       route = {
         name: 'yljs'
       } }) {
-      debugger
+      // debugger
       console.log(Cookies.get())
 
       // 要检索的值

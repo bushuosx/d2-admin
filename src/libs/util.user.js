@@ -38,10 +38,10 @@ export default {
   ksid: store.state.d2admin.user.info.ksid,
   profileId: store.state.d2admin.user.info.profileid,
   hasRoles (roles) {
-    if (roles === null || roles === undefined || !Array.isArray(roles) || roles.length === 0) {
+    if (!roles || !Array.isArray(roles) || roles.length === 0) {
       return false
     }
-    if (this.userRoles === null || this.userRoles === undefined || !Array.isArray(this.userRoles)) {
+    if (!this.userRoles || !Array.isArray(this.userRoles)) {
       return undefined
     }
     for (let i in roles) {

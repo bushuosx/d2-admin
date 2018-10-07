@@ -84,7 +84,7 @@ export default {
           this.rylist.push(res.data[i].ry)
         }
       } else {
-        this.$messaga.error(res.msg)
+        this.$message.error(res.msg)
       }
     })
   },

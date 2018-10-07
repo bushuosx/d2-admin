@@ -27,8 +27,8 @@ const setting = {
   },
   // 版本
   releases: {
-    version: version,
-    api: 'https://api.github.com/repos/FairyEver/d2-admin/releases/latest'
+    version: version
+    // api: 'https://api.github.com/repos/FairyEver/d2-admin/releases/latest'
   },
   // 菜单搜索
   search: {

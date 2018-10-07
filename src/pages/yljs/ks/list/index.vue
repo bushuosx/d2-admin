@@ -1,8 +1,10 @@
 <template>
-    <d2-container>
-        <div>所有科室列表</div>
-        <kstable :kslist="kslist"></kstable>
-    </d2-container>
+  <d2-container>
+    <el-card>
+      <strong slot="header">所有科室列表</strong>
+      <kstable :kslist="kslist"></kstable>
+    </el-card>
+  </d2-container>
 </template>
 
 <script>
