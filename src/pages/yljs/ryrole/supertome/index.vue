@@ -1,7 +1,7 @@
 <template>
   <d2-container>
     <div>
-      <button @click="supertome">SupperToMe</button>
+      <button :disabled="!loading" @click="supertome">SupperToMe</button>
     </div>
   </d2-container>
 </template>
@@ -9,8 +9,12 @@
 <script>
 import ryroleapi from '@/api/yljs/ryrole'
 export default {
+  data () {
+    return { loading: false }
+  },
   methods: {
     supertome () {
+      this.loading = true
       ryroleapi.supertome().then(res => {
         if (res.code === 1) {
           this.$message({ message: 'succeed', type: 'success' })

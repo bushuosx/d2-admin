@@ -9,11 +9,11 @@ function reject (msg) {
 export default {
   BaseURL,
   getbyname (name, pageIndex = 1) {
-    if (name === null || name === undefined || name === '') {
+    if (!name) {
       return reject('要查询的用户名不能为空！')
     }
     let url = this.BaseURL + '/getbyname/' + name
-    if (pageIndex !== null && pageIndex !== undefined) {
+    if (pageIndex) {
       if (pageIndex < 1) {
         return reject('pageIndex不能小于1')
       }
@@ -32,5 +32,8 @@ export default {
       return reject('ryid不能为空！')
     }
     return parent.axios.get(BaseURL + '/getbygh/' + rygh)
+  },
+  refreshMe () {
+    return parent.axios.get(BaseURL + '/refreshme')
   }
 }

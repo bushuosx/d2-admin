@@ -1,4 +1,5 @@
 import store from '@/store/index'
+import ryapi from '../api/yljs/ry'
 
 const Roles = {
   人员创建: 101,
@@ -35,6 +36,7 @@ export default {
   userName: store.state.d2admin.user.info.name,
   userRoles: store.state.d2admin.user.info.roles,
   ksid: store.state.d2admin.user.info.ksid,
+  profileId: store.state.d2admin.user.info.profileid,
   hasRoles (roles) {
     if (roles === null || roles === undefined || !Array.isArray(roles) || roles.length === 0) {
       return false
@@ -55,5 +57,23 @@ export default {
       }
     }
     return true
+  },
+  refreshProfile () {
+    return new Promise((resolve, reject) => {
+      ryapi.refreshMe().then(res => {
+        if (res.code === 1) {
+          // 查询成功
+          // 开始刷新
+          let info = store.state.d2admin.user.info
+          info.roles = res.data.profile.permissions
+          info.ksid = res.data.profile.ksid
+          info.profileid = res.data.profile.profileId
+        } else {
+          reject(new Error(res.msg))
+        }
+      }).catch(err => {
+        reject(err)
+      })
+    })
   }
 }

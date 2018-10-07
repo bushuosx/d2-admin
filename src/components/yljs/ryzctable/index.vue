@@ -1,82 +1,167 @@
 <template>
-    <div>
-        <template v-if="hasData">
-            <div class="ryzcdata" v-for="item in ryzclist" :key="item.id" @click="handleClick(item)">
-                <el-row>
-                    <el-col :span="6">{{formartzylevel(item.zcLevel)}}</el-col>
-                    <el-col :span="18">{{item.zylb?item.zylb.mc:""}}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col><span>获得时间：</span><span>{{formartDate(item.zcsj)}}</span></el-col>
-                </el-row>
-                <el-row>
-                    <el-col><span>资历：</span><span>{{getNZ(item.zcsj)}}</span></el-col>
-                </el-row>
-            </div>
-        </template>
-        <template v-else><span>无数据</span></template>
-        <el-dialog :visible.sync="detailVisible" :ryzc="focusRyzc">
-            <ryzc-detail></ryzc-detail>
-        </el-dialog>
+  <div v-loading="loading">
+    <div class="ryzcdata" v-for="item in ryzclist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyzcClick(item)">
+      <el-row>
+        <el-col :span="8">{{formartZcLevel(item.zcLevel)}}</el-col>
+        <el-col :span="16">{{item.zylb?item.zylb.mc:""}}</el-col>
+      </el-row>
+      <el-row>
+        <el-col><span>获得时间：</span><span>{{formartDate(item.zcsj)}}</span></el-col>
+      </el-row>
+      <el-row>
+        <el-col><span>资历：</span><span>{{formartNZ(item.zcsj)}}</span></el-col>
+      </el-row>
     </div>
+    <div class="ryzcdata" v-if="!hasData">
+      <div>暂无数据</div>
+    </div>
+    <div v-if="isMe">
+      <el-button @click="handleAdd">添加</el-button>
+    </div>
+    <el-dialog :visible.sync="addVisible" title="添加人员职称证明">
+      <ryzc-edit :zylblist="zylblist" @edit-save="handleEditSaveFromAdd" @edit-cancel="addVisible=false"></ryzc-edit>
+    </el-dialog>
+    <el-dialog :visible.sync="detailVisible" title="人员职称详细">
+      <ryzc-detail :ryzc="focusRyzc" @detail-update="handleDetailUpdate" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryzc-detail>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
+import helper from '../helper/index.js'
+import user from '@/libs/util.user.js'
+import ryzcapi from '@/api/yljs/ryzc'
+import zylbapi from '@/api/yljs/zylb'
 export default {
   props: {
-    ryzclist: Array
+    ryInfo: {
+      type: Object
+    }
   },
   data () {
     return {
       detailVisible: false,
-      focusRyzc: null
+      focusRyzc: null,
+      addVisible: false,
+      zylblist: [],
+      ryzclist: [],
+      loading: false
     }
   },
   components: {
-    'ryzc-detail': () => import('../ryzcdetail')
+    'ryzc-detail': () => import('../ryzcdetail'),
+    'ryzc-edit': () => import('../ryzcedit')
   },
   computed: {
     hasData () {
       return Array.isArray(this.ryzclist) && this.ryzclist.length > 0
+    },
+    isMe () {
+      return !!this.ryInfo && this.ryInfo.id === user.userId
+    },
+    isKSManager () {
+      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid
     }
   },
+  created () {
+    this.fetchRyzcList(this.ryInfo)
+  },
+  watch: {
+    ryInfo: function (n, o) { this.fetchRyzcList(n) }
+  },
   methods: {
-    formartzylevel (level) {
-      switch (level) {
-        case 1:
-          return '初级'
-        case 2:
-          return '中级'
-        case 3:
-          return '副高级'
-        case 4:
-          return '高级'
-        default:
-          return ''
+    ...helper,
+    fetchRyzcList (ry) {
+      if (ry && ry.ryProfile && ry.ryProfile.id) {
+        ryzcapi.getbyprofile(ry.ryProfile.id).then(res => {
+          if (res.code === 1) {
+            this.ryzclist = res.data
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       }
     },
-    formartDate (date) {
-      if (!date || !(date instanceof Date)) {
-        return ''
+    fetchZylbList () {
+      if (!Array.isArray(this.zylblist) || this.zylblist.length < 1) {
+        zylbapi.getall().then(res => {
+          if (res.code === 1) {
+            this.zylblist = res.data
+          } else {
+            this.$message.error(res.msg)
+          }
+        })
       }
-      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDay()}`
     },
-    getNZ (date) {
-      if (!date || !(date instanceof Date)) {
-        return ''
-      }
-      let val = new Date() - date
-      if (val < 0) {
-        return '时间有误'
-      }
-      const oneyear = 1000 * 60 * 60 * 24 * 365.25
-      let year = Math.floor(val / oneyear)
-      let month = Math.floor((val - year * oneyear) / (oneyear / 12))
-      return year > 0 ? `${year} 年 ${month} 月` : `${month} 月`
+    isValid (item) {
+      return !!item && !!item.kjshInfo && item.kjshInfo.operateCode === 2
     },
-    handleClick (val) {
+    handleRyzcClick (tmp) {
+      if (tmp && tmp.id) {
+        if (!tmp.zylb || !tmp.files) {
+          this.loading = true
+          ryzcapi.get(tmp.id).then(res => {
+            this.loading = false
+            if (res.code === 1) {
+              this.focusRyzc = res.data
+              this.updateRyzcList(res.data)
+              this.detailVisible = true
+            } else {
+              this.$message.error(res.msg)
+            }
+          }).catch(err => {
+            this.loading = false
+            this.$message.error(err.message ? err.message : err)
+          })
+        } else {
+          this.focusRyzc = tmp
+          this.detailVisible = true
+        }
+      }
+    },
+    updateRyzcList (val) {
+      if (val) {
+        let index = -1
+        for (let i in this.ryzclist) {
+          if (this.ryzclist[i].id === val.id) {
+            index = i
+            break
+          }
+        }
+        if (index === -1) {
+          this.ryzclist.push(val)
+        } else {
+          this.$set(this.ryzclist, index, val)
+        }
+      }
+    },
+    handleAdd () {
+      this.fetchZylbList()
+      this.addVisible = true
+    },
+    handleEditSaveFromAdd (val) {
+      this.addVisible = false
+
+      if (!val.profileId) {
+        // add
+        val.profileId = this.ryInfo.ryProfile.id
+        ryzcapi.create(val).then(res => {
+          if (res.code === 1) {
+            this.updateRyzcList(res.data)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).then(err => {
+          this.$message.error(err.message ? err.message : err)
+        })
+      } else if (val.id) {
+        this.updateRyzcList(val)
+      }
+    },
+    handleDetailUpdate (val) {
       this.focusRyzc = val
-      this.detailVisible = true
+      this.updateRyzcList(val)
+      // this.detailVisible=false
     }
   }
 }
@@ -84,11 +169,14 @@ export default {
 
 <style>
 div.ryzcdata {
-  width: 200px;
-  border-color: powderblue;
+  width: 300px;
+  border-color: #a5ddff;
   border-style: solid;
   margin: 2px;
   padding: 2px;
   cursor: pointer;
+}
+div.ryzcdata:hover {
+  background-color: #f2faff;
 }
 </style>

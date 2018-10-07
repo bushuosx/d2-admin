@@ -21,7 +21,7 @@ export default {
     'ryjs-table': () => import('@/components/yljs/ryjstable')
   },
   props: {
-    ksid: String
+    ryid: String
   },
   data () {
     return {
@@ -37,7 +37,7 @@ export default {
   },
   created () {
     // fetch未审核人员
-    ryjsapi.getbyry(this.ksid).then(res => {
+    ryjsapi.getbyry(this.ryid).then(res => {
       this.loading = false
       if (res.code === 1) {
         this.ryjslist = res.data

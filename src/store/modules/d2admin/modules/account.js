@@ -11,8 +11,8 @@ export default {
       route = {
         name: 'yljs'
       } }) {
-      // console.log(Cookies.get())
       debugger
+      console.log(Cookies.get())
 
       // 要检索的值
       let token
@@ -20,45 +20,47 @@ export default {
       let name
       let roles
       let ksid
+      let profileid
 
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
         // uuid = '019932A8-194D-4785-66F5-08D622B6098B'.toLowerCase() // YWBPC
         uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69'.toLowerCase() // JJPC
-        ksid = '96847FDC-0557-4B2B-1EC6-08D62091EF0E'.toLowerCase() // JJPC
+        ksid = 'ef11af9f-8cdb-4d2c-3386-08d62c131173' // JJPC
         name = 'jj'
         roles = [101, 102, 103, 201, 202, 203, 301, 302, 303, 401, 402, 403, 9001, 9002, 9600, 9700, 9800, 9900]
       } else {
         // 查看Cookie，是否已完成登录
-        token = Cookies.get('spatoken')
         uuid = Cookies.get('spasub')
-        name = Cookies.get('spaname')
-        roles = Cookies.get('sparoles')
-        ksid = Cookies.get('spaksid')
+        token = Cookies.get('spatoken')
+        let profile = JSON.parse(Cookies.get('spaprofile'))
+        name = profile.Name
+        roles = profile.Permissions
+        ksid = profile.KSID
+        profileid = profile.ProfileID
+        // name = Cookies.get('spaname')
+        // roles = Cookies.get('sparoles')
+        // ksid = Cookies.get('spaksid')
 
-        if (!token || token === '') {
+        if (!uuid) {
           return
         }
-        if (!uuid || uuid === '') {
+        if (!token) {
           return
         }
-        if (!name || name === '') {
-          return
-        }
-        if (roles !== null && roles !== undefined && roles !== '') {
-          roles = JSON.parse(roles)
-        } else {
-          roles = []
+        if (!name) {
+          name = uuid
         }
       }
 
       // 移除不必要的token
-      Cookies.remove('spatoken')
       Cookies.remove('spasub')
-      Cookies.remove('spaname')
-      Cookies.remove('sparoles')
-      Cookies.remove('spaksid')
+      Cookies.remove('spatoken')
+      Cookies.remove('spaprofile')
+      // Cookies.remove('spaname')
+      // Cookies.remove('sparoles')
+      // Cookies.remove('spaksid')
 
       // 设置自留cookie
       util.cookies.set('uuid', uuid)
@@ -69,7 +71,8 @@ export default {
         uuid,
         token,
         roles,
-        ksid
+        ksid,
+        profileid
       }, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
       commit('load')

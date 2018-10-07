@@ -1,10 +1,9 @@
 <template>
   <d2-container>
-    <div slot="header">
-      <h3>人员技术</h3>
-      <div>以下是人员的技术授权</div>
-    </div>
     <el-card v-loading='loading'>
+      <div slot="header">
+        <h3>我的技术授权</h3>
+      </div>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
     </el-card>
   </d2-container>
@@ -12,16 +11,13 @@
 
 <script>
 /**
- * 此页面需科级审核权限
+ * 个人技术
  */
 import ryjsapi from '@/api/yljs/ryjs'
 export default {
-  name: 'yljs-ryjs-listbyks',
+  name: 'yljs-ry-js',
   components: {
     'ryjs-table': () => import('@/components/yljs/ryjstable')
-  },
-  props: {
-    ksid: String
   },
   data () {
     return {
