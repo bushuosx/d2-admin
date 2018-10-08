@@ -13,7 +13,7 @@
     <el-table :data="rylist" style="width: 100%">
       <el-table-column label="科室">
         <template slot-scope="scope">
-          <template v-if="scope.row.ryks.ks">
+          <template v-if="scope.row.ryks && scope.row.ryks.ks">
             <router-link :to="{name:'yljs-ks-index',params:{ksid:scope.row.ryks.ks.id}}">{{scope.row.ryks.ks.mc}}</router-link>
           </template>
         </template>

@@ -22,7 +22,7 @@
 
       <jstransfer ref="jsselector" v-bind:jslist="jslist"></jstransfer>
 
-      <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button>
+      <!-- <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button> -->
     </el-card>
     <fast-upload @file-changed="handleFileChanged">
       <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料</h2>
@@ -71,7 +71,7 @@ export default {
       let message = this.$message
       ryjsapi.createryjs(jsids, this.fileidlist).then(function (res) {
         if (res.code === 1) {
-          router.push({ name: 'yljs-ry-index' })
+          router.push({ name: 'yljs-ry-js' })
         } else {
           log(res.msg)
         }

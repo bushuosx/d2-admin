@@ -1,11 +1,13 @@
 <template>
   <d2-container>
-    <div slot="header">
-      <h3>人员技术</h3>
-      <div>以下是人员的技术授权</div>
-    </div>
     <el-card v-loading='loading'>
-      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
+      <div slot="header">
+        <h3>人员技术授权信息</h3>
+        <router-link v-if="isMe" :to="{name:'yljs-ryjs-create'}">申请新技术</router-link>
+        <div v-else>以下是人员的技术授权</div>
+      </div>
+      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:!isMe}"></ryjs-table>
+      <my-pagination :pageIndex="pageIndex" @page-index-change="handlePageChange"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -15,10 +17,12 @@
  * 此页面需科级审核权限
  */
 import ryjsapi from '@/api/yljs/ryjs'
+import user from '@/libs/util.user.js'
 export default {
-  name: 'yljs-ryjs-listbyks',
+  name: 'yljs-ryjs-listbyry',
   components: {
-    'ryjs-table': () => import('@/components/yljs/ryjstable')
+    'ryjs-table': () => import('@/components/yljs/ryjstable'),
+    'my-pagination': () => import('@/components/MyPagination')
   },
   props: {
     ryid: String
@@ -27,30 +31,43 @@ export default {
     return {
       loading: true,
       ryjslist: null,
-      multipleSelection: []
+      multipleSelection: [],
+      pageIndex: 1
     }
   },
   computed: {
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
+    },
+    isMe () {
+      return !!this.ryid && this.ryid === user.userId
     }
   },
   created () {
     // fetch未审核人员
-    ryjsapi.getbyry(this.ryid).then(res => {
-      this.loading = false
-      if (res.code === 1) {
-        this.ryjslist = res.data
-      } else if (res.code === 2) {
-        this.$message.warning('该人员还没有已授权的技术')
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(() => {
-      this.loading = false
-    })
+    this.fetchData(1)
   },
   methods: {
+    fetchData (page) {
+      let api
+      if (this.isMe) {
+        api = ryjsapi.getmine(page)
+      } else {
+        api = ryjsapi.getbyry(this.ryid, page)
+      }
+      api.then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.ryjslist = res.data
+        } else if (res.code === 2) {
+          this.$message.warning('没有查询到更多数据')
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
     selectedChange (val) {
       this.multipleSelection = val
     },
@@ -79,6 +96,9 @@ export default {
       } else {
         this.$message.error(rst.msg)
       }
+    },
+    handlePageChange (val) {
+      this.fetchData(val)
     }
   }
 }

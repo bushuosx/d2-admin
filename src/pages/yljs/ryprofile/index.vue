@@ -9,11 +9,9 @@
     <el-tabs type="border-card">
       <el-tab-pane>
         <span slot="label"><i class="el-icon-star-on"></i> 职称</span>
-        <ryzc-edit></ryzc-edit>
-      </el-tab-pane>
-      <el-tab-pane label="资格">
         <ryzc-table :ryInfo="ryInfo"></ryzc-table>
       </el-tab-pane>
+      <el-tab-pane label="资格">资格</el-tab-pane>
       <el-tab-pane label="学历">学历</el-tab-pane>
       <el-tab-pane label="学位">学位</el-tab-pane>
     </el-tabs>

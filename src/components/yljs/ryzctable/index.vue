@@ -2,14 +2,20 @@
   <div v-loading="loading">
     <div class="ryzcdata" v-for="item in ryzclist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyzcClick(item)">
       <el-row>
-        <el-col :span="8">{{formartZcLevel(item.zcLevel)}}</el-col>
-        <el-col :span="16">{{item.zylb?item.zylb.mc:""}}</el-col>
+        <el-col :span="8"><span>职称级别：</span></el-col>
+        <el-col :span="16"><span><strong v-if="item.zcLevel" style="color:#409EFF">{{formartZcLevel(item.zcLevel)}}</strong></span></el-col>
       </el-row>
       <el-row>
-        <el-col><span>获得时间：</span><span>{{formartDate(item.zcsj)}}</span></el-col>
+        <el-col :span="8"><span>专业：</span></el-col>
+        <el-col :span="16"><span>{{item.zylb?item.zylb.mc:""}}</span></el-col>
       </el-row>
       <el-row>
-        <el-col><span>资历：</span><span>{{formartNZ(item.zcsj)}}</span></el-col>
+        <el-col :span="8"><span>获得时间：</span></el-col>
+        <el-col :span="16"><span>{{formartDate(item.zcsj)}}</span></el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8"><span>年资：</span></el-col>
+        <el-col :span="16"><span>{{formartNZ(item.zcsj)}}</span></el-col>
       </el-row>
     </div>
     <div class="ryzcdata" v-if="!hasData">
@@ -169,14 +175,18 @@ export default {
 
 <style>
 div.ryzcdata {
-  width: 300px;
-  border-color: #a5ddff;
+  width: 400px;
+  border-color: #ffe0b2;
   border-style: solid;
-  margin: 2px;
-  padding: 2px;
+  margin: 4px;
+  padding: 4px;
   cursor: pointer;
 }
 div.ryzcdata:hover {
-  background-color: #f2faff;
+  background-color: #fff3e0;
+}
+div.ryzcdata span {
+  font-family: "Microsoft YaHei", "Arial", "\9ED1\4F53", "\5B8B\4F53",
+    sans-serif;
 }
 </style>

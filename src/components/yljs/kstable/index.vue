@@ -3,7 +3,7 @@
     <el-table :data="kslist" style="width: 100%">
       <el-table-column label="名称">
         <template slot-scope="scope">
-          <el-button @click="showks(scope.row.id)" type="primary" size="mini" plain>{{scope.row.mc}}</el-button>
+          <el-button @click="showks(scope.row.id)" type="primary" plain>{{scope.row.mc}}</el-button>
         </template>
       </el-table-column>
       <el-table-column prop="bm" label="编码"></el-table-column>

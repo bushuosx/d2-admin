@@ -12,19 +12,19 @@ import store from '@/store/index'
 // 核心插件
 import d2Admin from '@/plugin/d2admin'
 
-// [ 可选插件组件 ]D2-Crud
-import D2Crud from '@d2-projects/d2-crud'
+// // [ 可选插件组件 ]D2-Crud
+// import D2Crud from '@d2-projects/d2-crud'
 // [ 可选插件组件 ] 图表
 import VCharts from 'v-charts'
 // [ 可选插件组件 ] 右键菜单
 import contentmenu from 'v-contextmenu'
 import 'v-contextmenu/dist/index.css'
-// [ 可选插件组件 ] JSON 树状视图
-import vueJsonTreeView from 'vue-json-tree-view'
-// [ 可选插件组件 ] 网格布局组件
-import { GridLayout, GridItem } from 'vue-grid-layout'
-// [ 可选插件组件 ] 区域划分组件
-import SplitPane from 'vue-splitpane'
+// // [ 可选插件组件 ] JSON 树状视图
+// import vueJsonTreeView from 'vue-json-tree-view'
+// // [ 可选插件组件 ] 网格布局组件
+// import { GridLayout, GridItem } from 'vue-grid-layout'
+// // [ 可选插件组件 ] 区域划分组件
+// import SplitPane from 'vue-splitpane'
 
 // 菜单和路由设置
 import router from './router'
@@ -35,13 +35,13 @@ import { frameInRoutes } from '@/router/routes'
 Vue.use(d2Admin)
 
 // 可选插件组件
-Vue.use(D2Crud)
+// Vue.use(D2Crud)
 Vue.use(VCharts)
 Vue.use(contentmenu)
-Vue.use(vueJsonTreeView)
-Vue.component('d2-grid-layout', GridLayout)
-Vue.component('d2-grid-item', GridItem)
-Vue.component('SplitPane', SplitPane)
+// Vue.use(vueJsonTreeView)
+// Vue.component('d2-grid-layout', GridLayout)
+// Vue.component('d2-grid-item', GridItem)
+// Vue.component('SplitPane', SplitPane)
 
 new Vue({
   router,

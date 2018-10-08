@@ -4,10 +4,10 @@
       <h3 slot="header">科室信息一览</h3>
       <div>
         <div>
-          <span>科室：我的科室</span>
+          <span>科室：{{ksInfo?ksInfo.mc:""}}</span>
         </div>
         <div>
-          <span>人数：{{rylist.length}}</span>
+          <span>人数：{{ksryCount}}</span>
         </div>
       </div>
     </el-card>
@@ -25,22 +25,30 @@
       <el-row>
         <el-col :span="8">
           <el-card>人员
-            <el-table :data="rylist">
-              <el-table-column prop="gh" label="工号"></el-table-column>
-              <el-table-column prop="xm" label="姓名"></el-table-column>
-            </el-table>
+            <div v-if="ksInfo && ksInfo.ryList">
+              <el-table :data="ksInfo.ryList">
+                <el-table-column prop="gh" label="工号"></el-table-column>
+                <el-table-column prop="xm" label="姓名"></el-table-column>
+              </el-table>
+            </div>
           </el-card>
         </el-col>
         <el-col :span="8">
-          <el-card>职称
-            <mypie :data="rylist" :filter="zcfilter"></mypie>
-          </el-card>
+          <div v-if="ksInfo && ksInfo.ryList">
+            <el-card>职称
+              <mypie :data="ksInfo.ryList" :filter="zcfilter"></mypie>
+            </el-card>
+          </div>
         </el-col>
         <el-col :span="8">
           <el-card>学历
-            <mypie :data="rylist" :filter="xlfilter"></mypie>
+            <div v-if="ksInfo && ksInfo.ryList">
+              <mypie :data="ksInfo.ryList" :filter="xlfilter"></mypie>
+            </div>
           </el-card>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="8">
           <el-card>年龄</el-card>
         </el-col>
@@ -54,7 +62,7 @@
 
 <script>
 import role from '@/libs/util.user.js'
-import ryksapi from '@/api/yljs/ryks'
+import ksapi from '@/api/yljs/ks'
 export default {
   name: 'yljs-ks-index',
   props: {
@@ -65,36 +73,36 @@ export default {
   },
   data () {
     return {
-      //   rylist: [
-      //     { id: 1, xm: '张三', xb: 1, xl: 2, zc: 3 },
-      //     { id: 2, xm: '李四', xb: 1, xl: 2, zc: 2 },
-      //     { id: 3, xm: '王花', xb: 2, xl: 3, zc: 1 },
-      //     { id: 4, xm: '张三二', xb: 1, xl: 1, zc: 1 },
-      //     { id: 5, xm: '李四二', xb: 1, xl: 2, zc: 2 },
-      //     { id: 6, xm: '王花二', xb: 2, xl: 3, zc: 1 }
-      //   ],
-      rylist: []
+      ksInfo: null
     }
   },
-  created () {
-    ryksapi.getbyks(this.ksid).then(res => {
-      if (res.code === 1) {
-        this.rylist = []
-        for (let i in res.data) {
-          this.rylist.push(res.data[i].ry)
-        }
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
-  },
   computed: {
+    ksryCount () {
+      if (!this.ksInfo || !this.ksInfo.ryList || !Array.isArray(this.ksInfo.ryList)) {
+        return 0
+      } else {
+        return this.ksInfo.ryList.length
+      }
+    },
     isksManager () {
       if (!this.ksid) {
         return false
       }
       return role.hasRoles([role.Roles.科级审核]) && role.ksid === this.ksid
     }
+  },
+  created () {
+    ksapi.loadksry(this.ksid).then(res => {
+      if (res.code === 1) {
+        // this.rylist = []
+        // for (let i in res.data.ryList) {
+        //   this.rylist.push(res.data.ryList[i].ry)
+        // }
+        this.ksInfo = res.data
+      } else {
+        this.$message.error(res.msg)
+      }
+    })
   },
   methods: {
     zcfilter (item) {

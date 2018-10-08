@@ -1,6 +1,10 @@
 import parent from '../index'
 const BaseURL = parent.BaseURL + '/ks'
 
+function reject (msg) {
+  return Promise.reject(new Error('KSApi：' + msg))
+}
+
 export default {
   BaseURL,
   getksbyname () {
@@ -12,5 +16,11 @@ export default {
     } else {
       return parent.axios.get(BaseURL + '/getallks')
     }
+  },
+  loadksry (ksid) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/loadksry/' + ksid)
   }
 }

@@ -6,9 +6,11 @@
         <h3>科室信息加载出错，请稍后重试</h3>
         <div>{{err.message}}</div>
       </div>
-      <div v-else-if="myryks===null">
-        <h2>你还不属于任何科室</h2>
-        <el-button type="primary" @click="handleCreate">点击这里申请加入一个科室</el-button>
+      <div v-else-if="!myryks">
+        <template v-if="myryks===null">
+          <h2>你还不属于任何科室</h2>
+          <el-button type="primary" @click="handleCreate">点击这里申请加入一个科室</el-button>
+        </template>
       </div>
       <div v-else>
         <div>你已经申请加入科室：<strong>{{myryks.ks.mc}}</strong></div>
@@ -50,7 +52,7 @@ export default {
   },
   data () {
     return {
-      myryks: null,
+      myryks: undefined,
       loading: true,
       err: null
     }

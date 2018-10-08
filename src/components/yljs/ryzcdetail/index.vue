@@ -2,7 +2,7 @@
   <div>
     <el-form v-if="isKSManager || isMe || isApproved" label-width="120px" size="small">
       <el-form-item label="职称级别">
-        <strong>{{formartZcLevel(ryzc.zcLevel)}}</strong>
+        <strong v-if="ryzc.zcLevel">{{formartZcLevel(ryzc.zcLevel)}}</strong>
       </el-form-item>
       <el-form-item label="专业">
         <strong>{{ryzc.zylb.mc}}</strong>
@@ -29,16 +29,19 @@
         </el-form-item>
       </template>
       <template v-else>
-        <el-form-item label="科室审核时间">
-          <strong>{{formartDate(ryzc.kjshInfo.operateTime)}}</strong>
+        <el-form-item label="审核意见">
+          <el-tag v-if="ryzc.kjshInfo.operateReason" type="warning">{{ryzc.kjshInfo.operateReason}}</el-tag>
         </el-form-item>
         <el-form-item label="审核人">
           <strong>{{ryzc.kjshInfo.operatorName}}</strong>
         </el-form-item>
+        <el-form-item label="科室审核时间">
+          <strong>{{formartDate(ryzc.kjshInfo.operateTime)}}</strong>
+        </el-form-item>
       </template>
       <el-form-item v-if="isMe">
-        <el-button v-if="needCommit" @click="handleCommit">提交信息，等待审核</el-button>
-        <el-button v-if="needReedit" @click="handleReedit">撤回信息重新编辑</el-button>
+        <el-button v-if="needCommit" @click="handleCommit">点击提交信息，并等待科室审核</el-button>
+        <el-button v-if="needReedit" @click="handleReedit">已被驳回，点击撤回重新编辑</el-button>
       </el-form-item>
     </el-form>
     <div style="text-align:right">
@@ -102,6 +105,11 @@ export default {
       this.reason = null
     },
     handleReject () {
+      if (!this.reason) {
+        this.$message.warning('请输入驳回理由')
+        return false
+      }
+
       ryzcapi.rejectkjsh(this.ryzc.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
