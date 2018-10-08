@@ -1,11 +1,12 @@
 <template>
   <d2-container>
+    <el-card v-loading='loading'>
     <div slot="header">
       <h3>人员技术</h3>
       <div>以下是科室人员的技术授权</div>
     </div>
-    <el-card v-loading='loading'>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
+      <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -18,7 +19,8 @@ import ryjsapi from '@/api/yljs/ryjs'
 export default {
   name: 'yljs-ryjs-listbyks',
   components: {
-    'ryjs-table': () => import('@/components/yljs/ryjstable')
+    'ryjs-table': () => import('@/components/yljs/ryjstable'),
+    'my-pagination': () => import('@/components/MyPagination')
   },
   props: {
     ksid: String
@@ -27,7 +29,8 @@ export default {
     return {
       loading: true,
       ryjslist: null,
-      multipleSelection: []
+      multipleSelection: [],
+      pageIndex: 1
     }
   },
   computed: {
@@ -37,20 +40,25 @@ export default {
   },
   created () {
     // fetch未审核人员
-    ryjsapi.getbyks(this.ksid).then(res => {
-      this.loading = false
-      if (res.code === 1) {
-        this.ryjslist = res.data
-      } else if (res.code === 2) {
-        this.$message.warning('目前没有新的申请')
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(() => {
-      this.loading = false
-    })
+    this.fetchData(1)
   },
   methods: {
+    fetchData (val) {
+      this.pageIndex = val
+      this.loading = true
+      ryjsapi.getbyks(this.ksid, val).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.ryjslist = res.data
+        } else if (res.code === 2) {
+          this.$message.warning('目前没有新的申请')
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
     selectedChange (val) {
       this.multipleSelection = val
     },

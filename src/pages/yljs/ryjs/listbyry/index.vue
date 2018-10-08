@@ -7,7 +7,7 @@
         <div v-else>以下是人员的技术授权</div>
       </div>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:!isMe}"></ryjs-table>
-      <my-pagination :pageIndex="pageIndex" @page-index-change="handlePageChange"></my-pagination>
+      <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -49,6 +49,8 @@ export default {
   },
   methods: {
     fetchData (page) {
+      this.pageIndex = page
+      this.loading = true
       let api
       if (this.isMe) {
         api = ryjsapi.getmine(page)
@@ -96,9 +98,6 @@ export default {
       } else {
         this.$message.error(rst.msg)
       }
-    },
-    handlePageChange (val) {
-      this.fetchData(val)
     }
   }
 }

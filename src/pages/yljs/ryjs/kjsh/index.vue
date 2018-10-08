@@ -1,15 +1,16 @@
 <template>
   <d2-container>
+    <el-card v-loading='loading'>
     <div slot="header">
       <h3>人员技术</h3>
       <div>以下是科室人员的技术授权申请</div>
     </div>
-    <el-card v-loading='loading'>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
       <div v-if="isKjManager || isYjManager" style="margin-top:10px">
         <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
         <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
       </div>
+      <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -23,7 +24,8 @@ import user from '@/libs/util.user.js'
 export default {
   name: 'yljs-ryjs-listbyks',
   components: {
-    'ryjs-table': () => import('@/components/yljs/ryjstable')
+    'ryjs-table': () => import('@/components/yljs/ryjstable'),
+    'my-pagination': () => import('@/components/MyPagination')
   },
   props: {
     ksid: String
@@ -32,7 +34,8 @@ export default {
     return {
       loading: true,
       ryjslist: null,
-      multipleSelection: []
+      multipleSelection: [],
+      pageIndex: 1
     }
   },
   computed: {
@@ -48,24 +51,30 @@ export default {
   },
   created () {
     // fetch未审核人员
-    if (!this.isKjManager) {
-      this.$message.error('没有此权限')
-      return
-    }
-    ryjsapi.getneedkjsh(this.ksid).then(res => {
-      this.loading = false
-      if (res.code === 1) {
-        this.ryjslist = res.data
-      } else if (res.code === 2) {
-        this.$message.warning('目前没有新的申请')
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(() => {
-      this.loading = false
-    })
+    this.fetchData(1)
   },
   methods: {
+    fetchData (val) {
+      this.pageIndex = val
+      if (!this.isKjManager) {
+        this.$message.error('没有此权限')
+        return
+      }
+
+      this.loading = true
+      ryjsapi.getneedkjsh(this.ksid, val).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.ryjslist = res.data
+        } else if (res.code === 2) {
+          this.$message.warning('目前没有新的申请')
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
     selectedChange (val) {
       this.multipleSelection = val
     },
