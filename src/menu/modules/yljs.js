@@ -53,17 +53,10 @@ export default {
       ]
     },
     {
-      title: '角色管理',
-      icon: 'table',
-      children: [
-        { path: `${pre}ryrole`, title: '人员角色' }
-      ]
-    },
-    {
       title: '管理',
       icon: 'table',
       children: [
-        { path: `${pre}ryrole`, title: '科室人员管理' }
+        { path: `${pre}ryrole/manage`, title: '人员角色管理' }
       ]
     }
   ])('/yljs/')

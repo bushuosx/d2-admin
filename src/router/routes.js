@@ -313,7 +313,7 @@ const frameIn = [
       { path: 'ryjs/yjsh', name: `${pre}ryjs-yjsh`, component: () => import('@/pages/yljs/ryjs/yjsh'), props: (route) => ({ ksid: route.params.ksid }), meta: { ...meta, title: '人员技术院级审核' } },
       { path: 'ryrole/index/:ryid', name: `${pre}ryrole-index`, component: () => import('@/pages/yljs/ryrole'), props: true, meta: { ...meta, title: '人员角色信息' } },
       { path: 'ryrole/supertome', name: `${pre}ryrole-supertome`, component: () => import('@/pages/yljs/ryrole/supertome'), meta: { ...meta, title: '给我力量吧' } },
-      { path: 'ryrole/manage/:ryid', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), props: true, meta: { ...meta, title: '人员权限分配' } },
+      { path: 'ryrole/manage/', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), meta: { ...meta, title: '人员权限分配' } },
       { path: 'ryprofile/index/:ryid', name: `${pre}ryprofile-index`, component: () => import('@/pages/yljs/ryprofile'), props: true, meta: { ...meta, title: '人员详细资料' } }
 
     ])('yljs-')
@@ -328,7 +328,7 @@ const frameOut = [
   {
     path: '/yljs/debuglogin',
     name: 'yljs-debuglogin',
-    component: () => import('@/pages/login')
+    component: () => import('@/pages/login/debuglogin.vue')
   },
   {
     path: '/yljs/logincallback',

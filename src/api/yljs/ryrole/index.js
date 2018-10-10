@@ -14,7 +14,7 @@ export default {
     return parent.axios.get(BaseURL + '/getbyry/' + ryid)
   },
   getrolesofry (ryid) {
-    if (ryid === null || ryid === undefined || ryid === '') {
+    if (!ryid) {
       return reject('ryid不能为空')
     }
     return parent.axios.get(BaseURL + '/getrolesofry/' + ryid)
