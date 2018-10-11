@@ -315,6 +315,9 @@ const frameIn = [
       { path: 'ryrole/supertome', name: `${pre}ryrole-supertome`, component: () => import('@/pages/yljs/ryrole/supertome'), meta: { ...meta, title: '给我力量吧' } },
       { path: 'ryrole/manage/', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), meta: { ...meta, title: '人员权限分配' } },
       { path: 'ryprofile/index/:ryid', name: `${pre}ryprofile-index`, component: () => import('@/pages/yljs/ryprofile'), props: true, meta: { ...meta, title: '人员详细资料' } },
+
+      { path: 'manage/ksmanager/add', name: `${pre}manage-ksmanager-add`, component: () => import('@/pages/yljs/manage/ksmanager/add.vue'), meta: { ...meta, title: '增加科室管理员' } },
+
       { path: 'test/excel', name: `${pre}test-excel`, component: () => import('@/pages/yljs/test/excel.vue'), meta: { ...meta, title: 'Excel测试' } }
     ])('yljs-')
   }

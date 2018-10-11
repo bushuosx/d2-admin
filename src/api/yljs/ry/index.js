@@ -35,5 +35,11 @@ export default {
   },
   refreshMe () {
     return parent.axios.get(BaseURL + '/refreshme')
+  },
+  setksmanager (data) {
+    if (!Array.isArray(data) || data.length === 0) {
+      return reject('data不能为空')
+    }
+    return parent.axios.post(BaseURL + '/setksmanager', data)
   }
 }
