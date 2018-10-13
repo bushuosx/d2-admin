@@ -69,10 +69,15 @@ new Vue({
     // 初始化全屏监听
     this.$store.commit('d2admin/fullscreen/listen')
   },
+  computed: {
+    __asideMenu () {
+      return getAsideMenu(this.$store.state.d2admin.user.info)
+    }
+  },
   watch: {
     // 监听路由 控制侧边栏显示
     '$route.matched' (val) {
-      const _side = getAsideMenu().filter(menu => menu.path === val[0].path)
+      const _side = this.__asideMenu.filter(menu => menu.path === val[0].path)
       this.$store.commit('d2admin/menu/asideSet', _side.length > 0 ? _side[0].children : [])
     }
   }

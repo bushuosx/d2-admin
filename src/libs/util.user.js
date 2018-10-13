@@ -30,24 +30,34 @@ const Roles = {
   超级管理权限: 9900
 }
 
+const __getUserInfo = function () {
+  if (!store || !store.state) {
+    return undefined
+  }
+  return store.state.d2admin.user.info
+}
+
 export default {
   Roles,
-  userId: store.state.d2admin.user.info.uuid,
-  userName: store.state.d2admin.user.info.name,
-  userRoles: store.state.d2admin.user.info.roles,
-  ksid: store.state.d2admin.user.info.ksid,
-  profileId: store.state.d2admin.user.info.profileid,
+  userId: __getUserInfo() ? __getUserInfo().uuid : undefined,
+  userName: __getUserInfo() ? __getUserInfo().name : undefined,
+  userRoles: __getUserInfo() ? __getUserInfo().roles : undefined,
+  ksid: __getUserInfo() ? __getUserInfo().ksid : undefined,
+  profileId: __getUserInfo() ? __getUserInfo().profileid : undefined,
   hasRoles (roles) {
-    if (!roles || !Array.isArray(roles) || roles.length === 0) {
-      return false
-    }
-    if (!this.userRoles || !Array.isArray(this.userRoles)) {
+    if (!Array.isArray(roles)) {
       return undefined
     }
+
+    const myroles = __getUserInfo() ? __getUserInfo().roles : undefined
+    if (!Array.isArray(myroles)) {
+      return false
+    }
+
     for (let i in roles) {
       let found = false
-      for (let j in this.userRoles) {
-        if (roles[i] === this.userRoles[j]) {
+      for (let j in myroles) {
+        if (roles[i] === myroles[j]) {
           found = true
           break
         }
@@ -68,6 +78,7 @@ export default {
           info.roles = res.data.profile.permissions
           info.ksid = res.data.profile.ksid
           info.profileid = res.data.profile.profileId
+          resolve(info)
         } else {
           reject(new Error(res.msg))
         }

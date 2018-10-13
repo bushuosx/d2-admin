@@ -1,10 +1,10 @@
 <template>
   <d2-container>
     <el-card v-loading='loading'>
-    <div slot="header">
-      <h3>人员技术</h3>
-      <div>以下是科室人员的技术授权</div>
-    </div>
+      <div slot="header">
+        <h3>人员技术</h3>
+        <div>以下是科室人员的技术授权</div>
+      </div>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
       <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
@@ -51,7 +51,7 @@ export default {
         if (res.code === 1) {
           this.ryjslist = res.data
         } else if (res.code === 2) {
-          this.$message.warning('目前没有新的申请')
+          this.$message.warning('没有查询到更多数据')
         } else {
           this.$message.error(res.msg)
         }

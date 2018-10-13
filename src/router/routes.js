@@ -319,7 +319,10 @@ const frameIn = [
       { path: 'manage/ksmanager/add', name: `${pre}manage-ksmanager-add`, component: () => import('@/pages/yljs/manage/ksmanager/add.vue'), meta: { ...meta, title: '增加科室管理员' } },
       { path: 'manage/rymanager/add', name: `${pre}manage-rymanager-add`, component: () => import('@/pages/yljs/manage/rymanager/add.vue'), meta: { ...meta, title: '导入员工列表' } },
 
+      { path: 'help/about', name: `${pre}help-about`, component: () => import('@/pages/yljs/help/about'), meta: { ...meta, title: '关于本站' } },
+
       { path: 'test/excel', name: `${pre}test-excel`, component: () => import('@/pages/yljs/test/excel.vue'), meta: { ...meta, title: 'Excel测试' } }
+
     ])('yljs-')
   }
 ]

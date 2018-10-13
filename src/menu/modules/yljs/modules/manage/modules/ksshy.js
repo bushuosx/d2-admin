@@ -7,9 +7,9 @@ const getChildren = function (user) {
   } else {
     const ksid = user.ksid
     return [
-      { path: `${BaseUrl}/ryks/kjsh/${ksid}`, title: '审核入科申请' },
-      { path: `${BaseUrl}/ryjs/kjsh/${ksid}`, title: '审核技术授权申请' },
-      { path: `${BaseUrl}/ryprofile/kjsh/${ksid}`, title: '审核人员档案' }
+      { path: `${BaseUrl}/ryks/kjsh/${ksid}`, icon: 'search', title: '审核入科申请' },
+      { path: `${BaseUrl}/ryjs/kjsh/${ksid}`, icon: 'clipboard', title: '审核技术授权申请' },
+      { path: `${BaseUrl}/ryprofile/kjsh/${ksid}`, icon: 'street-view', title: '审核人员档案' }
     ]
   }
 }

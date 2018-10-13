@@ -1,6 +1,5 @@
 import db from '@/libs/db.js'
 import util from '@/libs/util.js'
-
 /**
  * @description 检查路径是否存在 不存在的话初始化
  * @param {Object} param dbName {String} 数据库名称
@@ -18,6 +17,7 @@ function pathInit ({
   defaultValue = ''
 }) {
   const uuid = util.cookies.get('uuid') || 'ghost-uuid'
+  // const uuid = util.user.userId || 'ghost-uuid'
   const currentPath = `${dbName}.${user ? `user.${uuid}` : 'public'}${path ? `.${path}` : ''}`
   const value = db.get(currentPath).value()
   if (!(value !== undefined && validator(value))) {

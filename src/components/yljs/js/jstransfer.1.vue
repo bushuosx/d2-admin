@@ -4,17 +4,17 @@
     <div>
       <el-row style="margin-top:6px">
         <el-col :span="6">
-          <el-input @change="filterjs" v-model="jsfilter.mc" placeholder="输入技术名称" clearable>
+          <el-input v-model="jsfilter.mc" placeholder="输入技术名称" clearable>
             <span slot="prepend">按名称</span>
           </el-input>
         </el-col>
         <el-col style="margin-left:6px" :span="6">
-          <el-input @change="filterjs" v-model="jsfilter.bm" placeholder="输入技术编码" clearable>
+          <el-input v-model="jsfilter.bm" placeholder="输入技术编码" clearable>
             <span slot="prepend">按编码</span>
           </el-input>
         </el-col>
         <el-col style="margin-left:6px" :span="6">
-          <el-input @change="filterjs" v-model="jsfilter.dj" type="Number" placeholder="输入技术等级" clearable>
+          <el-input v-model="jsfilter.dj" type="Number" placeholder="输入技术等级" clearable>
             <span slot="prepend">按等级</span>
           </el-input>
         </el-col>
@@ -44,7 +44,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="js in jslist" v-bind:key="js.id" v-show="!js.hidden" @click="clickcheck(js)" class="jslistrow">
+              <tr v-for="js in filtedJsList" v-bind:key="js.id" v-show="!js.hidden" @click="clickcheck(js)" class="jslistrow">
                 <td><input type="checkbox" v-model="js.checked"></td>
                 <td>{{js.mc}}</td>
                 <td>{{js.dj}}</td>
@@ -89,6 +89,13 @@ export default {
         }
       )
       return rst
+    },
+    filtedJsList: function () {
+      return this.jslist.filter(v =>
+        (!this.jsfilter.mc || (v.mc && v.mc.indexOf(this.jsfilter.mc) !== -1)) &&
+        (!this.jsfilter.bm || (v.jsbm && v.jsbm.indexOf(this.jsfilter.bm) !== -1)) &&
+        (!this.jsfilter.dj || v.dj === Number(this.jsfilter.dj))
+      )
     }
   },
   data () {
@@ -134,25 +141,6 @@ export default {
         }
       }
       if (removeindex !== -1) this.selectedjslist.splice(removeindex, 1)
-    },
-    filterjs () {
-      // debugger
-      let mc = this.jsfilter.mc
-      let bm = this.jsfilter.bm
-      let dj = this.jsfilter.dj
-      this.$props.jslist.forEach(js => {
-        let show = true
-        if (show && mc && mc !== '') {
-          show = js.mc.indexOf(mc) !== -1
-        }
-        if (show && bm && bm !== '') {
-          show = js.bm.indexOf(bm) !== -1
-        }
-        if (show && dj) {
-          show = js.dj === Number(dj)
-        }
-        js.hidden = !show
-      })
     }
   }
 }

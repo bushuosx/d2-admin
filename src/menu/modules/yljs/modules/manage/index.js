@@ -8,7 +8,7 @@ export default function (user) {
     title: '管理模板',
     icon: 'lock',
     children: [
-      { path: `${Constants.BaseUrl}/ryrole/manage`, title: '人员角色分配' },
+      { path: `${Constants.BaseUrl}/ryrole/manage`, icon: 'arrows', title: '人员角色分配' },
       ksshy(user),
       yyshy(user),
       webmanager(user)

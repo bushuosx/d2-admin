@@ -1,6 +1,5 @@
 import log from './util.log.js'
 import cookies from './util.cookies.js'
-
 let util = {
   cookies,
   log

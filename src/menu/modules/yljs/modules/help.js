@@ -5,7 +5,7 @@ export default function (user) {
     title: '帮助',
     icon: 'sitemap',
     children: [
-      { path: `${Constants.BaseUrl}/ry/ks/rysh`, title: '入科审核' }
+      { path: `${Constants.BaseUrl}/help/about`, title: '关于本站' }
     ]
   }
 }

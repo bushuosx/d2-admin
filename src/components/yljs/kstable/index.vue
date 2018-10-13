@@ -42,11 +42,14 @@ export default {
       return user.hasRoles([user.Roles.院级审核]) || user.hasRoles([user.Roles.科级审核])
     },
     isYJSHManager () {
+      console.log(user)
       return user.hasRoles([user.Roles.院级审核])
     }
   },
   methods: {
     isKJSHManager (ksid) {
+      console.log(user)
+      debugger
       if (!user.ksid) {
         return false
       }

@@ -1,5 +1,6 @@
 <template>
   <d2-container>
+    <div slot="header">人员角色分配</div>
     <ry-search v-show="!ryInfo">
       <el-button slot="actioner" slot-scope="scope" @click="handleClick(scope.ry)">分配角色</el-button>
     </ry-search>
