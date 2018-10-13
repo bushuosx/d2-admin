@@ -1,14 +1,17 @@
 <template>
   <d2-container v-loading="loading">
-    <strong slot="header">设置科室管理员</strong>
+    <div slot="header">
+      <strong>导入员工信息</strong>
+      <div>本医疗技术数据库中存在的信息记录的员工，方能在本系统成功注册</div>
+    </div>
     <div>
       <ol>
         <li>从Excel导入预览数据，匹配要导入的数据</li>
         <li>执行上传工作</li>
         <li>等待服务器返回操作结果</li>
       </ol>
+      <!-- <div><a target="_blank" href="/yljs/employees.xlsx">点击这里可以下载模板</a></div> -->
     </div>
-    <div>注意：如果人员还未在本系统初始化，则该人员的设置不会成功。可在人员初始化以后，再次进行此操作。</div>
     <import-excel ref="iexcel" @header-change="handleHeaderChange"></import-excel>
     <div>
       <div>在上述数据中选择匹配的列</div>
@@ -18,15 +21,24 @@
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="科室编码">
-          <el-select v-model="ksHeader">
+        <el-form-item label="姓名">
+          <el-select v-model="xmHeader">
+            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="身份证号">
+          <el-select v-model="sfzHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSubmit">保存设置</el-button>
+          <el-button type="primary" @click="handleSubmit">开始上传</el-button>
         </el-form-item>
       </el-form>
+    </div>
+    <div v-if="faildList">
+      <div><strong>以下人员没有导入成功,共{{faildList.length}}个</strong></div>
+      <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
     </div>
   </d2-container>
 </template>
@@ -34,7 +46,7 @@
 <script>
 import ryapi from '@/api/yljs/ry'
 export default {
-  name: 'yljs-manage-ksmanager-add',
+  name: 'yljs-manage-rymanager-add',
   components: {
     'import-excel': () => import('@/components/ImportExcel')
   },
@@ -42,8 +54,10 @@ export default {
     return {
       headers: [],
       ghHeader: null,
-      ksHeader: null,
-      loading: false
+      xmHeader: null,
+      sfzHeader: null,
+      loading: false,
+      faildList: null
     }
   },
   methods: {
@@ -51,7 +65,7 @@ export default {
       this.headers = val
     },
     handleSubmit () {
-      if (!this.ghHeader || !this.ksHeader) {
+      if (!this.ghHeader || !this.xmHeader || !this.sfzHeader) {
         this.$message.error('数据选取有误')
         return false
       }
@@ -63,15 +77,19 @@ export default {
       }
 
       const ghHeader = this.ghHeader
-      const ksHeader = this.ksHeader
+      const xmHeader = this.xmHeader
+      const sfzHeader = this.sfzHeader
 
-      let rst = sd.map(v => { return { RYGH: v[ghHeader], KSCode: v[ksHeader] } })
+      let rst = sd.map(v => { return { GH: v[ghHeader], XM: v[xmHeader], SFZ: v[sfzHeader] } })
 
       this.loading = true
-      ryapi.setksmanager(rst).then(res => {
+      ryapi.importEmployees(rst).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.$message.success('操作成功')
+        } else if (res.code === 2) {
+          this.$message.warning('部分人员导入失败')
+          this.faildList = res.data
         } else {
           this.$message.error(res.msg)
         }

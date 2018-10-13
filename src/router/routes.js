@@ -317,6 +317,7 @@ const frameIn = [
       { path: 'ryprofile/index/:ryid', name: `${pre}ryprofile-index`, component: () => import('@/pages/yljs/ryprofile'), props: true, meta: { ...meta, title: '人员详细资料' } },
 
       { path: 'manage/ksmanager/add', name: `${pre}manage-ksmanager-add`, component: () => import('@/pages/yljs/manage/ksmanager/add.vue'), meta: { ...meta, title: '增加科室管理员' } },
+      { path: 'manage/rymanager/add', name: `${pre}manage-rymanager-add`, component: () => import('@/pages/yljs/manage/rymanager/add.vue'), meta: { ...meta, title: '导入员工列表' } },
 
       { path: 'test/excel', name: `${pre}test-excel`, component: () => import('@/pages/yljs/test/excel.vue'), meta: { ...meta, title: 'Excel测试' } }
     ])('yljs-')

@@ -41,5 +41,11 @@ export default {
       return reject('data不能为空')
     }
     return parent.axios.post(BaseURL + '/setksmanager', data)
+  },
+  importEmployees (data) {
+    if (!Array.isArray(data) || data.length === 0) {
+      return reject('data不能为空')
+    }
+    return parent.axios.post(BaseURL + '/importemployees', data)
   }
 }
