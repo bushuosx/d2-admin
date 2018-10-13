@@ -1,5 +1,6 @@
 // 设置文件
 import setting from '@/setting.js'
+import { getHeaderMenu } from '@/menu'
 
 export default {
   namespaced: true,
@@ -36,6 +37,12 @@ export default {
         defaultValue: setting.user.info,
         user: true
       })
+
+      // 重新加载菜单
+      // 设置顶栏菜单
+      this.commit('d2admin/menu/headerSet', getHeaderMenu(state.info))
+      // 初始化菜单搜索功能
+      this.commit('d2admin/search/init', getHeaderMenu(state.info))
     }
   },
   getters: {
