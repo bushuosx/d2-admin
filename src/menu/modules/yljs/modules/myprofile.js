@@ -4,11 +4,10 @@ const getChildren = function (user) {
   if (!user || !user.uuid) {
     return [{ title: Constants.InvalidMessage }]
   } else {
-    const pre = '/yljs'
     const userid = user.uuid
     return [
-      { path: `${pre}/ryprofile/index/${userid}`, title: '档案信息' },
-      { path: `${pre}/ryrole/index/${userid}`, title: '我的网站角色' }
+      { path: `${Constants.BaseUrl}/ryprofile/index/${userid}`, icon: 'id-card', title: '档案信息' },
+      { path: `${Constants.BaseUrl}/ryrole/index/${userid}`, title: '我的网站角色' }
     ]
   }
 }
@@ -16,7 +15,7 @@ const getChildren = function (user) {
 export default function (userinfo) {
   return {
     title: '我的资料',
-    icon: 'table',
+    icon: 'user',
     children: getChildren(userinfo)
   }
 }

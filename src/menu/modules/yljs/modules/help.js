@@ -1,9 +1,11 @@
+import Constants from './Constants'
+
 export default function (user) {
   return {
     title: '帮助',
-    icon: 'table',
+    icon: 'sitemap',
     children: [
-      { path: `ry/ks/rysh`, title: '入科审核' }
+      { path: `${Constants.BaseUrl}/ry/ks/rysh`, title: '入科审核' }
     ]
   }
 }

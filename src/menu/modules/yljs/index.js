@@ -9,7 +9,7 @@ const getMunu = function (userInfo) {
   return {
     path: '/yljs',
     title: '医疗技术管理系统',
-    icon: 'flask',
+    icon: 'medkit',
     children: [
       myprofile(userInfo),
       myks(userInfo),

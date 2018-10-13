@@ -6,8 +6,8 @@ const getChildren = function (user) {
   } else {
     const userid = user.uuid
     return [
-      { path: `ryjs/index/${userid}`, title: '个人技术一览' },
-      { path: `ryjs/create`, title: '申请技术授权' }
+      { path: `${Constants.BaseUrl}/ryjs/index/${userid}`, title: '个人技术一览' },
+      { path: `${Constants.BaseUrl}/ryjs/create`, title: '申请技术授权' }
     ]
   }
 }
@@ -15,7 +15,7 @@ const getChildren = function (user) {
 export default function (user) {
   return {
     title: '我的技术',
-    icon: 'table',
+    icon: 'heartbeat',
     children: getChildren(user)
   }
 }
