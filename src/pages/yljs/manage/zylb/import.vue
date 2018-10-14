@@ -1,64 +1,60 @@
 <template>
   <d2-container v-loading="loading">
-    <div slot="header">
-      <strong>导入员工信息</strong>
-      <div>本医疗技术数据库中存在的信息记录的员工，方能在本系统成功注册</div>
-    </div>
+    <strong slot="header">导入专业类别</strong>
     <div>
       <ol>
         <li>从Excel导入预览数据，匹配要导入的数据</li>
         <li>执行上传工作</li>
         <li>等待服务器返回操作结果</li>
       </ol>
-      <!-- <div><a target="_blank" href="/yljs/employees.xlsx">点击这里可以下载模板</a></div> -->
     </div>
     <import-excel ref="iexcel" @header-change="handleHeaderChange"></import-excel>
     <div>
       <div>在上述数据中选择匹配的列</div>
       <div>以下标记*的列，为必选项</div>
       <el-form label-width="100px">
-        <el-form-item label="*工号">
-          <el-select v-model="ghHeader">
+        <el-form-item label="*专业编码">
+          <el-select v-model="bmHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="*姓名">
-          <el-select v-model="xmHeader">
+        <el-form-item label="*专业名称">
+          <el-select v-model="mcHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="身份证号">
-          <el-select v-model="sfzHeader">
+        <el-form-item label="说明">
+          <el-select v-model="smHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSubmit">开始上传</el-button>
+          <el-button type="primary" @click="handleSubmit">保存设置</el-button>
         </el-form-item>
       </el-form>
-    </div>
-    <div v-if="faildList">
-      <div><strong>以下人员没有导入成功,共{{faildList.length}}个</strong></div>
-      <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
+      <div v-if="faildList">
+        <div><strong>以下内容没有导入成功,共{{faildList.length}}个</strong></div>
+        <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
+      </div>
     </div>
   </d2-container>
 </template>
 
 <script>
-import ryapi from '@/api/yljs/ry'
+import zylbapi from '@/api/yljs/zylb'
 export default {
-  name: 'yljs-manage-rymanager-add',
+  name: 'yljs-manage-zylb-import',
   components: {
     'import-excel': () => import('@/components/ImportExcel')
   },
   data () {
     return {
       headers: [],
-      ghHeader: null,
-      xmHeader: null,
-      sfzHeader: null,
+      bmHeader: null,
+      mcHeader: null,
+      smHeader: null,
       loading: false,
-      faildList: null
+      faildList: []
     }
   },
   methods: {
@@ -66,7 +62,7 @@ export default {
       this.headers = val
     },
     handleSubmit () {
-      if (!this.ghHeader || !this.xmHeader) {
+      if (!this.bmHeader || !this.mcHeader) {
         this.$message.error('数据选取有误')
         return false
       }
@@ -77,22 +73,22 @@ export default {
         return false
       }
 
-      const ghHeader = this.ghHeader
-      const xmHeader = this.xmHeader
-      const sfzHeader = this.sfzHeader
+      const bmHeader = this.bmHeader
+      const mcHeader = this.mcHeader
+      const smHeader = this.smHeader
 
-      let rst = sd.map(v => { return { GH: v[ghHeader], XM: v[xmHeader], SFZ: sfzHeader ? v[sfzHeader] : null } })
+      let rst = sd.map(v => { return { bm: v[bmHeader], mc: v[mcHeader], sm: smHeader ? v[smHeader] : null } })
 
       this.loading = true
-      ryapi.importEmployees(rst).then(res => {
+      zylbapi.importzylb(rst).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.$message.success('操作成功')
         } else if (res.code === 2) {
-          this.$message.warning('部分人员导入失败')
+          this.$message.warning(res.msg)
           this.faildList = res.data
         } else {
-          this.$message.error(res.msg)
+          this.$message.error(res.msg ? res.msg : '部分操作失败')
         }
       }).catch(err => {
         this.loading = false

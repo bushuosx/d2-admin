@@ -48,7 +48,7 @@
                 <td><input type="checkbox" v-model="js.checked"></td>
                 <td>{{js.mc}}</td>
                 <td>{{js.dj}}</td>
-                <td>{{js.bm}}</td>
+                <td>{{js.jsbm}}</td>
                 <td>{{js.zylb}}</td>
                 <td>{{js.sm}}</td>
               </tr>

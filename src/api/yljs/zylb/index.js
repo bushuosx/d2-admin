@@ -15,5 +15,11 @@ export default {
       reject('mc不能为空')
     }
     return parent.axios.get(BaseURL + '/getbymc/' + mc)
+  },
+  importzylb (zylbList) {
+    if (!Array.isArray(zylbList)) {
+      return reject('zylbList只能是数组')
+    }
+    return parent.axios.post(BaseURL + '/importzylb', zylbList)
   }
 }

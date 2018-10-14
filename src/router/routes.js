@@ -318,7 +318,10 @@ const frameIn = [
 
       { path: 'manage/ksmanager/add', name: `${pre}manage-ksmanager-add`, component: () => import('@/pages/yljs/manage/ksmanager/add.vue'), meta: { ...meta, title: '增加科室管理员' } },
       { path: 'manage/rymanager/add', name: `${pre}manage-rymanager-add`, component: () => import('@/pages/yljs/manage/rymanager/add.vue'), meta: { ...meta, title: '导入员工列表' } },
-
+      { path: `manage/zylb/import`, name: `${pre}manage-zylb-import`, component: () => import('@/pages/yljs/manage/zylb/import.vue'), meta: { ...meta, title: '导入专业类别' } },
+      { path: `manage/js/importjs`, name: `${pre}manage-js-importjs`, component: () => import('@/pages/yljs/manage/js/importjs.vue'), meta: { ...meta, title: '导入技术' } },
+      { path: `manage/js/importbmk`, name: `${pre}manage-js-importbmk`, component: () => import('@/pages/yljs/manage/js/importbmk.vue'), meta: { ...meta, title: '导入技术编码库' } },
+      { path: `manage/js/setjsbmdy`, name: `${pre}manage-js-setjsbmdy`, component: () => import('@/pages/yljs/manage/js/setjsbmdy.vue'), meta: { ...meta, title: '设置技术编码对应' } },
       { path: 'help/about', name: `${pre}help-about`, component: () => import('@/pages/yljs/help/about'), meta: { ...meta, title: '关于本站' } },
 
       { path: 'test/excel', name: `${pre}test-excel`, component: () => import('@/pages/yljs/test/excel.vue'), meta: { ...meta, title: 'Excel测试' } }

@@ -32,5 +32,38 @@ export default {
       url += '/' + pageIndex
     }
     return parent.axios.get(url)
+  },
+  getbmkname (date) {
+    if (!date) {
+      return reject('date不能为空')
+    }
+
+    return parent.axios.get(BaseURL + '/getjsbmkname/' + date)
+  },
+  importbmk (bmkList, time) {
+    if (!Array.isArray(bmkList)) {
+      return reject('bmkList不能为空')
+    }
+    if (!time) {
+      return reject('time不能为空')
+    }
+
+    return parent.axios.post(BaseURL + '/importjsbmk', { bmkList, time })
+  },
+  setjsbmdy (jsbmList, time) {
+    if (!Array.isArray(jsbmList)) {
+      return reject('jsbmList不能为空')
+    }
+    if (!time) {
+      return reject('time不能为空')
+    }
+    return parent.axios.put(BaseURL + '/setjsbmdy', { jsbmList, time })
+  },
+  importjs (jsList) {
+    if (!Array.isArray(jsList)) {
+      return reject('jsList只能为数组')
+    }
+    return parent.axios.post(BaseURL + '/importjs', jsList)
   }
+
 }

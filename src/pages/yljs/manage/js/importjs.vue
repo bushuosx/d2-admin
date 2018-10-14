@@ -1,8 +1,7 @@
 <template>
   <d2-container v-loading="loading">
     <div slot="header">
-      <strong>导入员工信息</strong>
-      <div>本医疗技术数据库中存在的信息记录的员工，方能在本系统成功注册</div>
+      <strong>导入技术信息</strong>
     </div>
     <div>
       <ol>
@@ -17,18 +16,23 @@
       <div>在上述数据中选择匹配的列</div>
       <div>以下标记*的列，为必选项</div>
       <el-form label-width="100px">
-        <el-form-item label="*工号">
-          <el-select v-model="ghHeader">
+        <el-form-item label="*技术名称">
+          <el-select v-model="mcHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="*姓名">
-          <el-select v-model="xmHeader">
+        <el-form-item label="描述">
+          <el-select v-model="msHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="身份证号">
-          <el-select v-model="sfzHeader">
+        <el-form-item label="等级">
+          <el-select v-model="djHeader">
+            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="类别">
+          <el-select v-model="lbHeader">
             <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
           </el-select>
         </el-form-item>
@@ -38,25 +42,26 @@
       </el-form>
     </div>
     <div v-if="faildList">
-      <div><strong>以下人员没有导入成功,共{{faildList.length}}个</strong></div>
+      <div><strong>以下内容没有导入成功,共{{faildList.length}}个</strong></div>
       <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
     </div>
   </d2-container>
 </template>
 
 <script>
-import ryapi from '@/api/yljs/ry'
+import jsapi from '@/api/yljs/js'
 export default {
-  name: 'yljs-manage-rymanager-add',
+  name: 'yljs-manage-js-importjs',
   components: {
     'import-excel': () => import('@/components/ImportExcel')
   },
   data () {
     return {
       headers: [],
-      ghHeader: null,
-      xmHeader: null,
-      sfzHeader: null,
+      mcHeader: null,
+      msHeader: null,
+      djHeader: null,
+      lbHeader: null,
       loading: false,
       faildList: null
     }
@@ -66,30 +71,31 @@ export default {
       this.headers = val
     },
     handleSubmit () {
-      if (!this.ghHeader || !this.xmHeader) {
+      if (!this.mcHeader) {
         this.$message.error('数据选取有误')
         return false
       }
 
       let sd = this.$refs.iexcel.getSelectedData()
-      if (!sd || !Array.isArray(sd)) {
+      if (!Array.isArray(sd)) {
         this.$message.error('数据选取有误')
         return false
       }
 
-      const ghHeader = this.ghHeader
-      const xmHeader = this.xmHeader
-      const sfzHeader = this.sfzHeader
+      const mcHeader = this.mcHeader
+      const msHeader = this.msHeader
+      const djHeader = this.djHeader
+      const lbHeader = this.lbHeader
 
-      let rst = sd.map(v => { return { GH: v[ghHeader], XM: v[xmHeader], SFZ: sfzHeader ? v[sfzHeader] : null } })
+      let rst = sd.map(v => { return { MC: v[mcHeader], MS: msHeader ? v[msHeader] : null, DJ: djHeader ? parseInt(v[djHeader]) : 0, LB: lbHeader ? parseInt(v[lbHeader]) : 0 } })
 
       this.loading = true
-      ryapi.importEmployees(rst).then(res => {
+      jsapi.importjs(rst).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.$message.success('操作成功')
         } else if (res.code === 2) {
-          this.$message.warning('部分人员导入失败')
+          this.$message.warning('部分内容导入失败')
           this.faildList = res.data
         } else {
           this.$message.error(res.msg)
