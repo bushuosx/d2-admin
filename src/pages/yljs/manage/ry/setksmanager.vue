@@ -34,7 +34,7 @@
 <script>
 import ryapi from '@/api/yljs/ry'
 export default {
-  name: 'yljs-manage-ksmanager-add',
+  name: 'yljs-manage-ry-setksmanager',
   components: {
     'import-excel': () => import('@/components/ImportExcel')
   },

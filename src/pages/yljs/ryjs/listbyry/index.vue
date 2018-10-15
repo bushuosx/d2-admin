@@ -47,10 +47,18 @@ export default {
     // fetch未审核人员
     this.fetchData(1)
   },
+  watch: {
+    ryid: function () {
+      this.fetchData(1)
+    }
+  },
   methods: {
     fetchData (page) {
       this.pageIndex = page
       this.loading = true
+      this.ryjslist = null
+      this.multipleSelection = []
+
       let api
       if (this.isMe) {
         api = ryjsapi.getmine(page)

@@ -1,17 +1,17 @@
 <template>
-    <d2-container>
-        <div slot="header">
-            <h3>人员技术</h3>
-            <div>以下是等待院级审核的技术授权申请</div>
-        </div>
-        <el-card v-loading='loading'>
-            <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true,showks:true}"></ryjs-table>
-            <div v-if="isYjManager" style="margin-top:10px">
-                <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
-                <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
-            </div>
-        </el-card>
-    </d2-container>
+  <d2-container>
+    <div slot="header">
+      <h3>人员技术</h3>
+      <div>以下是等待院级审核的技术授权申请</div>
+    </div>
+    <el-card v-loading='loading'>
+      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true,showks:true}"></ryjs-table>
+      <div v-if="isYjManager" style="margin-top:10px">
+        <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
+        <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
+      </div>
+    </el-card>
+  </d2-container>
 </template>
 
 <script>
@@ -44,25 +44,36 @@ export default {
     }
   },
   created () {
-    // fetch未审核人员
-    if (!this.isYjManager) {
-      this.$message.error('没有此权限')
-      return
+    this.fetchData()
+  },
+  watch: {
+    ksid: function () {
+      this.fetchData()
     }
-    ryjsapi.getneedyjsh(this.ksid).then(res => {
-      this.loading = false
-      if (res.code === 1) {
-        this.ryjslist = res.data
-      } else if (res.code === 2) {
-        this.$message.warning('目前没有新的申请')
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(() => {
-      this.loading = false
-    })
   },
   methods: {
+    fetchData () {
+      // fetch未审核人员
+      if (!this.isYjManager) {
+        this.$message.error('没有此权限')
+        return
+      }
+      this.loading = true
+      this.ryjslist = null
+      this.multipleSelection = []
+      ryjsapi.getneedyjsh(this.ksid).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.ryjslist = res.data
+        } else if (res.code === 2) {
+          this.$message.warning('目前没有新的申请')
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
     selectedChange (val) {
       this.multipleSelection = val
     },

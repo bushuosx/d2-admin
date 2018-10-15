@@ -46,6 +46,6 @@ export default {
     if (!Array.isArray(data) || data.length === 0) {
       return reject('data不能为空')
     }
-    return parent.axios.post(BaseURL + '/importemployees', data)
+    return parent.axios.post(BaseURL + '/importemployees', data, { timeout: 40000 })
   }
 }

@@ -6,7 +6,8 @@ const getChildren = function (user) {
   } else {
     const ksid = user.ksid
     return [
-      { path: `${Constants.BaseUrl}/ks/index/${ksid}`, icon: 'tree', title: '科室信息' },
+      // { path: `${Constants.BaseUrl}/ks/index/${ksid}`, icon: 'tree', title: '科室信息' },
+      { path: `${Constants.BaseUrl}/ry/ks`, icon: 'tree', title: '科室信息' },
       { path: `${Constants.BaseUrl}/ks/rylist/${ksid}`, icon: 'address-book', title: '科室人员' },
       { path: `${Constants.BaseUrl}/ryjs/listbyks/${ksid}`, icon: 'archive ', title: '科室技术' }
     ]

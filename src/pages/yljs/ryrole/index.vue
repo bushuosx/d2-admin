@@ -23,23 +23,28 @@ export default {
   },
   data () {
     return {
-      loading: true,
+      loading: false,
       rolelist: []
     }
   },
   created () {
-    ryroleapi.getrolesofry(this.ryid).then(res => {
-      this.loading = false
-      if (res.code === 1) {
-        this.rolelist = res.data
-      } else if (res.code === 2) {
-        this.$message.warning(res.msg)
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(() => { this.loading = false })
+    this.fetchData()
   },
   methods: {
+    fetchData () {
+      this.loading = true
+      this.rolelist = []
+      ryroleapi.getrolesofry(this.ryid).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.rolelist = res.data
+        } else if (res.code === 2) {
+          this.$message.warning(res.msg)
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => { this.loading = false })
+    },
     pmssToString (permissions) {
       let rst = []
       for (let i in permissions) {

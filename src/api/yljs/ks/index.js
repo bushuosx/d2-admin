@@ -22,5 +22,11 @@ export default {
       return reject('ksid不能为空')
     }
     return parent.axios.get(BaseURL + '/loadksry/' + ksid)
+  },
+  importks (ksList) {
+    if (!Array.isArray(ksList)) {
+      return reject('ksList必须为数组')
+    }
+    return parent.axios.post(BaseURL + '/postlist', ksList, { timeout: 20000 })
   }
 }

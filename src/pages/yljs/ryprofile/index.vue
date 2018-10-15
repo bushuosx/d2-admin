@@ -1,5 +1,5 @@
 <template>
-  <d2-container>
+  <d2-container v-loading="loading">
     <el-card>
       <h3 slot="header">人员信息维护</h3>
     </el-card>
@@ -41,38 +41,12 @@ export default {
     }
   },
   created () {
-    let self = this
-    ryapi.getbyid(self.ryid).then(res => {
-      if (res.code === 1) {
-        let ryrst = res.data
-        if (!ryrst.ryProfile) {
-          if (self.isMe) {
-            ryprofileapi.getmyprofile().then(rst => {
-              if (rst.code === 1) {
-                ryrst.ryProfile = rst.data
-                self.loading = false
-                self.ryInfo = ryrst
-              } else {
-                self.loading = false
-                self.$message.error(rst.msg)
-              }
-            })
-          } else {
-            self.loading = false
-            this.$message.error('该人员还没有填写档案资料')
-          }
-        } else {
-          self.ryInfo = ryrst
-          self.loading = false
-        }
-      } else {
-        self.loading = false
-        this.$message.error(res.msg)
-      }
-    }).catch(err => {
-      self.loading = false
-      this.$message.error(err.message ? err.message : err)
-    })
+    this.fetchData()
+  },
+  watch: {
+    ryid: function () {
+      this.fetchData()
+    }
   },
   computed: {
     isMe () {
@@ -80,6 +54,42 @@ export default {
     }
   },
   methods: {
+    fetchData () {
+      let self = this
+      self.loading = true
+      self.ryInfo = {}
+      ryapi.getbyid(self.ryid).then(res => {
+        if (res.code === 1) {
+          let ryrst = res.data
+          if (!ryrst.ryProfile) {
+            if (self.isMe) {
+              ryprofileapi.getmyprofile().then(rst => {
+                if (rst.code === 1) {
+                  ryrst.ryProfile = rst.data
+                  self.loading = false
+                  self.ryInfo = ryrst
+                } else {
+                  self.loading = false
+                  self.$message.error(rst.msg)
+                }
+              })
+            } else {
+              self.loading = false
+              this.$message.error('该人员还没有填写档案资料')
+            }
+          } else {
+            self.ryInfo = ryrst
+            self.loading = false
+          }
+        } else {
+          self.loading = false
+          this.$message.error(res.msg)
+        }
+      }).catch(err => {
+        self.loading = false
+        this.$message.error(err.message ? err.message : err)
+      })
+    }
     // handelUpdateRyzc (val) {
     //   if (val) {
     //     let index = -1

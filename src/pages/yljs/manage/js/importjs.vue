@@ -3,6 +3,7 @@
     <div slot="header">
       <strong>导入技术信息</strong>
     </div>
+          <div>数据量较大时，操作耗时将较长。默认等待 <strong>90</strong> 秒。</div>
     <div>
       <ol>
         <li>从Excel导入预览数据，匹配要导入的数据</li>

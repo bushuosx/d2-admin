@@ -48,7 +48,7 @@ export default {
       return reject('time不能为空')
     }
 
-    return parent.axios.post(BaseURL + '/importjsbmk', { bmkList, time })
+    return parent.axios.post(BaseURL + '/importjsbmk', { bmkList, time }, { timeout: 90000 })
   },
   setjsbmdy (jsbmList, time) {
     if (!Array.isArray(jsbmList)) {
@@ -57,13 +57,13 @@ export default {
     if (!time) {
       return reject('time不能为空')
     }
-    return parent.axios.put(BaseURL + '/setjsbmdy', { jsbmList, time })
+    return parent.axios.put(BaseURL + '/setjsbmdy', { jsbmList, time }, { timeout: 120000 })
   },
   importjs (jsList) {
     if (!Array.isArray(jsList)) {
       return reject('jsList只能为数组')
     }
-    return parent.axios.post(BaseURL + '/importjs', jsList)
+    return parent.axios.post(BaseURL + '/importjs', jsList, { timeout: 90000 })
   }
 
 }

@@ -3,7 +3,13 @@
     <div class="ryzcdata" v-for="item in ryzclist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyzcClick(item)">
       <el-row>
         <el-col :span="8"><span>职称级别：</span></el-col>
-        <el-col :span="16"><span><strong v-if="item.zcLevel" style="color:#409EFF">{{formartZcLevel(item.zcLevel)}}</strong></span></el-col>
+        <el-col :span="14"><span><strong v-if="item.zcLevel" style="color:#409EFF">{{formartZcLevel(item.zcLevel)}}</strong></span></el-col>
+        <el-col :span="2">
+          <i v-if="approved(item)" class="el-icon-success" style="color:#67C23A"></i>
+          <i v-else-if="rejected(item)" class="el-icon-error" style="color:#F56C6C"></i>
+          <i v-else-if="needAction(item)" class="el-icon-warning" style="color:#E6A23C"></i>
+          <i v-else class="el-icon-question"></i>
+        </el-col>
       </el-row>
       <el-row>
         <el-col :span="8"><span>专业：</span></el-col>
@@ -78,6 +84,12 @@ export default {
   methods: {
     ...helper,
     fetchRyzcList (ry) {
+      this.detailVisible = false
+      this.focusRyzc = null
+      this.addVisible = false
+      this.zylblist = []
+      this.ryzclist = []
+      this.loading = false
       if (ry && ry.ryProfile && ry.ryProfile.id) {
         ryzcapi.getbyprofile(ry.ryProfile.id).then(res => {
           if (res.code === 1) {
@@ -168,6 +180,15 @@ export default {
       this.focusRyzc = val
       this.updateRyzcList(val)
       // this.detailVisible=false
+    },
+    needAction (row) {
+      return !!row && !!row.kjshInfo && (row.kjshInfo.operateCode === 0 || row.kjshInfo.operateCode === 1)
+    },
+    approved (row) {
+      return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 2
+    },
+    rejected (row) {
+      return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 3
     }
   }
 }

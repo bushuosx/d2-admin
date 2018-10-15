@@ -54,21 +54,32 @@ export default {
     }
   },
   created () {
-    // fetch未审核人员
-    ryksapi.getneedkjsh(this.ksid).then(res => {
-      this.loading = false
-      if (res.code === 1) {
-        this.rykslist = res.data
-      } else if (res.code === 2) {
-        this.$message.warning('目前没有新的入科申请')
-      } else {
-        this.$message.error(res.msg)
-      }
-    }).catch(() => {
-      this.loading = false
-    })
+    this.fetchData()
+  },
+  watch: {
+    ksid: function () {
+      this.fetchData()
+    }
   },
   methods: {
+    fetchData () {
+      this.loading = true
+      this.rykslist = null
+      this.multipleSelection = []
+      // fetch未审核人员
+      ryksapi.getneedkjsh(this.ksid).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.rykslist = res.data
+        } else if (res.code === 2) {
+          this.$message.warning('目前没有新的入科申请')
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    },
     handleResolve (row) {
       this.approvekjsh([row.id])
     },

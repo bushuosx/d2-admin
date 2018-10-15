@@ -4,6 +4,7 @@
       <strong>设置技术对应的编码库信息</strong>
     </div>
     <div v-if="bmkName"><strong>目前系统使用的编码库为{{bmkName}}</strong></div>
+    <div>数据量较大时，操作耗时将较长。默认等待 <strong>120</strong> 秒。</div>
     <div>
       <ol>
         <li>从Excel导入预览数据，匹配要导入的数据</li>

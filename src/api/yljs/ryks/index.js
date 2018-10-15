@@ -72,5 +72,8 @@ export default {
       return reject('ryksid不能为空')
     }
     return parent.axios.patch(BaseURL + '/commit/' + ryksid)
+  },
+  getprofileneedkjsh () {
+    return parent.axios.get(BaseURL + '/getprofileneedkjsh')
   }
 }

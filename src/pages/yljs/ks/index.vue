@@ -1,5 +1,5 @@
 <template>
-  <d2-container>
+  <d2-container v-loading="loading">
     <el-card>
       <h3 slot="header">科室信息一览</h3>
       <div>
@@ -73,7 +73,8 @@ export default {
   },
   data () {
     return {
-      ksInfo: null
+      ksInfo: null,
+      loading: false
     }
   },
   computed: {
@@ -92,19 +93,30 @@ export default {
     }
   },
   created () {
-    ksapi.loadksry(this.ksid).then(res => {
-      if (res.code === 1) {
-        // this.rylist = []
-        // for (let i in res.data.ryList) {
-        //   this.rylist.push(res.data.ryList[i].ry)
-        // }
-        this.ksInfo = res.data
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
+    this.fetchData()
+  },
+  watch: {
+    ksid: function () {
+      this.fetchData()
+    }
   },
   methods: {
+    fetchData () {
+      this.loading = true
+      this.ksInfo = null
+      ksapi.loadksry(this.ksid).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          // this.rylist = []
+          // for (let i in res.data.ryList) {
+          //   this.rylist.push(res.data.ryList[i].ry)
+          // }
+          this.ksInfo = res.data
+        } else {
+          this.$message.error(res.msg)
+        }
+      }).catch(() => { this.loading = false })
+    },
     zcfilter (item) {
       switch (item.zc) {
         case 1:
