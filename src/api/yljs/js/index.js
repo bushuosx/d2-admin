@@ -7,7 +7,7 @@ function reject (msg) {
 
 export default {
   BaseURL,
-  getbyname (name, pageIndex = 1) {
+  getbyname (name, pageIndex) {
     if (!name || name === undefined) {
       return reject('要查询的技术名称不能为空！')
     }
@@ -20,7 +20,7 @@ export default {
     }
     return parent.axios.get(url)
   },
-  getbycode (code, pageIndex = 1) {
+  getbycode (code, pageIndex) {
     if (!code || code === undefined) {
       return reject('要查询的技术编码不能为空！')
     }

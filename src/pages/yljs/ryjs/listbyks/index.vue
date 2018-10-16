@@ -5,7 +5,7 @@
         <h3>人员技术</h3>
         <div>以下是科室人员的技术授权</div>
       </div>
-      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
+      <js-report :jsReport="ksjsReport" :options="{showcount:true}"></js-report>
       <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
@@ -19,7 +19,7 @@ import ryjsapi from '@/api/yljs/ryjs'
 export default {
   name: 'yljs-ryjs-listbyks',
   components: {
-    'ryjs-table': () => import('@/components/yljs/ryjstable'),
+    'js-report': () => import('@/components/yljs/jsreport'),
     'my-pagination': () => import('@/components/MyPagination')
   },
   props: {
@@ -28,18 +28,11 @@ export default {
   data () {
     return {
       loading: true,
-      ryjslist: null,
-      multipleSelection: [],
+      ksjsReport: null,
       pageIndex: 1
     }
   },
-  computed: {
-    anySelected () {
-      return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
-    }
-  },
   created () {
-    // fetch未审核人员
     this.fetchData(1)
   },
   methods: {
@@ -49,7 +42,7 @@ export default {
       ryjsapi.getbyks(this.ksid, val).then(res => {
         this.loading = false
         if (res.code === 1) {
-          this.ryjslist = res.data
+          this.ksjsReport = res.data
         } else if (res.code === 2) {
           this.$message.warning('没有查询到更多数据')
         } else {
@@ -58,35 +51,6 @@ export default {
       }).catch(() => {
         this.loading = false
       })
-    },
-    selectedChange (val) {
-      this.multipleSelection = val
-    },
-    getSelectedId () {
-      let rst = []
-      for (let i in this.multipleSelection) {
-        rst.push(this.multipleSelection[i].id)
-      }
-      return rst
-    },
-    handleRyjsChanged (rowid, rst) {
-      if (rst.code === 1) {
-        for (let d in rst.data) {
-          let index = -1
-          for (let i in this.ryjslist) {
-            if (rst.data[d].id === this.ryjslist[i].id) {
-              index = i
-              break
-            }
-          }
-          if (index !== -1) {
-            this.$set(this.ryjslist, index, rst.data[d])
-          }
-        }
-        this.$message.success('操作成功')
-      } else {
-        this.$message.error(rst.msg)
-      }
     }
   }
 }

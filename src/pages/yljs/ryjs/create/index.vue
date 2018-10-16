@@ -1,5 +1,5 @@
 <template>
-  <d2-container>
+  <d2-container v-loading="loading">
     <el-card>
       <div slot="header">
         <h2>申请技术授权</h2>
@@ -52,7 +52,8 @@ export default {
       jslist: [],
       ksjslist: null,
       yyjslist: null,
-      fileidlist: null
+      fileidlist: null,
+      loading: false
     }
   },
   methods: {
@@ -87,12 +88,16 @@ export default {
         msg({ message: '请输入查询条件', type: 'error' })
       }
       let data = this.$data
-      jsapi.getbyname(this.selectvalue).then(function (res) {
+      this.loading = true
+      jsapi.getbyname(this.selectvalue).then(res => {
+        this.loading = false
         if (res.code === 1) {
           data.jslist = res.data
         } else {
           log(res.msg)
         }
+      }).catch(() => {
+        this.loading = false
       })
     },
     testjs () {

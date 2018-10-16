@@ -36,9 +36,9 @@
     <el-dialog :visible.sync="detailVisible" title="人员职称详细">
       <ryzc-detail :ryzc="focusRyzc" @detail-update="handleDetailUpdate" @detail-edit="handleDetailEdit" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryzc-detail>
     </el-dialog>
-    <!-- <el-dialog :visible.sync="editVisible" title="修改人员职称证明">
-      <ryzc-edit :zylblist="zylblist" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryzc-edit>
-    </el-dialog> -->
+    <el-dialog :visible.sync="editVisible" title="修改人员职称证明">
+      <ryzc-edit :ryzc="focusRyzc" :zylblist="zylblist" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryzc-edit>
+    </el-dialog>
   </div>
 </template>
 
@@ -58,6 +58,7 @@ export default {
       detailVisible: false,
       focusRyzc: null,
       addVisible: false,
+      editVisible: false,
       zylblist: [],
       ryzclist: [],
       loading: false
@@ -90,6 +91,7 @@ export default {
       this.detailVisible = false
       this.focusRyzc = null
       this.addVisible = false
+      this.editVisible = false
       this.zylblist = []
       this.ryzclist = []
       this.loading = false
@@ -157,26 +159,45 @@ export default {
       }
     },
     handleAdd () {
-      this.fetchZylbList()
       this.addVisible = true
     },
     handleEditSaveFromAdd (val) {
       this.addVisible = false
-
+      this.loading = true
       if (!val.profileId) {
         // add
         val.profileId = this.ryInfo.ryProfile.id
         ryzcapi.create(val).then(res => {
+          this.loading = false
           if (res.code === 1) {
             this.updateRyzcList(res.data)
           } else {
             this.$message.error(res.msg)
           }
-        }).then(err => {
+        }).catch(err => {
+          this.loading = false
           this.$message.error(err.message ? err.message : err)
         })
       } else if (val.id) {
         this.updateRyzcList(val)
+      }
+    },
+    handleEditSaveFromEdit (val) {
+      this.editVisible = false
+      this.loading = true
+      if (val.profileId === this.ryInfo.ryProfile.id) {
+        // edit
+        ryzcapi.update(val).then(res => {
+          this.loading = false
+          if (res.code === 1) {
+            this.updateRyzcList(res.data)
+          } else {
+            this.$message.error(res.msg)
+          }
+        }).catch(err => {
+          this.loading = false
+          this.$message.error(err.message ? err.message : err)
+        })
       }
     },
     handleDetailUpdate (val) {
@@ -184,9 +205,11 @@ export default {
       this.updateRyzcList(val)
       // this.detailVisible=false
     },
-    handleDetailEdit (val) {
+    handleDetailEdit () {
       this.detailVisible = false
-      this.$message.warning('暂时没有提供编辑，等待系统完善')
+      this.fetchZylbList()
+      this.editVisible = true
+      // this.$message.warning('暂时没有提供编辑，等待系统完善')
     },
     needAction (row) {
       return !!row && !!row.kjshInfo && (row.kjshInfo.operateCode === 0 || row.kjshInfo.operateCode === 1)

@@ -7,11 +7,17 @@ function reject (msg) {
 
 export default {
   BaseURL,
-  create ({ profileId, zcLevel, zylbId, zcsj, zcbm, fileIdList }) {
-    if (!profileId || !zcLevel || !zylbId || !zcsj || !zcbm || !Array.isArray(fileIdList)) {
+  create ({ zcLevel, zylbId, zcsj, zcbm, fileIdList }) {
+    if (!zcLevel || !zylbId || !zcsj || !zcbm || !Array.isArray(fileIdList)) {
       return reject('create参数无效')
     }
-    return parent.axios.post(BaseURL, { profileId, zcLevel, zylbId, zcsj, zcbm, fileIdList })
+    return parent.axios.post(BaseURL, { zcLevel, zylbId, zcsj, zcbm, fileIdList })
+  },
+  update ({ id, zcLevel, zylbId, zcsj, zcbm, fileIdList }) {
+    if (!id || !zcLevel || !zylbId || !zcsj || !zcbm || !Array.isArray(fileIdList)) {
+      return reject('update参数无效')
+    }
+    return parent.axios.put(BaseURL, { id, zcLevel, zylbId, zcsj, zcbm, fileIdList })
   },
   get (ryzcid) {
     if (!ryzcid) {

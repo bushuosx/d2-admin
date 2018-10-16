@@ -1,5 +1,5 @@
 <template>
-        <d2-curd>
+  <el-table>
 
-        </d2-curd>
+  </el-table>
 </template>
