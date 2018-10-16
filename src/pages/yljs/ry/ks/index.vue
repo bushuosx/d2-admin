@@ -13,7 +13,7 @@
         </template>
       </div>
       <div v-else>
-        <div>你已经申请加入科室：<strong>{{myryks.ks.mc}}</strong></div>
+        <div>你已经申请加入科室：<el-button @click="toMyKS" type="primary" plain>{{myryks.ks.mc}}</el-button></div>
         <div>申请理由：{{myryks.createLog.operateReason}}</div>
         <div>申请时间：{{myryks.createLog.operateTime}}</div>
         <div v-if="myryks.kjshInfo.operateCode===0">
@@ -59,27 +59,34 @@ export default {
   },
   created () {
     ryksapi.getmine().then(res => {
+      this.loading = false
       if (res.code === 1) {
-        if (res.data.kjshInfo.operateCode === 2) {
+        this.myryks = res.data
+        if (res.data.kjshInfo && res.data.kjshInfo.operateCode === 2) {
           // 已审核,跳转至相应科室
-          this.$router.replacePlus({ name: 'yljs-ks-index', params: { ksid: res.data.ks.id } })
+          this.toMyKS()
         } else {
           // 未提交、未审核、已驳回
-          this.myryks = res.data
         }
       } else if (res.code === 2) {
         // 还没有入科申请
         this.myryks = null
       } else {
+        this.myryks = null
         this.$message.error(res.msg)
       }
-      this.loading = false
     }).catch((err) => {
-      this.err = err
       this.loading = false
+      this.err = err
     })
   },
   methods: {
+    toMyKS () {
+      if (!this.myryks || !this.myryks.ks || !this.myryks.id) {
+        return false
+      }
+      this.$router.replacePlus({ name: 'yljs-ks-index', params: { ksid: this.myryks.ks.id } })
+    },
     handleEdit () {
       this.$router.replacePlus({ name: 'yljs-ryks-edit', params: { ryksid: this.myryks.id } })
     },
