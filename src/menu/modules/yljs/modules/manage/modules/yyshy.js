@@ -5,7 +5,7 @@ const getChildren = function (user) {
     return [{ title: Constants.InvalidMessage }]
   } else {
     return [
-      { path: `${Constants.BaseUrl}/ks/list`, title: '全院科室列表' }
+      { path: `${Constants.BaseUrl}/ryjs/yjsh`, icon: 'clipboard', title: '医疗技术院级审核' }
     ]
   }
 }

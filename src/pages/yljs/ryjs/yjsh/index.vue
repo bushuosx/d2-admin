@@ -10,6 +10,7 @@
         <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
         <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
       </div>
+      <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -21,9 +22,10 @@
 import ryjsapi from '@/api/yljs/ryjs'
 import user from '@/libs/util.user.js'
 export default {
-  name: 'yljs-ryjs-listbyks',
+  name: 'yljs-ryjs-yjsh',
   components: {
-    'ryjs-table': () => import('@/components/yljs/ryjstable')
+    'ryjs-table': () => import('@/components/yljs/ryjstable'),
+    'my-pagination': () => import('@/components/MyPagination')
   },
   props: {
     ksid: String
@@ -52,7 +54,7 @@ export default {
     }
   },
   methods: {
-    fetchData () {
+    fetchData (page = 1) {
       // fetch未审核人员
       if (!this.isYjManager) {
         this.$message.error('没有此权限')
@@ -61,7 +63,11 @@ export default {
       this.loading = true
       this.ryjslist = null
       this.multipleSelection = []
-      ryjsapi.getneedyjsh(this.ksid).then(res => {
+      // let api = ryjsapi.getallneedyjsh
+      // if (this.ksid) {
+      //   api = ryjsapi.getneedyjsh(this.ksid)
+      // }
+      ryjsapi.getneedyjsh(this.ksid, page).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.ryjslist = res.data

@@ -75,7 +75,7 @@ export default {
               })
             } else {
               self.loading = false
-              this.$message.error('该人员还没有填写档案资料')
+              self.$message.error('该人员还没有填写档案资料')
             }
           } else {
             self.ryInfo = ryrst
@@ -83,11 +83,11 @@ export default {
           }
         } else {
           self.loading = false
-          this.$message.error(res.msg)
+          self.$message.error(res.msg)
         }
       }).catch(err => {
         self.loading = false
-        this.$message.error(err.message ? err.message : err)
+        self.$message.error(err.message ? err.message : err)
       })
     }
     // handelUpdateRyzc (val) {

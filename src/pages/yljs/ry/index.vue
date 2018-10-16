@@ -30,7 +30,7 @@ import ryapi from '@/api/yljs/ry'
 // import fastupload from '@/components/fast-upload/index.vue'
 
 export default {
-  name: 'yljs-ry',
+  name: 'yljs-index-ry',
   // components: { fastupload },
   data () {
     return { rys: null, name: null, selected: '1' }

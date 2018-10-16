@@ -34,8 +34,11 @@
       <ryzc-edit :zylblist="zylblist" @edit-save="handleEditSaveFromAdd" @edit-cancel="addVisible=false"></ryzc-edit>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible" title="人员职称详细">
-      <ryzc-detail :ryzc="focusRyzc" @detail-update="handleDetailUpdate" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryzc-detail>
+      <ryzc-detail :ryzc="focusRyzc" @detail-update="handleDetailUpdate" @detail-edit="handleDetailEdit" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryzc-detail>
     </el-dialog>
+    <!-- <el-dialog :visible.sync="editVisible" title="修改人员职称证明">
+      <ryzc-edit :zylblist="zylblist" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryzc-edit>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -180,6 +183,10 @@ export default {
       this.focusRyzc = val
       this.updateRyzcList(val)
       // this.detailVisible=false
+    },
+    handleDetailEdit (val) {
+      this.detailVisible = false
+      this.$message.warning('暂时没有提供编辑，等待系统完善')
     },
     needAction (row) {
       return !!row && !!row.kjshInfo && (row.kjshInfo.operateCode === 0 || row.kjshInfo.operateCode === 1)

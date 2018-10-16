@@ -22,7 +22,7 @@
 import ryjsapi from '@/api/yljs/ryjs'
 import user from '@/libs/util.user.js'
 export default {
-  name: 'yljs-ryjs-listbyks',
+  name: 'yljs-ryjs-kjsh',
   components: {
     'ryjs-table': () => import('@/components/yljs/ryjstable'),
     'my-pagination': () => import('@/components/MyPagination')

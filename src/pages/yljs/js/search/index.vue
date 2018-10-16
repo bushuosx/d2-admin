@@ -1,23 +1,24 @@
 <template>
-    <d2-container>
-        <div style="margin-top: 15px;width:50%;">
-            <el-input v-model="searchvalue" placeholder="请输入要搜索的内容" class="input-with-select">
-                <el-select v-model="selected" slot="prepend" placeholder="请选择">
-                    <el-option label="按技术名称搜索" value="mc"></el-option>
-                    <el-option label="按编码搜索" value="bm"></el-option>
-                    <el-option label="按等级搜索" value="dj"></el-option>
-                </el-select>
-                <el-button @click="search" slot="append" icon="el-icon-search" type="primary">查询</el-button>
-            </el-input>
-        </div>
-        <d2-crud :columns="columns" :data="data" :options="options" />
-    </d2-container>
+  <d2-container>
+    <div style="margin-top: 15px;width:50%;">
+      <el-input v-model="searchvalue" placeholder="请输入要搜索的内容" class="input-with-select">
+        <el-select v-model="selected" slot="prepend" placeholder="请选择">
+          <el-option label="按技术名称搜索" value="mc"></el-option>
+          <el-option label="按编码搜索" value="bm"></el-option>
+          <el-option label="按等级搜索" value="dj"></el-option>
+        </el-select>
+        <el-button @click="search" slot="append" icon="el-icon-search" type="primary">查询</el-button>
+      </el-input>
+    </div>
+    <d2-crud :columns="columns" :data="data" :options="options" />
+  </d2-container>
 </template>
 
 <script>
 import jsapi from '@/api/yljs/js'
 import { Message } from 'element-ui'
 export default {
+  name: 'yljs-js-search',
   data () {
     return {
       searchvalue: null,
@@ -114,6 +115,6 @@ export default {
   background-color: #fff;
 }
 .input-with-select .el-input-group__append {
-  color: #409EFF;
+  color: #409eff;
 }
 </style>

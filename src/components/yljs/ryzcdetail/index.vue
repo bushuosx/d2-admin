@@ -40,8 +40,11 @@
         </el-form-item>
       </template>
       <el-form-item v-if="isMe">
-        <el-button v-if="needCommit" @click="handleCommit">点击提交信息，并等待科室审核</el-button>
-        <el-button v-if="needReedit" @click="handleReedit">已被驳回，点击撤回重新编辑</el-button>
+        <template v-if="needCommit">
+          <el-button @click="handleCommit">点击提交信息，并等待科室审核</el-button>
+          <el-button @click="handleEdit">重新编辑此档案</el-button>
+        </template>
+        <el-button v-else-if="needReedit" @click="handleReedit" type="warning" plain>已被驳回，点击撤回重新编辑</el-button>
       </el-form-item>
     </el-form>
     <div style="text-align:right">
@@ -74,7 +77,10 @@ export default {
   },
   computed: {
     isMe () {
-      return !!this.ryzc && this.ryzc.ryProfileId === user.profileId
+      // console.log(this.ryzc)
+      // console.log(user)
+      // debugger
+      return !!this.ryzc && this.ryzc.ryProfileID === user.profileId
     },
     needCommit () {
       return !!this.ryzc && !!this.ryzc.kjshInfo && this.ryzc.kjshInfo.operateCode === 0
@@ -139,6 +145,9 @@ export default {
     },
     emitUpdate (val) {
       this.$emit('detail-update', val)
+    },
+    handleEdit () {
+      this.$emit('detail-edit')
     }
   }
 }

@@ -10,6 +10,7 @@
 <script>
 import ryksapi from '@/api/yljs/ryks'
 export default {
+  name: 'yljs-ryprofile-needkjsh',
   components: {
     'ry-table': () => import('@/components/yljs/rytable')
   },
