@@ -75,5 +75,11 @@ export default {
   },
   getprofileneedkjsh () {
     return parent.axios.get(BaseURL + '/getprofileneedkjsh')
+  },
+  getrybyks (ksid) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getrybyks/' + ksid)
   }
 }

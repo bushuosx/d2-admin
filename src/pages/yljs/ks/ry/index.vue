@@ -1,25 +1,45 @@
 <template>
-  <d2-container>
-    <el-card>
-      <h3 slot="header">个人首页</h3>
-      <div>
-        <span>姓名：{{username}}</span>
-        <div><span>科室：XX</span></div>
-        <div><a href="/">详细信息</a></div>
-      </div>
-    </el-card>
-    <el-card>
-      <el-row>
-        <el-col :span="8">
-          <el-card>科室人员</el-card>
-        </el-col>
-                <el-col :span="8">
-          <el-card>年资</el-card>
-        </el-col>
-                <el-col :span="8">
-          <el-card>学历</el-card>
-        </el-col>
-      </el-row>
-    </el-card>
+  <d2-container v-loading="loading">
+    <template slot="header">
+      <div><span>科室：</span></div>
+    </template>
+    <ry-table :ryList="ryList"></ry-table>
   </d2-container>
 </template>
+
+<script>
+import ryksapi from '@/api/yljs/ryks'
+
+export default {
+  props: {
+    ksid: String
+  },
+  components: {
+    'ry-table': () => import('@/components/yljs/rytable')
+  },
+  data () {
+    return {
+      ryList: null,
+      loading: false
+    }
+  },
+  created () {
+    this.fetchData()
+  },
+  methods: {
+    fetchData () {
+      this.loading = true
+      ryksapi.getrybyks(this.ksid).then(res => {
+        this.loading = false
+        if (res.code === 1) {
+          this.ryList = res.data
+        } else {
+          this.$messgae.error(res.msg)
+        }
+      }).catch(() => {
+        this.loading = false
+      })
+    }
+  }
+}
+</script>

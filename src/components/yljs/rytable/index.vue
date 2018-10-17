@@ -1,6 +1,7 @@
 <template>
     <div>
-        <el-table :data="rylist">
+        <div v-if="ryList">共 {{ryList.length}} 人</div>
+        <el-table :data="ryList">
             <el-table-column prop="gh" label="工号"></el-table-column>
             <el-table-column prop="xm" label="姓名"></el-table-column>
             <el-table-column>
@@ -15,7 +16,7 @@
 <script>
 export default {
   props: {
-    rylist: Array
+    ryList: Array
   }
 }
 </script>

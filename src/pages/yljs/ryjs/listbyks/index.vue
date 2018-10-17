@@ -5,7 +5,7 @@
         <h3>人员技术</h3>
         <div>以下是科室人员的技术授权</div>
       </div>
-      <js-report :jsReport="ksjsReport" :options="{showcount:true}"></js-report>
+      <js-report :jsReport="ksjsReport" :options="{showcount:true}" @click-js="handleClickJS"></js-report>
       <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
@@ -51,6 +51,21 @@ export default {
       }).catch(() => {
         this.loading = false
       })
+    },
+    handleClickJS (js) {
+      if (js) {
+        this.loading = true
+        ryjsapi.getrybyksandjs(this.ksid, js.id).then(res => {
+          this.loading = false
+          if (res.code === 1) {
+            this.$router.push({ name: 'yljs-ry-list', params: { title: `科室已授权 ${js.mc} 的人员`, ryList: res.data } })
+          } else {
+            this.$message.warning(res.msg)
+          }
+        }).catch(() => {
+          this.loading = false
+        })
+      }
     }
   }
 }

@@ -45,8 +45,8 @@ export default {
   },
   methods: {
     handleClickCount (row) {
-      if (!!row && !!row.js && row.js.id) {
-        this.$emit('click-js', row.js.id)
+      if (!!row && !!row.js) {
+        this.$emit('click-js', row.js)
       }
     }
   }

@@ -1,10 +1,13 @@
 <template>
-    <d2-container>
-        <div slot="header"><strong>需要审核档案的人员</strong></div>
-        <ry-table :rylist="rylist">
-            <el-button slot="actioner" slot-scope="scope" @click="handClick(scope.ry.id)" type="primary" size="small" plain>转至审核界面</el-button>
-        </ry-table>
-    </d2-container>
+  <d2-container>
+    <div slot="header"><strong>需要审核档案的人员</strong></div>
+    <template v-if="ryList">
+      <ry-table :ryList="ryList">
+        <el-button slot="actioner" slot-scope="scope" @click="handClick(scope.ry.id)" type="primary" size="small" plain>转至审核界面</el-button>
+      </ry-table>
+    </template>
+    <div v-else>暂时没有需要审核的数据</div>
+  </d2-container>
 </template>
 
 <script>
@@ -19,7 +22,7 @@ export default {
   },
   data () {
     return {
-      rylist: null,
+      ryList: null,
       loading: false
     }
   },
@@ -32,7 +35,7 @@ export default {
       ryksapi.getprofileneedkjsh().then(res => {
         this.loading = false
         if (res.code === 1) {
-          this.rylist = res.data
+          this.ryList = res.data
         } else if (res.code === 2) {
           this.$message.warning('本科室暂时没有人员资料需要审核')
         } else {

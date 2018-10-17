@@ -19,6 +19,9 @@
         <el-col :span="8">
           <el-button @click="handleRKSH" type="primary" plain>审核入科申请</el-button>
         </el-col>
+        <el-col :span="8">
+          <el-button @click="handleRYProfileKJSH" type="primary" plain>审核人员资料</el-button>
+        </el-col>
       </el-row>
     </el-card>
     <el-card>
@@ -146,6 +149,9 @@ export default {
     },
     handleJSSH () {
       this.$router.push({ name: 'yljs-ryjs-kjsh', params: { ksid: this.ksid } })
+    },
+    handleRYProfileKJSH () {
+      this.$router.push({ name: 'yljs-ryprofile-needkjsh', params: { ksid: this.ksid } })
     }
   }
 }

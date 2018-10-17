@@ -147,5 +147,14 @@ export default {
       url += '/' + pageIndex
     }
     return parent.axios.get(url)
+  },
+  getrybyksandjs (ksid, jsid) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    if (!jsid) {
+      return reject('jsid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getrybyksandjs/' + ksid + '/' + jsid)
   }
 }
