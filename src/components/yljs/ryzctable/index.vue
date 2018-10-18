@@ -159,6 +159,7 @@ export default {
       }
     },
     handleAdd () {
+      this.fetchZylbList()
       this.addVisible = true
     },
     handleEditSaveFromAdd (val) {

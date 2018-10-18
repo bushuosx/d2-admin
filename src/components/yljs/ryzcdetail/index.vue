@@ -17,7 +17,7 @@
         <strong>{{ryzc.zcbm}}</strong>
       </el-form-item>
       <el-form-item label="证明文件">
-        <file-list :filelist="ryzc.files" filearea="ryzc"></file-list>
+        <file-list :filelist="ryzc.files" filearea="ryzcfile"></file-list>
       </el-form-item>
       <template v-if="isKSManager && needKjsh">
         <el-form-item label="审核理由：">
