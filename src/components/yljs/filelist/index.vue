@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-left:2em">
+  <div>
     <div v-for="(file,index) in filelist" :key="file.id">
       <el-tag size="small" type="warning">{{index+1}}.</el-tag>
       <el-tag size="small"><a :href="geturl(file.id)">{{file.fileInfo.fileName}}</a></el-tag>

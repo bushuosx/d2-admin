@@ -34,7 +34,8 @@ export default {
     return {
       loading: true,
       ryjslist: null,
-      multipleSelection: []
+      multipleSelection: [],
+      pageIndex: 1
     }
   },
   computed: {
@@ -63,6 +64,7 @@ export default {
       this.loading = true
       this.ryjslist = null
       this.multipleSelection = []
+      this.pageIndex = page
       // let api = ryjsapi.getallneedyjsh
       // if (this.ksid) {
       //   api = ryjsapi.getneedyjsh(this.ksid)
