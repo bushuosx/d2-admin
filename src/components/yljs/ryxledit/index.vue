@@ -1,20 +1,15 @@
 <template>
-  <el-form ref="ryzcedit" :rules="rules" :model="ryzc" label-width="100px">
-    <el-form-item label="职称级别" prop="zcLevel">
-      <el-select v-model="ryzc.zcLevel">
-        <el-option v-for="item in zcLevelOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
-      </el-select>
-    </el-form-item>
+  <el-form ref="ryzgedit" :rules="rules" :model="ryzg" label-width="100px">
     <el-form-item label="专业类别" prop="zylbId">
-      <el-select v-model="ryzc.zylbId" filterable>
+      <el-select v-model="ryzg.zylbId" filterable>
         <el-option v-for="item in zylblist" :key="item.id" :label="item.mc" :value="item.id"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="获得时间" prop="zcsj">
-      <el-date-picker v-model="ryzc.zcsj"></el-date-picker>
+    <el-form-item label="获得时间" prop="zgsj">
+      <el-date-picker v-model="ryzg.zgsj"></el-date-picker>
     </el-form-item>
-    <el-form-item label="证书编码" prop="zcbm">
-      <el-input v-model="ryzc.zcbm"></el-input>
+    <el-form-item label="证书编码" prop="zgzsbm">
+      <el-input v-model="ryzg.zgzsbm"></el-input>
     </el-form-item>
     <el-form-item label="证明文件" prop="fileIdList">
       <file-upload @file-changed="handleFileChanged"></file-upload>
@@ -36,14 +31,14 @@ export default {
     zylblist: {
       type: Array
     },
-    ryzc: {
+    ryzg: {
       type: Object,
       default () {
         return {
           zcLevel: null,
           zylbId: null,
-          zcsj: new Date(),
-          zcbm: '',
+          zgsj: new Date(),
+          zgzsbm: '',
           // files: [{ fileInfo: { id: null } }],
           fileIdList: []
         }
@@ -67,24 +62,14 @@ export default {
     //   }
     // }
     return {
-      zcLevelOptions: [
-        { label: '无', value: 0 },
-        { label: '初级', value: 1 },
-        { label: '中级', value: 2 },
-        { label: '副高级', value: 3 },
-        { label: '正高级', value: 4 }
-      ],
       rules: {
-        zcLevel: [
-          { required: true, message: '请选择职称级别', trigger: 'change' }
-        ],
         zylbId: [
-          { required: true, message: '请选择职称的专业类别', trigger: 'change' }
+          { required: true, message: '请选择专业类别', trigger: 'change' }
         ],
-        zcsj: [
+        zgsj: [
           { required: true, validator: validateDate, trigger: 'change' }
         ],
-        zcbm: [
+        zgzsbm: [
           { required: true, message: '请输入证书编码', trigger: 'change' }
         ],
         fileIdList: [
@@ -102,12 +87,12 @@ export default {
   // },
   methods: {
     handleFileChanged (val) {
-      this.ryzc.fileIdList = val
+      this.ryzg.fileIdList = val
     },
     handleSave () {
-      this.$refs['ryzcedit'].validate((valid) => {
+      this.$refs['ryzgedit'].validate((valid) => {
         if (valid) {
-          this.$emit('edit-save', this.ryzc)
+          this.$emit('edit-save', this.ryzg)
         } else {
           return false
         }

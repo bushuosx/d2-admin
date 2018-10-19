@@ -11,7 +11,7 @@ export default {
       case 3:
         return '副高级'
       case 4:
-        return '高级'
+        return '正高级'
       default:
         return '未知'
     }

@@ -1,19 +1,20 @@
 <template>
   <d2-container v-loading="loading">
-    <el-card>
-      <h3 slot="header">人员信息维护</h3>
-    </el-card>
+    <h3 slot="header">人员信息维护</h3>
     <el-card>
       <div>一般信息展示</div>
     </el-card>
-    <el-tabs type="border-card">
-      <el-tab-pane>
-        <span slot="label"><i class="el-icon-star-on"></i> 职称</span>
-        <ryzc-table :ryInfo="ryInfo"></ryzc-table>
+    <el-tabs type="border-card" v-model="activeTabName" @tab-click="handleTabClick">
+      <el-tab-pane name="ryzcTab">
+        <span slot="label"><i class="el-icon-star-on"></i>职称</span>
+        <ryzc-table v-if="initedTab.ryzcTab" :ryInfo="ryInfo"></ryzc-table>
       </el-tab-pane>
-      <el-tab-pane label="资格">资格</el-tab-pane>
-      <el-tab-pane label="学历">学历</el-tab-pane>
-      <el-tab-pane label="学位">学位</el-tab-pane>
+      <el-tab-pane name="ryzgTab">
+        <span slot="label"><i class="el-icon-star-on"></i>资格</span>
+        <ryzg-table v-if="initedTab.ryzgTab" :ryInfo="ryInfo"></ryzg-table>
+      </el-tab-pane>
+      <el-tab-pane name="ryxlTab" label="学历">学历</el-tab-pane>
+      <el-tab-pane name="ryxwTab" label="学位">学位</el-tab-pane>
     </el-tabs>
   </d2-container>
 </template>
@@ -25,8 +26,8 @@ import user from '@/libs/util.user.js'
 export default {
   name: 'yljs-ryprofile-index',
   components: {
-    'ryzc-edit': () => import('@/components/yljs/ryzcedit'),
-    'ryzc-table': () => import('@/components/yljs/ryzctable')
+    'ryzc-table': () => import('@/components/yljs/ryzctable'),
+    'ryzg-table': () => import('@/components/yljs/ryzgtable')
   },
   props: {
     ryid: {
@@ -37,7 +38,9 @@ export default {
   data () {
     return {
       ryInfo: {},
-      loading: true
+      loading: true,
+      activeTabName: null,
+      initedTab: {}
     }
   },
   created () {
@@ -89,6 +92,9 @@ export default {
         self.loading = false
         self.$message.error(err.message ? err.message : err)
       })
+    },
+    handleTabClick () {
+      this.initedTab[this.activeTabName] = true
     }
     // handelUpdateRyzc (val) {
     //   if (val) {
