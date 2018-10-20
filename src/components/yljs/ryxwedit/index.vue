@@ -1,20 +1,15 @@
 <template>
-  <el-form ref="ryzcedit" :rules="rules" :model="ryzc" label-width="100px">
-    <el-form-item label="职称级别" prop="zcLevel">
-      <el-select v-model="ryzc.zcLevel">
-        <el-option v-for="item in zcLevelOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+  <el-form ref="ryxwedit" :rules="rules" :model="ryxw" label-width="100px">
+    <el-form-item label="学位名称" prop="xw">
+      <el-select v-model="ryxw.xw" filterable>
+        <el-option v-for="item in xwOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="专业类别" prop="zylbId">
-      <el-select v-model="ryzc.zylbId" filterable>
-        <el-option v-for="item in zylblist" :key="item.id" :label="item.mc" :value="item.id"></el-option>
-      </el-select>
+    <el-form-item label="获得时间" prop="xwsj">
+      <el-date-picker v-model="ryxw.xwsj"></el-date-picker>
     </el-form-item>
-    <el-form-item label="获得时间" prop="zcsj">
-      <el-date-picker v-model="ryzc.zcsj"></el-date-picker>
-    </el-form-item>
-    <el-form-item label="证书编码" prop="zcbm">
-      <el-input v-model="ryzc.zcbm"></el-input>
+    <el-form-item label="证书编码" prop="xwbm">
+      <el-input v-model="ryxw.xwbm"></el-input>
     </el-form-item>
     <el-form-item label="证明文件" prop="fileIdList">
       <file-upload @file-changed="handleFileChanged"></file-upload>
@@ -33,17 +28,13 @@ export default {
     'file-upload': () => import('@/components/fast-upload')
   },
   props: {
-    zylblist: {
-      type: Array
-    },
-    ryzc: {
+    ryxw: {
       type: Object,
       default () {
         return {
-          zcLevel: null,
-          zylbId: null,
-          zcsj: new Date(),
-          zcbm: '',
+          xw: null,
+          xwsj: new Date(),
+          xwbm: '',
           // files: [{ fileInfo: { id: null } }],
           fileIdList: []
         }
@@ -53,11 +44,11 @@ export default {
   data () {
     const maxDate = Date.now() - 1
     const validateDate = (rule, value, callback) => {
+      let errors = []
       if (value && value > maxDate) {
-        callback(new Error('时间有误'))
-      } else {
-        callback()
+        errors.push(new Error('时间有误'))
       }
+      callback(errors)
     }
     // const validatezylb = (rule, value, callback) => {
     //   if (!value || !value.id) {
@@ -67,24 +58,19 @@ export default {
     //   }
     // }
     return {
-      zcLevelOptions: [
-        { label: '无', value: 0 },
-        { label: '初级', value: 1 },
-        { label: '中级', value: 2 },
-        { label: '副高级', value: 3 },
-        { label: '正高级', value: 4 }
+      xwOptions: [
+        { label: '未知', value: 0 },
+        // { label: '大专学位', value: 4 },
+        { label: '学士学位', value: 5 },
+        { label: '硕士学位', value: 6 },
+        { label: '博士学位', value: 7 }
       ],
       rules: {
-        zcLevel: [
-          { required: true, message: '请选择职称级别', trigger: 'change' }
-        ],
-        zylbId: [
-          { required: true, message: '请选择职称的专业类别', trigger: 'change' }
-        ],
-        zcsj: [
+        xw: [{ required: true, message: '请选择学位', trigger: 'change' }],
+        xwsj: [
           { required: true, validator: validateDate, trigger: 'change' }
         ],
-        zcbm: [
+        xwbm: [
           { required: true, message: '请输入证书编码', trigger: 'change' }
         ],
         fileIdList: [
@@ -102,12 +88,13 @@ export default {
   // },
   methods: {
     handleFileChanged (val) {
-      this.ryzc.fileIdList = val
+      // this.$set(this.ryxw, 'fileIdList', val)
+      this.ryxw.fileIdList = val
     },
     handleSave () {
-      this.$refs['ryzcedit'].validate((valid) => {
+      this.$refs['ryxwedit'].validate((valid) => {
         if (valid) {
-          this.$emit('edit-save', this.ryzc)
+          this.$emit('edit-save', this.ryxw)
         } else {
           return false
         }

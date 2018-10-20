@@ -5,8 +5,8 @@
       <div>以下是等待院级审核的技术授权申请</div>
     </div>
     <el-card v-loading='loading'>
-      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true,showks:true}"></ryjs-table>
-      <div v-if="isYjManager" style="margin-top:10px">
+      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true,showks:true,isYjshManager}"></ryjs-table>
+      <div v-if="isYjshManager" style="margin-top:10px">
         <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
         <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
       </div>
@@ -42,7 +42,7 @@ export default {
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
     },
-    isYjManager () {
+    isYjshManager () {
       return user.hasRoles([user.Roles.院级审核])
     }
   },
@@ -57,7 +57,7 @@ export default {
   methods: {
     fetchData (page = 1) {
       // fetch未审核人员
-      if (!this.isYjManager) {
+      if (!this.isYjshManager) {
         this.$message.error('没有此权限')
         return
       }

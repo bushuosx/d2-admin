@@ -1,12 +1,12 @@
 <template>
   <d2-container>
-    <el-card v-loading='loading'>
     <div slot="header">
       <h3>人员技术</h3>
       <div>以下是科室人员的技术授权申请</div>
     </div>
-      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true}"></ryjs-table>
-      <div v-if="isKjManager || isYjManager" style="margin-top:10px">
+    <el-card v-loading='loading'>
+      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true,isKjshManager}"></ryjs-table>
+      <div v-if="isKjshManager" style="margin-top:10px">
         <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
         <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
       </div>
@@ -42,11 +42,8 @@ export default {
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
     },
-    isKjManager () {
+    isKjshManager () {
       return user.hasRoles([user.Roles.科级审核]) && user.ksid === this.ksid
-    },
-    isYjManager () {
-      return user.hasRoles([user.Roles.院级审核])
     }
   },
   created () {
@@ -56,7 +53,7 @@ export default {
   methods: {
     fetchData (val) {
       this.pageIndex = val
-      if (!this.isKjManager) {
+      if (!this.isKjshManager) {
         this.$message.error('没有此权限')
         return
       }

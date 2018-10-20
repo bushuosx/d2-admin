@@ -2,19 +2,19 @@
   <div>
     <el-form v-if="isKSManager || isMe || isApproved" label-width="120px" size="small">
       <el-form-item label="学历">
-        <strong>{{formartXL(ryxl.xl)}}</strong>
+        <strong>{{formartXW(ryxw.xw)}}</strong>
       </el-form-item>
       <el-form-item label="年资">
-        <strong>{{formartNZ(ryxl.xlsj)}}</strong>
+        <strong>{{formartNZ(ryxw.xwsj)}}</strong>
       </el-form-item>
       <el-form-item label="职称获得时间">
-        <strong>{{formartDate(ryxl.xlsj)}}</strong>
+        <strong>{{formartDate(ryxw.xwsj)}}</strong>
       </el-form-item>
       <el-form-item label="证书编码">
-        <strong>{{ryxl.xlbm}}</strong>
+        <strong>{{ryxw.xwbm}}</strong>
       </el-form-item>
       <el-form-item label="证明文件">
-        <file-list :filelist="ryxl.files" filearea="ryxlfile"></file-list>
+        <file-list :filelist="ryxw.files" filearea="ryxwfile"></file-list>
       </el-form-item>
       <template v-if="isKSManager && needKjsh">
         <el-form-item label="审核理由：">
@@ -27,13 +27,13 @@
       </template>
       <template v-else>
         <el-form-item label="审核意见">
-          <el-tag v-if="ryxl.kjshInfo.operateReason" type="warning">{{ryxl.kjshInfo.operateReason}}</el-tag>
+          <el-tag v-if="ryxw.kjshInfo.operateReason" type="warning">{{ryxw.kjshInfo.operateReason}}</el-tag>
         </el-form-item>
         <el-form-item label="审核人">
-          <strong>{{ryxl.kjshInfo.operatorName}}</strong>
+          <strong>{{ryxw.kjshInfo.operatorName}}</strong>
         </el-form-item>
         <el-form-item label="科室审核时间">
-          <strong>{{formartDate(ryxl.kjshInfo.operateTime)}}</strong>
+          <strong>{{formartDate(ryxw.kjshInfo.operateTime)}}</strong>
         </el-form-item>
       </template>
       <el-form-item v-if="isMe">
@@ -53,10 +53,10 @@
 <script>
 import helper from '../helper/index.js'
 import user from '@/libs/util.user.js'
-import ryxlapi from '@/api/yljs/ryxl'
+import ryxwapi from '@/api/yljs/ryxw'
 export default {
   props: {
-    ryxl: {
+    ryxw: {
       type: Object
     },
     isKSManager: {
@@ -74,22 +74,22 @@ export default {
   },
   computed: {
     isMe () {
-      // console.log(this.ryxl)
+      // console.log(this.ryxw)
       // console.log(user)
       // debugger
-      return !!this.ryxl && this.ryxl.ryProfileID === user.profileId
+      return !!this.ryxw && this.ryxw.ryProfileID === user.profileId
     },
     needCommit () {
-      return !!this.ryxl && !!this.ryxl.kjshInfo && this.ryxl.kjshInfo.operateCode === 0
+      return !!this.ryxw && !!this.ryxw.kjshInfo && this.ryxw.kjshInfo.operateCode === 0
     },
     needKjsh () {
-      return !!this.ryxl && !!this.ryxl.kjshInfo && this.ryxl.kjshInfo.operateCode === 1
+      return !!this.ryxw && !!this.ryxw.kjshInfo && this.ryxw.kjshInfo.operateCode === 1
     },
     isApproved () {
-      return !!this.ryxl && !!this.ryxl.kjshInfo && this.ryxl.kjshInfo.operateCode === 2
+      return !!this.ryxw && !!this.ryxw.kjshInfo && this.ryxw.kjshInfo.operateCode === 2
     },
     needReedit () {
-      return !!this.ryxl && !!this.ryxl.kjshInfo && this.ryxl.kjshInfo.operateCode === 3
+      return !!this.ryxw && !!this.ryxw.kjshInfo && this.ryxw.kjshInfo.operateCode === 3
     }
   },
   methods: {
@@ -98,7 +98,7 @@ export default {
       this.$emit('detail-cancel')
     },
     handleApprove () {
-      ryxlapi.approvekjsh(this.ryxl.id, this.reason).then(res => {
+      ryxwapi.approvekjsh(this.ryxw.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {
@@ -113,7 +113,7 @@ export default {
         return false
       }
 
-      ryxlapi.rejectkjsh(this.ryxl.id, this.reason).then(res => {
+      ryxwapi.rejectkjsh(this.ryxw.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {
@@ -123,7 +123,7 @@ export default {
       this.reason = null
     },
     handleCommit () {
-      ryxlapi.commit(this.ryxl.id).then(res => {
+      ryxwapi.commit(this.ryxw.id).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {
@@ -132,7 +132,7 @@ export default {
       })
     },
     handleReedit () {
-      ryxlapi.reedit(this.ryxl.id).then(res => {
+      ryxwapi.reedit(this.ryxw.id).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {

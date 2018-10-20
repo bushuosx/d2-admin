@@ -26,12 +26,12 @@
             <span v-else><i class="el-icon-error"></i>已驳回</span>
           </template>
           <template v-else-if="needkjsh(scope.row)">
-            <el-button v-if="kjshManager(scope.row)" @click="handleKjsh(scope.row)" size="mini">科级审核</el-button>
+            <el-button v-if="options && options.isKjshManager" @click="handleKjsh(scope.row)" size="mini">科级审核</el-button>
             <el-button v-else-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-question" type="text" size="mini">等待科级审核</el-button>
             <span v-else>等待科级审核</span>
           </template>
           <template v-else-if="needyjsh(scope.row)">
-            <el-button v-if="yjshManager(scope.row)" @click="handleYjsh(scope.row)" size="mini"><strong>院级</strong>审核</el-button>
+            <el-button v-if="options && options.isYjshManager" @click="handleYjsh(scope.row)" size="mini"><strong>院级</strong>审核</el-button>
             <el-button v-else-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-question" type="text" size="mini">等待<strong>院级</strong>审核</el-button>
             <span v-else>等待<strong>院级</strong>审核</span>
           </template>
@@ -85,7 +85,10 @@ export default {
     options: {
       type: Object,
       default: function () {
-        return { showry: true }
+        return {
+          showry: true,
+          isKjshManager: false
+        }
       }
     }
   },
@@ -144,20 +147,17 @@ export default {
     needkjsh (row) {
       return row.kjshInfo.operateCode === 1
     },
-    kjshManager (row) {
-      if (user.hasRoles([user.Roles.超级管理权限])) {
-        return true
-      }
-      if (!row.ry || !row.ry.ks || !row.ry.ks.ksid) {
-        return false
-      }
-      return user.hasRoles([user.Roles.科级审核]) && user.ksid === row.ry.ks.ksid
-    },
+    // kjshManager (row) {
+    //   if (user.hasRoles([user.Roles.超级管理权限])) {
+    //     return true
+    //   }
+    //   if (!row.ry || !row.ry.ks || !row.ry.ks.ksid) {
+    //     return false
+    //   }
+    //   return user.hasRoles([user.Roles.科级审核]) && user.ksid === row.ry.ks.ksid
+    // },
     needyjsh (row) {
       return row.kjshInfo.operateCode === 2 && row.yjshInfo.operateCode !== 2 && row.yjshInfo.operateCode !== 3
-    },
-    yjshManager (row) {
-      return user.hasRoles([user.Roles.超级管理权限]) || user.hasRoles([user.Roles.院级审核])
     },
     approved (row) {
       return row.yjshInfo.operateCode === 2

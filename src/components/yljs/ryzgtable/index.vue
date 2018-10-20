@@ -2,12 +2,12 @@
   <div v-loading="loading">
     <div class="ryzgdata" v-for="item in ryzglist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyzgClick(item)">
       <el-row>
-        <el-col :span="8"><span>执业资格专业：</span></el-col>
-        <el-col :span="14"><span>{{item.zylb?item.zylb.mc:""}}</span></el-col>
+        <el-col :span="8"><span>资格专业：</span></el-col>
+        <el-col :span="14"><strong style="color:#409EFF">{{item.zylb?item.zylb.mc:""}}</strong></el-col>
         <el-col :span="2">
           <i v-if="approved(item)" class="el-icon-success" style="color:#67C23A"></i>
           <i v-else-if="rejected(item)" class="el-icon-error" style="color:#F56C6C"></i>
-          <i v-else-if="needAction(item)" class="el-icon-warning" style="color:#E6A23C"></i>
+          <i v-else-if="needCommit(item)" class="el-icon-warning" style="color:#E6A23C"></i>
           <i v-else class="el-icon-question"></i>
         </el-col>
       </el-row>
@@ -161,9 +161,9 @@ export default {
     handleEditSaveFromAdd (val) {
       this.addVisible = false
       this.loading = true
-      if (!val.profileId) {
+      if (!val.ryProfileID) {
         // add
-        val.profileId = this.ryInfo.ryProfile.id
+        // val.profileId = this.ryInfo.ryProfile.id
         ryzgapi.create(val).then(res => {
           this.loading = false
           if (res.code === 1) {
@@ -182,7 +182,7 @@ export default {
     handleEditSaveFromEdit (val) {
       this.editVisible = false
       this.loading = true
-      if (val.profileId === this.ryInfo.ryProfile.id) {
+      if (val.ryProfileID === this.ryInfo.ryProfile.id) {
         // edit
         ryzgapi.update(val).then(res => {
           this.loading = false
@@ -208,8 +208,8 @@ export default {
       this.editVisible = true
       // this.$message.warning('暂时没有提供编辑，等待系统完善')
     },
-    needAction (row) {
-      return !!row && !!row.kjshInfo && (row.kjshInfo.operateCode === 0 || row.kjshInfo.operateCode === 1)
+    needCommit (row) {
+      return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 0
     },
     approved (row) {
       return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 2

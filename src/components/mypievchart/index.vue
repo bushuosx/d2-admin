@@ -1,5 +1,5 @@
 <template>
-  <VePie :data="tmpdata"></VePie>
+  <VePie :data="tmpdata" :events="chartEvents"></VePie>
 </template>
 
 <script>
@@ -22,6 +22,16 @@ export default {
     data: Array,
     filter: Function
   },
+  data () {
+    return {
+      chartEvents: {
+        click: (e) => {
+          // console.log(e)
+          this.emitClickPie(e.name)
+        }
+      }
+    }
+  },
   computed: {
     tmpdata () {
       let rst = []
@@ -40,6 +50,11 @@ export default {
         }
       }
       return { columns: ['key', 'value'], rows: rst.sort(sortmethod) }
+    }
+  },
+  methods: {
+    emitClickPie (name) {
+      this.$emit('click-pie', name)
     }
   }
 }

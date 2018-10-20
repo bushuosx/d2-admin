@@ -2,12 +2,12 @@
   <div v-loading="loading">
     <div class="ryxldata" v-for="item in ryxllist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyxlClick(item)">
       <el-row>
-        <el-col :span="8"><span>执业资格专业：</span></el-col>
-        <el-col :span="14"><span>{{item.zylb?item.zylb.mc:""}}</span></el-col>
+        <el-col :span="8"><span>学历：</span></el-col>
+        <el-col :span="14"><span><strong v-if="item.xl" style="color:#409EFF">{{formartXL(item.xl)}}</strong></span></el-col>
         <el-col :span="2">
           <i v-if="approved(item)" class="el-icon-success" style="color:#67C23A"></i>
           <i v-else-if="rejected(item)" class="el-icon-error" style="color:#F56C6C"></i>
-          <i v-else-if="needAction(item)" class="el-icon-warning" style="color:#E6A23C"></i>
+          <i v-else-if="needCommit(item)" class="el-icon-warning" style="color:#E6A23C"></i>
           <i v-else class="el-icon-question"></i>
         </el-col>
       </el-row>
@@ -26,14 +26,14 @@
     <div v-if="isMe">
       <el-button @click="handleAdd">添加</el-button>
     </div>
-    <el-dialog :visible.sync="addVisible" title="添加人员执业资格证明">
-      <ryxl-edit :zylblist="zylblist" @edit-save="handleEditSaveFromAdd" @edit-cancel="addVisible=false"></ryxl-edit>
+    <el-dialog :visible.sync="addVisible" title="添加人员学历证明">
+      <ryxl-edit @edit-save="handleEditSaveFromAdd" @edit-cancel="addVisible=false"></ryxl-edit>
     </el-dialog>
-    <el-dialog :visible.sync="detailVisible" title="人员执业资格详细">
+    <el-dialog :visible.sync="detailVisible" title="人员学历详细">
       <ryxl-detail :ryxl="focusRyxl" @detail-update="handleDetailUpdate" @detail-edit="handleDetailEdit" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryxl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="editVisible" title="修改人员执业资格证明">
-      <ryxl-edit :ryxl="focusRyxl" :zylblist="zylblist" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryxl-edit>
+    <el-dialog :visible.sync="editVisible" title="修改人员学历证明">
+      <ryxl-edit :ryxl="focusRyxl" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryxl-edit>
     </el-dialog>
   </div>
 </template>
@@ -55,6 +55,7 @@ export default {
       addVisible: false,
       editVisible: false,
       ryxllist: [],
+      // zylblist: [],
       loading: false
     }
   },
@@ -104,7 +105,7 @@ export default {
     },
     handleRyxlClick (tmp) {
       if (tmp && tmp.id) {
-        if (!tmp.zylb || !tmp.files) {
+        if (!tmp.files) {
           this.loading = true
           ryxlapi.get(tmp.id).then(res => {
             this.loading = false
@@ -148,9 +149,9 @@ export default {
     handleEditSaveFromAdd (val) {
       this.addVisible = false
       this.loading = true
-      if (!val.profileId) {
+      if (!val.ryProfileID) {
         // add
-        val.profileId = this.ryInfo.ryProfile.id
+        // val.profileId = this.ryInfo.ryProfile.id
         ryxlapi.create(val).then(res => {
           this.loading = false
           if (res.code === 1) {
@@ -167,10 +168,11 @@ export default {
       }
     },
     handleEditSaveFromEdit (val) {
+      // debugger
       this.editVisible = false
-      this.loading = true
-      if (val.profileId === this.ryInfo.ryProfile.id) {
+      if (!!val.ryProfileID && val.ryProfileID === this.ryInfo.ryProfile.id) {
         // edit
+        this.loading = true
         ryxlapi.update(val).then(res => {
           this.loading = false
           if (res.code === 1) {
@@ -195,8 +197,8 @@ export default {
       this.editVisible = true
       // this.$message.warning('暂时没有提供编辑，等待系统完善')
     },
-    needAction (row) {
-      return !!row && !!row.kjshInfo && (row.kjshInfo.operateCode === 0 || row.kjshInfo.operateCode === 1)
+    needCommit (row) {
+      return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 0
     },
     approved (row) {
       return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 2

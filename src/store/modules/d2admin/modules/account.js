@@ -25,12 +25,12 @@ export default {
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
-        uuid = '019932A8-194D-4785-66F5-08D622B6098B'.toLowerCase() // YWBPC
-        ksid = 'bc139d6b-f23a-440d-ac80-08d622bc65bd' // ywbpc
-        profileid = 'AA0946D2-0906-4A44-DD40-08D62CC2AF83'.toLowerCase() // ywbpc
-        // uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69'.toLowerCase() // JJPC
-        // ksid = 'ef11af9f-8cdb-4d2c-3386-08d62c131173'.toLowerCase() // JJPC
-        // profileid = 'A3A2C82E-1BFA-4AE2-30FE-08D62C19313E'.toLowerCase()
+        // uuid = '019932A8-194D-4785-66F5-08D622B6098B'.toLowerCase() // YWBPC
+        // ksid = 'bc139d6b-f23a-440d-ac80-08d622bc65bd' // ywbpc
+        // profileid = 'AA0946D2-0906-4A44-DD40-08D62CC2AF83'.toLowerCase() // ywbpc
+        uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69'.toLowerCase() // JJPC
+        ksid = 'ef11af9f-8cdb-4d2c-3386-08d62c131173'.toLowerCase() // JJPC
+        profileid = 'A3A2C82E-1BFA-4AE2-30FE-08D62C19313E'.toLowerCase()
         name = 'jj'
         roles = [101, 102, 103, 201, 202, 203, 301, 302, 303, 401, 402, 403, 9001, 9002, 9600, 9700, 9800, 9900]
       } else {

@@ -2,8 +2,23 @@
   <d2-container v-loading="loading">
     <h3 slot="header">人员信息维护</h3>
     <el-card>
-      <div>一般信息展示</div>
+      <div v-if="!ryInfo">一般信息加载中……</div>
+      <template v-else>
+        <el-row>
+          <el-col :span="4"><span>姓名：</span></el-col>
+          <el-col :span="4">{{ryInfo.xm}}</el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="4"><span>工号：</span></el-col>
+          <el-col :span="4">{{ryInfo.gh}}</el-col>
+        </el-row>
+        <el-row v-if="ryInfo.ryks && ryInfo.ryks.ks">
+          <el-col :span="4"><span>科室：</span></el-col>
+          <el-col :span="4">{{ryInfo.ryks.ks.mc}}</el-col>
+        </el-row>
+      </template>
     </el-card>
+    <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签查看内容<i class="el-icon-caret-bottom"></i></div>
     <el-tabs type="border-card" v-model="activeTabName" @tab-click="handleTabClick">
       <el-tab-pane name="ryzcTab">
         <span slot="label"><i class="el-icon-star-on"></i>职称</span>
@@ -13,8 +28,14 @@
         <span slot="label"><i class="el-icon-star-on"></i>资格</span>
         <ryzg-table v-if="initedTab.ryzgTab" :ryInfo="ryInfo"></ryzg-table>
       </el-tab-pane>
-      <el-tab-pane name="ryxlTab" label="学历">学历</el-tab-pane>
-      <el-tab-pane name="ryxwTab" label="学位">学位</el-tab-pane>
+      <el-tab-pane name="ryxlTab">
+        <span slot="label"><i class="el-icon-star-on"></i>学历</span>
+        <ryxl-table v-if="initedTab.ryxlTab" :ryInfo="ryInfo"></ryxl-table>
+      </el-tab-pane>
+      <el-tab-pane name="ryxwTab">
+        <span slot="label"><i class="el-icon-star-on"></i>学位</span>
+        <ryxw-table v-if="initedTab.ryxwTab" :ryInfo="ryInfo"></ryxw-table>
+      </el-tab-pane>
     </el-tabs>
   </d2-container>
 </template>
@@ -27,7 +48,9 @@ export default {
   name: 'yljs-ryprofile-index',
   components: {
     'ryzc-table': () => import('@/components/yljs/ryzctable'),
-    'ryzg-table': () => import('@/components/yljs/ryzgtable')
+    'ryzg-table': () => import('@/components/yljs/ryzgtable'),
+    'ryxl-table': () => import('@/components/yljs/ryxltable'),
+    'ryxw-table': () => import('@/components/yljs/ryxwtable')
   },
   props: {
     ryid: {

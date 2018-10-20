@@ -73,7 +73,7 @@ export default {
           { required: true, message: '请输入证书编码', trigger: 'change' }
         ],
         fileIdList: [
-          { required: true, type: 'array', message: '请上传证明文件', trigger: 'change' }
+          { required: true, message: '请上传证明文件', trigger: 'change' }
         ]
       }
     }
