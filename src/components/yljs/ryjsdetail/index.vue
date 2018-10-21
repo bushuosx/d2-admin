@@ -27,7 +27,8 @@
     </div>
     <div>
       <div>支撑文件：</div>
-      <file-list :filelist=ryjs.files filearea='ryjsfile'></file-list>
+      <file-list :filelist=ryjs.files
+        filearea='ryjsfile'></file-list>
     </div>
     <div>
       <el-row :gutter="10">
@@ -37,7 +38,7 @@
     </div>
     <div>
       <el-row :gutter="10">
-        <el-col :span="12"><label>科室审核意见：</label><span>{{ryjs.kjshInfo.operateCode}}</span></el-col>
+        <el-col :span="12"><label>科室审核意见：</label><span>{{formartSH(ryjs.kjshInfo.operateCode)}}</span></el-col>
         <el-col :span="12"><label>科室审核意见说明：</label><span>{{ryjs.kjshInfo.operateReason}}</span></el-col>
       </el-row>
       <el-row :gutter="10">
@@ -47,7 +48,7 @@
     </div>
     <div>
       <el-row :gutter="10">
-        <el-col :span="12"><label>医院审核意见：</label><span>{{ryjs.yjshInfo.operateCode}}</span></el-col>
+        <el-col :span="12"><label>医院审核意见：</label><span>{{formartSH(ryjs.yjshInfo.operateCode)}}</span></el-col>
         <el-col :span="12"><label>医院审核意见说明：</label><span>{{ryjs.yjshInfo.operateReason}}</span></el-col>
       </el-row>
       <el-row :gutter="10">
@@ -57,12 +58,14 @@
     </div>
 
     <div style="margin-top:10px">
-      <slot name="footer" :data="ryjs"></slot>
+      <slot name="footer"
+        :data="ryjs"></slot>
     </div>
   </el-card>
 </template>
 
 <script>
+import yljsHelper from '@/libs/util.yljs.js'
 export default {
   props: {
     ryjs: Object,
@@ -75,6 +78,9 @@ export default {
   },
   components: {
     'file-list': () => import('../filelist')
+  },
+  methods: {
+    formartSH: yljsHelper.formartSH
   }
 }
 </script>

@@ -1,11 +1,12 @@
 import axios from '@/plugin/axios'
-const BaseURL = 'http://localhost:5002/file/yljs/'
+const BaseURL = 'http://localhost:5002/file/yljs'
 
 const reject = function (errmsg) {
   return Promise.reject(new Error('FileDownload:' + errmsg))
 }
 
 export default {
+  fileServer: BaseURL,
   getFile (area, fileid) {
     if (!area) {
       return reject('area不能为空')
@@ -14,6 +15,6 @@ export default {
       return reject('reject不能为空')
     }
 
-    return axios.get(BaseURL + area + '/' + fileid)
+    return axios.get(BaseURL + '/' + area + '/' + fileid)
   }
 }

@@ -78,5 +78,19 @@ export default {
       default:
         return '未知'
     }
+  },
+  formartSH (shStatus) {
+    switch (shStatus) {
+      case 0:
+        return '待提交'
+      case 1:
+        return '待审核'
+      case 2:
+        return '已审核'
+      case 3:
+        return '已驳回'
+      default:
+        return '未知'
+    }
   }
 }

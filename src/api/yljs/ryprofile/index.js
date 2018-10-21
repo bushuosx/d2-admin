@@ -21,5 +21,11 @@ export default {
       return reject('ryprofileid不能为空')
     }
     return parent.axios.get(BaseURL + '/' + ryprofileid)
+  },
+  updatePhoto (fileid) {
+    if (!fileid) {
+      return reject('fileid不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/updatephoto/' + fileid)
   }
 }
