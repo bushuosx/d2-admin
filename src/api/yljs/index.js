@@ -1,6 +1,6 @@
 import store from '@/store/index'
 import axios from '@/plugin/axios'
-const APIServer = process.env.NODE_ENV === 'production' ? 'http://172.16.128.43:5002' : 'http://localhost:5002'
+const APIServer = process.env.NODE_ENV !== 'production' ? 'http://172.16.128.43:5002' : 'http://localhost:5002'
 
 const debug = false
 

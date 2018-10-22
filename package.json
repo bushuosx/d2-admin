@@ -7,6 +7,7 @@
     "start": "vue-cli-service serve --open",
     "dev": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
+    "buildme": "vue-cli-service build --development",
     "lint": "vue-cli-service lint --fix",
     "test:unit": "vue-cli-service test:unit"
   },

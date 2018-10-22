@@ -1,8 +1,25 @@
 import parent from '../index.js'
+import myaxios from './myaxios.js'
 const BaseURL = parent.APIServer + '/file/yljs'
 
 const reject = function (errmsg) {
   return Promise.reject(new Error('FileDownload:' + errmsg))
+}
+
+const getFileName = function (resp) {
+  // debugger
+  let disp = resp.headers['Content-Disposition'.toLowerCase()]
+  let parter = new RegExp('filename=(.+);')
+  let rst = parter.exec(disp)
+  if (Array.isArray(rst) && rst.length > 1) {
+    return rst[1]
+  } else {
+    return null
+  }
+}
+
+const getMIME = function (resp) {
+  return resp.headers['Content-Type'.toLowerCase()]
 }
 
 export default {
@@ -15,8 +32,13 @@ export default {
       return reject('fileid不能为空')
     }
 
-    return parent.axios.get(BaseURL + '/' + area + '/' + fileid, {
-      responseType: 'blob' // 返回数据的格式，可选值为arraybuffer,blob,document,json,text,stream，默认值为json
+    return new Promise((resolve, reject) => {
+      myaxios.get(BaseURL + '/' + area + '/' + fileid).then(resp => {
+        // debugger
+        return resolve({ data: resp.data, name: getFileName(resp), mime: getMIME(resp) })
+      }).catch(err => {
+        return reject(err)
+      })
     })
   }
 }
