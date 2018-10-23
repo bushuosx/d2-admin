@@ -20,7 +20,7 @@ import yljsMenu from './modules/yljs'
 export const getHeaderMenu = function (userinfo) {
   return [
     {
-      path: '/index',
+      path: '/',
       title: '首页',
       icon: 'home'
     },

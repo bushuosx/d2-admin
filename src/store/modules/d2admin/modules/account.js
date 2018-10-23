@@ -36,7 +36,7 @@ export default {
       } else {
         // 查看Cookie，是否已完成登录
         uuid = Cookies.get('spasub')
-        token = Cookies.get('access-token')
+        token = Cookies.get('spatoken')
         let profile = JSON.parse(Cookies.get('spaprofile'))
         name = profile.Name
         roles = profile.Permissions
@@ -57,10 +57,10 @@ export default {
         }
       }
 
-      // 移除不必要的token
-      Cookies.remove('spasub')
-      Cookies.remove('access-token')
-      Cookies.remove('spaprofile')
+      // // 移除不必要的token
+      // Cookies.remove('spasub')
+      // Cookies.remove('access-token')
+      // Cookies.remove('spaprofile')
       // Cookies.remove('spaname')
       // Cookies.remove('sparoles')
       // Cookies.remove('spaksid')

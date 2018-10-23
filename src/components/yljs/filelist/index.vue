@@ -8,7 +8,7 @@
 </template>
 
 <script>
-const BaseURL = 'http://localhost:5002/file/yljs/'
+import filedownloadapi from '@/api/yljs/filedownload'
 export default {
   props: {
     filelist: Array,
@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     geturl (key) {
-      return BaseURL + this.filearea + '/' + key
+      return filedownloadapi.fileServer + '/' + this.filearea + '/' + key
     }
   }
 }

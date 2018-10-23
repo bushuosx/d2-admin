@@ -13,13 +13,14 @@ const frameIn = [
     component: layoutHeaderAside,
     children: [
       {
-        path: 'index',
+        path: 'yljs',
         name: 'index',
         meta,
         component: () => import('@/pages/index')
       }
     ]
   },
+
   // {
   //   path: '/demo/playground',
   //   name: 'demo-playground',
@@ -281,12 +282,12 @@ const frameIn = [
   // },
   {
     path: '/yljs',
-    name: 'yljs',
+    name: 'yljs-index',
     meta,
-    redirect: { name: 'yljs-index' },
+    redirect: { name: 'index' },
     component: layoutHeaderAside,
     children: (pre => [
-      { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/index'), meta: { ...meta, title: '人员首页' } },
+      // { path: 'index', name: `${pre}index`, component: () => import('@/pages/yljs/index'), meta: { ...meta, title: '医疗技术管理首页' } },
       { path: 'ry', name: `${pre}ry-index`, component: () => import('@/pages/yljs/ry'), meta: { ...meta, title: '人员' } },
       { path: 'ry/profile', name: `${pre}ry-profile`, component: () => import('@/pages/yljs/ry/profile'), meta: { ...meta, title: '人员资料' } },
       { path: 'ry/js', name: `${pre}ry-js`, component: () => import('@/pages/yljs/ry/js'), meta: { ...meta, title: '技术列表' } },

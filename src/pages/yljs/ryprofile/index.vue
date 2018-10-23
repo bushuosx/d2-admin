@@ -23,11 +23,8 @@
           <el-col :span="8">
             <div>
               <div>照片：</div>
-              <img v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo"
-                :src="photoData"
-                alt="正在加载照片">
-              <el-button v-else-if="isMe"
-                @click="photoDialogVisible=true">上传个人照片</el-button>
+              <img v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo" :src="getUrl(ryInfo.ryProfile.photo.id)" alt="正在加载照片">
+              <el-button v-else-if="isMe" @click="photoDialogVisible=true">上传个人照片</el-button>
             </div>
           </el-col>
         </el-row>
@@ -35,33 +32,26 @@
       </template>
     </el-card>
     <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签查看内容<i class="el-icon-caret-bottom"></i></div>
-    <el-tabs type="border-card"
-      v-model="activeTabName"
-      @tab-click="handleTabClick">
+    <el-tabs type="border-card" v-model="activeTabName" @tab-click="handleTabClick">
       <el-tab-pane name="ryzcTab">
         <span slot="label"><i class="el-icon-star-on"></i>职称</span>
-        <ryzc-table v-if="initedTab.ryzcTab"
-          :ryInfo="ryInfo"></ryzc-table>
+        <ryzc-table v-if="initedTab.ryzcTab" :ryInfo="ryInfo"></ryzc-table>
       </el-tab-pane>
       <el-tab-pane name="ryzgTab">
         <span slot="label"><i class="el-icon-star-on"></i>资格</span>
-        <ryzg-table v-if="initedTab.ryzgTab"
-          :ryInfo="ryInfo"></ryzg-table>
+        <ryzg-table v-if="initedTab.ryzgTab" :ryInfo="ryInfo"></ryzg-table>
       </el-tab-pane>
       <el-tab-pane name="ryxlTab">
         <span slot="label"><i class="el-icon-star-on"></i>学历</span>
-        <ryxl-table v-if="initedTab.ryxlTab"
-          :ryInfo="ryInfo"></ryxl-table>
+        <ryxl-table v-if="initedTab.ryxlTab" :ryInfo="ryInfo"></ryxl-table>
       </el-tab-pane>
       <el-tab-pane name="ryxwTab">
         <span slot="label"><i class="el-icon-star-on"></i>学位</span>
-        <ryxw-table v-if="initedTab.ryxwTab"
-          :ryInfo="ryInfo"></ryxw-table>
+        <ryxw-table v-if="initedTab.ryxwTab" :ryInfo="ryInfo"></ryxw-table>
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog :visible.sync="photoDialogVisible"
-      title="上传个人照片">
+    <el-dialog :visible.sync="photoDialogVisible" title="上传个人照片">
       <image-uploader @Upload-Success="handlePhotoUploadSuccess"></image-uploader>
     </el-dialog>
   </d2-container>
@@ -69,9 +59,10 @@
 
 <script>
 import ryapi from '@/api/yljs/ry'
-import filedownloadapi from '@/api/yljs/filedownload'
 import ryprofileapi from '@/api/yljs/ryprofile'
 import user from '@/libs/util.user.js'
+import filedownloadapi from '@/api/yljs/filedownload'
+
 export default {
   name: 'yljs-ryprofile-index',
   components: {
@@ -103,9 +94,6 @@ export default {
   watch: {
     ryid: function () {
       this.fetchData()
-    },
-    ryInfo () {
-      this.downloadPhoto()
     }
   },
   computed: {
@@ -114,6 +102,7 @@ export default {
     }
   },
   methods: {
+    getUrl: filedownloadapi.getShared,
     fetchData () {
       let self = this
       self.loading = true

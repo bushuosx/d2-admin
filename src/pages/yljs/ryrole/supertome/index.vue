@@ -1,7 +1,7 @@
 <template>
   <d2-container>
     <div>
-      <button :disabled="!loading" @click="supertome">SupperToMe</button>
+      <button :disabled="loading" @click="supertome">SupperToMe</button>
     </div>
   </d2-container>
 </template>
