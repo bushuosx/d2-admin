@@ -13,34 +13,43 @@
       </ol>
       <!-- <div><a target="_blank" href="/yljs/employees.xlsx">点击这里可以下载模板</a></div> -->
     </div>
-    <import-excel ref="iexcel" @header-change="handleHeaderChange"></import-excel>
+    <import-excel ref="iexcel"
+      @header-change="handleHeaderChange"></import-excel>
     <div>
       <div>在上述数据中选择匹配的列</div>
       <div>以下标记*的列，为必选项</div>
       <el-form label-width="100px">
         <el-form-item label="*技术编码">
           <el-select v-model="bmHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="*技术名称">
           <el-select v-model="mcHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="技术等级">
           <el-select v-model="djHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSubmit">开始上传</el-button>
+          <el-button type="primary"
+            @click="handleSubmit">开始上传</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div v-if="faildList">
       <div><strong>以下内容没有导入成功,共{{faildList.length}}个</strong></div>
-      <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
+      <span v-for="(item,index) in faildList"
+        :key="index">{{item.gh}}；</span>
     </div>
   </d2-container>
 </template>
@@ -65,7 +74,7 @@ export default {
     }
   },
   created () {
-    jsapi.getbmkname(dayjs().format()).then(res => {
+    jsapi.getbmkname(dayjs().toISOString()).then(res => {
       if (res.code === 1) {
         this.bmkName = res.data
       }
@@ -94,7 +103,7 @@ export default {
       let rst = sd.map(v => { return { MC: v[mcHeader], BM: v[bmHeader], DJ: djHeader ? parseInt(v[djHeader]) : 0 } })
 
       this.loading = true
-      jsapi.importbmk(rst, dayjs().format()).then(res => {
+      jsapi.importbmk(rst, dayjs().toISOString()).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.$message.success('操作成功')
