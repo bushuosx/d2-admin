@@ -22,8 +22,7 @@
           </el-col>
           <el-col :span="8">
             <div>
-              <div>照片：</div>
-              <img v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo" :src="getUrl(ryInfo.ryProfile.photo.id)" alt="正在加载照片">
+              <img :style="photoSize" v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo" :src="getUrl(ryInfo.ryProfile.photo.id)" alt="正在加载照片">
               <el-button v-else-if="isMe" @click="photoDialogVisible=true">上传个人照片</el-button>
             </div>
           </el-col>
@@ -85,7 +84,11 @@ export default {
       activeTabName: null,
       initedTab: {},
       photoDialogVisible: false,
-      photoData: null // 临时照片数据
+      photoData: null, // 临时照片数据
+      photoSize: {
+        height: 413 / 2 + 'px',
+        width: 295 / 2 + 'px'
+      }
     }
   },
   created () {

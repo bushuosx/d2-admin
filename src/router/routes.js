@@ -328,6 +328,8 @@ const frameIn = [
       { path: `manage/js/setjsbmdy`, name: `${pre}manage-js-setjsbmdy`, component: () => import('@/pages/yljs/manage/js/setjsbmdy.vue'), meta: { ...meta, title: '设置技术编码对应' } },
       { path: 'help/about', name: `${pre}help-about`, component: () => import('@/pages/yljs/help/about'), meta: { ...meta, title: '关于本站' } },
 
+      { path: 'iframe', name: `d2-container-frame`, component: () => import('@/components/d2-container-frame'), props: true, meta: { ...meta, title: '外链' } },
+
       { path: 'test/excel', name: `${pre}test-excel`, component: () => import('@/pages/yljs/test/excel.vue'), meta: { ...meta, title: 'Excel测试' } },
       { path: 'test/imageuploader', name: `${pre}test-imageuploader`, component: () => import('@/pages/yljs/test/imageuploader.vue'), meta: { ...meta, title: 'ImageUploader测试' } }
 
