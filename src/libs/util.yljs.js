@@ -16,6 +16,9 @@ export default {
         return '未知'
     }
   },
+  formartZC (zc) {
+    return this.formartZcLevel(zc)
+  },
   formartDate (date) {
     if (!date) {
       return ''

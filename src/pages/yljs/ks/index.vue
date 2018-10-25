@@ -161,7 +161,9 @@ export default {
       this.ryListDialogData.visible = true
     },
     handClickPieOnZC (name) {
-
+      this.ryListDialogData.title = name
+      this.ryListDialogData.ryList = this.ryList.filter(v => yljsHelper.formartZcLevel(v.zc) === name)
+      this.ryListDialogData.visible = true
     }
   }
 }
