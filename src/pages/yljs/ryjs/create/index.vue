@@ -58,6 +58,10 @@ export default {
   },
   methods: {
     applyAll () {
+      if (this.loading === true) {
+        return
+      }
+
       let jsids = this.$refs.jsselector.jsidlist
       if (!jsids || jsids === undefined || jsids.length === 0) {
         this.$msgbox({ message: '请先选择要申请授权的技术', title: '未选择技术', type: 'info' })
@@ -67,16 +71,20 @@ export default {
         this.$msgbox({ message: '请上传所需的支撑材料', title: '无支撑材料', type: 'info' })
         return
       }
+
+      this.loading = true
       let log = this.$logError
       let router = this.$router
       let message = this.$message
-      ryjsapi.createryjs(jsids, this.fileidlist).then(function (res) {
+      ryjsapi.createryjs(jsids, this.fileidlist).then((res) => {
+        this.loading = false
         if (res.code === 1) {
           router.push({ name: 'yljs-ry-js' })
         } else {
           log(res.msg)
         }
       }).catch(function (err) {
+        this.loading = false
         message(!err.message ? err : err.message)
       })
     },

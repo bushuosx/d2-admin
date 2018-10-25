@@ -67,6 +67,10 @@ export default {
       this.headers = val
     },
     handleSubmit () {
+      if (this.loading === true) {
+        return
+      }
+
       if (!this.ghHeader || !this.xmHeader) {
         this.$message.error('数据选取有误')
         return false

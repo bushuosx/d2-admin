@@ -8,11 +8,24 @@ function reject (msg) {
 
 export default {
   BaseURL,
-  getbyname (name, pageIndex = 1) {
+  getbyname (name, pageIndex) {
     if (!name) {
       return reject('要查询的用户名不能为空！')
     }
     let url = this.BaseURL + '/getbyname/' + name
+    if (pageIndex) {
+      if (pageIndex < 1) {
+        return reject('pageIndex不能小于1')
+      }
+      url += '/' + pageIndex
+    }
+    return parent.axios.get(url)
+  },
+  getemployees (name, pageIndex) {
+    if (!name) {
+      return reject('要查询的用户名不能为空！')
+    }
+    let url = this.BaseURL + '/getemployees/' + name
     if (pageIndex) {
       if (pageIndex < 1) {
         return reject('pageIndex不能小于1')

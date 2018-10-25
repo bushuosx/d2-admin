@@ -26,7 +26,8 @@ export default {
     return {
       kslist: [],
       ksid: null,
-      reason: null
+      reason: null,
+      loading: false
     }
   },
   created () {
@@ -41,10 +42,16 @@ export default {
   },
   methods: {
     submit () {
+      if (this.loading === true) {
+        return
+      }
+
       if (this.ksid === null || this.ksid === undefined || this.ksid === '') {
         this.$message({ message: '请选择一个科室', type: 'error' })
       } else {
+        this.loading = true
         ryksapi.createryks(this.ksid, this.reason).then(res => {
+          this.loading = false
           if (res.code === 1) {
             this.$message({ message: '申请成功，等待审核', type: 'success' })
             this.$router.replacePlus({ name: 'yljs-ry-ks' })
@@ -52,7 +59,9 @@ export default {
             this.$message({ message: res.msg, type: 'error' })
           }
         }
-        )
+        ).catch(() => {
+          this.loading = false
+        })
       }
     }
   }
