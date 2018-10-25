@@ -57,10 +57,10 @@ export default {
         }
       }
 
-      // // 移除不必要的token
-      // Cookies.remove('spasub')
-      // Cookies.remove('access-token')
-      // Cookies.remove('spaprofile')
+      // 移除不必要的token
+      Cookies.remove('spasub')
+      Cookies.remove('spatoken')
+      Cookies.remove('spaprofile')
       // Cookies.remove('spaname')
       // Cookies.remove('sparoles')
       // Cookies.remove('spaksid')

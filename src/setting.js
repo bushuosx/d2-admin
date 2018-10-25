@@ -1,4 +1,6 @@
-import { version } from '../package'
+// import { version } from '../package'
+
+const version = 1.3
 
 const setting = {
   // 快捷键
@@ -27,7 +29,7 @@ const setting = {
   },
   // 版本
   releases: {
-    version: version
+    version
     // api: 'https://api.github.com/repos/FairyEver/d2-admin/releases/latest'
   },
   // 菜单搜索
