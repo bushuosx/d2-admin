@@ -3,7 +3,7 @@ import setting from '@/setting.js'
 
 const cookies = {}
 
-const cookieExpires = 1 / 24
+// const cookieExpires = 1 / 24
 
 /**
  * @description 存储 cookie 值
@@ -12,11 +12,11 @@ const cookieExpires = 1 / 24
  * @param {Object} setting cookie setting
  */
 cookies.set = function (name = 'default', value = '', cookieSetting = {}) {
-  let currentCookieSetting = {
-    expires: cookieExpires
-  }
-  Object.assign(currentCookieSetting, cookieSetting)
-  Cookies.set(`d2admin-${setting.releases.version}-${name}`, value, currentCookieSetting)
+  // let currentCookieSetting = {
+  //   expires: cookieExpires
+  // }
+  // Object.assign(currentCookieSetting, cookieSetting)
+  Cookies.set(`d2admin-${setting.releases.version}-${name}`, value, cookieSetting)
 }
 
 /**
