@@ -1,7 +1,7 @@
 <template>
   <d2-container v-loading="loading">
-    <h3 slot="header">人员信息维护</h3>
     <el-card>
+    <h4 slot="header">人员信息</h4>
       <div v-if="!ryInfo">一般信息加载中……</div>
       <template v-else>
         <el-row>

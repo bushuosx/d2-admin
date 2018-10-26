@@ -73,7 +73,6 @@ export default {
       }
 
       this.loading = true
-      let log = this.$logError
       let router = this.$router
       let message = this.$message
       ryjsapi.createryjs(jsids, this.fileidlist).then((res) => {
@@ -81,17 +80,16 @@ export default {
         if (res.code === 1) {
           router.push({ name: 'yljs-ry-js' })
         } else {
-          log(res.msg)
+          message.error(res.msg)
         }
       }).catch(function (err) {
         this.loading = false
-        message(!err.message ? err : err.message)
+        message.error(!err.message ? err : err.message)
       })
     },
     getjslist () {
       // 从服务器加载
       let msg = this.$message
-      let log = this.$logError
       if (!this.selectvalue || setInterval === undefined) {
         msg({ message: '请输入查询条件', type: 'error' })
       }
@@ -102,7 +100,7 @@ export default {
         if (res.code === 1) {
           data.jslist = res.data
         } else {
-          log(res.msg)
+          msg.error(res.msg)
         }
       }).catch(() => {
         this.loading = false

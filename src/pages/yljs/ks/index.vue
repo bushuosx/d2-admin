@@ -29,10 +29,11 @@
         <el-col :span="8">
           <el-card>人员
             <div v-if="ryList">
-              <el-table :data="ryList">
+              <!-- <el-table :data="ryList">
                 <el-table-column prop="gh" label="工号"></el-table-column>
                 <el-table-column prop="xm" label="姓名"></el-table-column>
-              </el-table>
+              </el-table> -->
+              <ry-table :ryList="ryList" :options="{hideCounter:true}"></ry-table>
             </div>
           </el-card>
         </el-col>
@@ -62,7 +63,7 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="ryListDialogData.visible" :title="ryListDialogData.title + ' 人员列表'">
-      <ry-table :ryList="ryListDialogData.ryList"></ry-table>
+      <ry-table :ryList="ryListDialogData.ryList" :options="{hideActioner:true}"></ry-table>
     </el-dialog>
   </d2-container>
 </template>

@@ -10,7 +10,7 @@
       </el-input>
     </div>
 
-    <el-table :data="rylist" style="width: 100%">
+    <!-- <el-table :data="rylist" style="width: 100%">
       <el-table-column label="科室">
         <template slot-scope="scope">
           <template v-if="scope.row.ryks && scope.row.ryks.ks">
@@ -28,7 +28,8 @@
           <el-button size="mini" @click="showzl(scope.row)">查看资料</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
+    <ry-table :ryList="rylist" :options="{showks:true}"></ry-table>
 
   </d2-container>
 </template>
@@ -38,6 +39,9 @@ import ryapi from '@/api/yljs/ry'
 
 export default {
   name: 'yljs-ry-search',
+  components: {
+    'ry-table': () => import('@/components/yljs/rytable')
+  },
   data () {
     return {
       rylist: [],
@@ -65,13 +69,14 @@ export default {
           this.$message.error(res.msg)
         }
       })
-    },
-    showryjs (row) {
-      this.$router.push({ name: 'yljs-ryjs-listbyry', params: { ryid: row.id } })
-    },
-    showzl (row) {
-      this.$router.push({ name: 'yljs-ryprofile-index', params: { ryid: row.id } })
     }
+    // ,
+    // showryjs (row) {
+    //   this.$router.push({ name: 'yljs-ryjs-listbyry', params: { ryid: row.id } })
+    // },
+    // showzl (row) {
+    //   this.$router.push({ name: 'yljs-ryprofile-index', params: { ryid: row.id } })
+    // }
   }
 }
 </script>
