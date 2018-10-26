@@ -85,7 +85,7 @@ export default {
       // 删除 cookie 中保存的重定向页面
       util.cookies.remove('redirect')
       // 根据是否存有重定向页面判断如何重定向
-      vm.$router.replace(path ? { path } : route)
+      vm.$router.replace(path ? { path } : { path: '/yljs' })
     },
     /**
      * @description 注销用户并返回登录页面

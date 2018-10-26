@@ -20,6 +20,14 @@ const frameIn = [
       }
     ]
   },
+  {
+    path: '/yljs/help',
+    redirect: { name: 'help-about' },
+    component: layoutHeaderAside,
+    children: [
+      { path: 'about', name: `help-about`, component: () => import('@/pages/yljs/help/about'), meta: { title: '关于本站' } }
+    ]
+  },
 
   // {
   //   path: '/demo/playground',
@@ -327,7 +335,6 @@ const frameIn = [
       { path: `manage/js/importjs`, name: `${pre}manage-js-importjs`, component: () => import('@/pages/yljs/manage/js/importjs.vue'), meta: { ...meta, title: '导入技术' } },
       { path: `manage/js/importbmk`, name: `${pre}manage-js-importbmk`, component: () => import('@/pages/yljs/manage/js/importbmk.vue'), meta: { ...meta, title: '导入技术编码库' } },
       { path: `manage/js/setjsbmdy`, name: `${pre}manage-js-setjsbmdy`, component: () => import('@/pages/yljs/manage/js/setjsbmdy.vue'), meta: { ...meta, title: '设置技术编码对应' } },
-      { path: 'help/about', name: `${pre}help-about`, component: () => import('@/pages/yljs/help/about'), meta: { ...meta, title: '关于本站' } },
 
       { path: 'iframe', name: `d2-container-frame`, component: () => import('@/components/d2-container-frame'), props: true, meta: { ...meta, title: '外链' } },
 

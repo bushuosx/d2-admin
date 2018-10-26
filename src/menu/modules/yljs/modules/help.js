@@ -1,6 +1,6 @@
 import Constants from './Constants'
 
-export default function (user) {
+export default function () {
   return {
     title: '帮助',
     icon: 'sitemap',
