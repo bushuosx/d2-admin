@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
     const token = util.cookies.get('uuid')
     // const token = util.user.userId
 
-    if (token && token !== 'undefined') {
+    if (token && token !== 'undefined' && token !== 'Ghost') {
       next()
     } else {
       // const userInfo = store.state.d2admin.user.info

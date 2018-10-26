@@ -82,10 +82,10 @@ export default {
       commit('load')
       // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址
       const path = util.cookies.get('redirect')
-      // 根据是否存有重定向页面判断如何重定向
-      vm.$router.replace(path ? { path } : route)
       // 删除 cookie 中保存的重定向页面
       util.cookies.remove('redirect')
+      // 根据是否存有重定向页面判断如何重定向
+      vm.$router.replace(path ? { path } : route)
     },
     /**
      * @description 注销用户并返回登录页面
