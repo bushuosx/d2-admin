@@ -13,34 +13,57 @@
       </ol>
       <!-- <div><a target="_blank" href="/yljs/employees.xlsx">点击这里可以下载模板</a></div> -->
     </div>
-    <import-excel ref="iexcel" @header-change="handleHeaderChange"></import-excel>
+    <import-excel ref="iexcel"
+      @header-change="handleHeaderChange"></import-excel>
     <div>
       <div>在上述数据中选择匹配的列</div>
       <div>以下标记*的列，为必选项</div>
-      <el-form label-width="100px">
+      <el-form label-width="200px">
         <el-form-item label="*工号">
           <el-select v-model="ghHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="*姓名">
           <el-select v-model="xmHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="身份证号">
-          <el-select v-model="sfzHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+        <el-form-item label="科室编码">
+          <el-select v-model="ksCodeHeader">
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="预设科室管理员">
+          <el-select v-model="ksManagerHeader">
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="预设医院管理员">
+          <el-select v-model="yyManagerHeader">
+            <el-option v-for="(row,rowIndex) in headers"
+              :key="rowIndex"
+              :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSubmit">开始上传</el-button>
+          <el-button type="primary"
+            @click="handleSubmit">开始上传</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div v-if="faildList">
       <div><strong>以下人员没有导入成功,共{{faildList.length}}个</strong></div>
-      <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
+      <span v-for="(item,index) in faildList"
+        :key="index">{{item.gh}}；</span>
     </div>
   </d2-container>
 </template>
@@ -57,7 +80,9 @@ export default {
       headers: [],
       ghHeader: null,
       xmHeader: null,
-      sfzHeader: null,
+      ksCodeHeader: null,
+      ksManagerHeader: null,
+      yyManagerHeader: null,
       loading: false,
       faildList: null
     }
@@ -84,9 +109,19 @@ export default {
 
       const ghHeader = this.ghHeader
       const xmHeader = this.xmHeader
-      const sfzHeader = this.sfzHeader
+      const ksCodeHeader = this.ksCodeHeader
+      const ksManagerHeader = this.ksManagerHeader
+      const yyManagerHeader = this.yyManagerHeader
 
-      let rst = sd.map(v => { return { GH: v[ghHeader], XM: v[xmHeader], SFZ: sfzHeader ? v[sfzHeader] : null } })
+      let rst = sd.map(v => {
+        return {
+          GH: v[ghHeader],
+          XM: v[xmHeader],
+          KSCode: ksCodeHeader ? v[ksCodeHeader] : null,
+          KSManager: ksManagerHeader ? !!v[ksManagerHeader] : false,
+          YYManager: yyManagerHeader ? !!v[yyManagerHeader] : false
+        }
+      })
 
       this.loading = true
       ryapi.importEmployees(rst).then(res => {

@@ -1,6 +1,4 @@
-// import { version } from '../package'
-
-const version = 1.3
+import { version } from '../package'
 
 const setting = {
   // 快捷键

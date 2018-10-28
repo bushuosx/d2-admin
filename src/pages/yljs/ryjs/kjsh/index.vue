@@ -5,12 +5,23 @@
       <div>以下是科室人员的技术授权申请</div>
     </div>
     <el-card v-loading='loading'>
-      <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:true,isKjshManager}"></ryjs-table>
-      <div v-if="isKjshManager" style="margin-top:10px">
-        <el-button :disabled='anySelected !== true' @click="handleResolveAll" type="primary" plain>批量通过</el-button>
-        <el-button :disabled='anySelected !== true' @click="handleRejectAll" type="warning" plain>批量拒绝</el-button>
+      <ryjs-table v-on:ryjs-changed="handleRyjsChanged"
+        v-on:selection-changed="selectedChange"
+        :ryjslist="ryjslist"
+        :options="{showry:true,isKjshManager}"></ryjs-table>
+      <div v-if="isKjshManager"
+        style="margin-top:10px">
+        <el-button :disabled='anySelected !== true'
+          @click="handleResolveAll"
+          type="primary"
+          plain>批量通过</el-button>
+        <el-button :disabled='anySelected !== true'
+          @click="handleRejectAll"
+          type="warning"
+          plain>批量拒绝</el-button>
       </div>
-      <my-pagination :pageIndex="pageIndex" @page-index-change="fetchData"></my-pagination>
+      <my-pagination :pageIndex="pageIndex"
+        @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -77,12 +88,24 @@ export default {
     },
     handleResolveAll () {
       if (this.anySelected) {
-        this.approvekjsh(this.getSelectedId())
+        this.loading = true
+        ryjsapi.approveKjsh(this.getSelectedId(), '批量通过').then(res => {
+          this.handleRyjsChanged(null, res)
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
       }
     },
     handleRejectAll () {
       if (this.anySelected) {
-        this.rejectkjsh(this.getSelectedId())
+        this.loading = true
+        ryjsapi.rejectKjsh(this.getSelectedId(), '批量拒绝').then(res => {
+          this.handleRyjsChanged(null, res)
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
       }
     },
     // processResponse (res) {
