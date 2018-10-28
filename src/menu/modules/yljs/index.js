@@ -17,14 +17,22 @@ const isLogon = function (userInfo) {
   return !!userInfo && !!userInfo.uuid
 }
 
+const hasAnyRole = function (userInfo) {
+  return !!userInfo && Array.isArray(userInfo.roles) && userInfo.roles.length > 0
+}
+
 const getChildren = function (userInfo) {
   let rst = []
   if (isLogon(userInfo)) {
-    rst.push(myprofile(userInfo),
+    rst.push(
+      myprofile(userInfo),
       myks(userInfo),
       myjs(userInfo),
-      myyy(userInfo),
-      manage(userInfo))
+      myyy(userInfo)
+    )
+    if (hasAnyRole(userInfo)) {
+      rst.push(manage(userInfo))
+    }
   }
   rst.push(help())
   return rst

@@ -21,10 +21,12 @@ const getChildren = function (user) {
       rst.push({ path: `${Constants.BaseUrl}/manage/ry/setksmanager`, title: '设置科室管理员' })
     }
 
+    if (Constants.hasRoles(user, [Constants.Roles.网站角色管理权限, Constants.Roles.超级管理权限, Constants.Roles.人员创建])) {
+      rst.push({ path: `${Constants.BaseUrl}/manage/ry/getemployees`, title: '查询员工' })
+    }
+
     if (rst.length === 0) {
       rst.push({ title: Constants.InvalidMessage })
-    } else {
-      rst.push({ path: `${Constants.BaseUrl}/manage/ry/getemployees`, title: '查询员工' })
     }
     return rst
   }
