@@ -16,7 +16,7 @@ const frameIn = [
         path: 'yljs',
         name: 'index',
         // meta,
-        component: () => import('@/pages/index')
+        component: () => import('@/pages/yljs/index')
       }
     ]
   },

@@ -13,7 +13,7 @@
     </el-menu>
     <div v-if="aside.length === 0 && !asideCollapse" class="d2-layout-header-aside-menu-empty" flex="dir:top main:center cross:center">
       <d2-icon name="inbox"/>
-      <span>没有侧栏菜单</span>
+      <span>侧边栏</span>
     </div>
   </div>
 </template>

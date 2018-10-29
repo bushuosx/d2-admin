@@ -3,6 +3,7 @@
     <div slot="header">
       <strong>导入员工信息</strong>
       <div>本医疗技术数据库中存在的信息记录的员工，方能在本系统成功注册</div>
+      <div>可以预设科室、预设科室管理员权限、预设医院管理员权限</div>
       <div>数据量较大时，操作耗时将较长。默认等待 <strong>40</strong> 秒。</div>
     </div>
     <div>

@@ -1,6 +1,10 @@
 <template>
   <d2-container v-loading="loading">
-    <strong slot="header">设置科室管理员</strong>
+    <template>
+      <strong slot="header">设置科室管理员</strong>
+      <p>设置人员为对应科室并设置为管理员</p>
+      <p>此方法适用于人员已完成初始化，但尚未选择科室</p>
+    </template>
     <div>
       <ol>
         <li>从Excel导入预览数据，匹配要导入的数据</li>

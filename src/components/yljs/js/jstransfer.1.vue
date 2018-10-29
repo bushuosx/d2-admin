@@ -22,13 +22,6 @@
     </div>
     <el-row style="margin-top:10px">
       <el-col :span="12">
-        <!-- <div style="text-align: center">尚未申请的技术{{jslist.length}}</div>
-        <div style="overflow-y:auto;height:400px;">
-          <div class="jslistrow" v-for="js in jslist" v-show="!js.hidden" v-bind:key="js.id" @click="clickcheck(js)">
-            <span><input type="checkbox" v-model="js.checked"></span>
-            <span>{{js.mc}}</span>
-          </div>
-        </div> -->
         <div style="overflow:auto;height:600px;">
           <table class="jslisttable">
             <caption>尚未申请的技术
@@ -55,6 +48,7 @@
             </tbody>
           </table>
         </div>
+        <!-- <jslisttable :jsList="filtedJsList"></jslisttable> -->
       </el-col>
       <el-col :span="6" style="margin-left:16px">
         <div style="text-align: center;">准备申请的技术
@@ -77,6 +71,9 @@
 export default {
   props: {
     jslist: Array
+  },
+  components: {
+    'jslisttable': () => import('@/components/yljs/jslist')
   },
   computed: {
     jsidlist: function () {
@@ -141,6 +138,12 @@ export default {
         }
       }
       if (removeindex !== -1) this.selectedjslist.splice(removeindex, 1)
+    },
+    ResetSelected () {
+      for (let i = 0; i < this.jslist.length; i++) {
+        this.jslist[i].checked = false
+      }
+      Object.assign(this.$data, this.$options.data())
     }
   }
 }

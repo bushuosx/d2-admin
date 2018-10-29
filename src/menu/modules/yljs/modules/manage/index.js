@@ -5,7 +5,7 @@ import Constants from '../Constants'
 
 export default function (user) {
   return {
-    title: '管理模板',
+    title: '管理模块',
     icon: 'lock',
     children: [
       { path: `${Constants.BaseUrl}/ryrole/manage`, icon: 'arrows', title: '人员角色分配' },

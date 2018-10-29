@@ -1,7 +1,7 @@
 <template>
   <d2-container v-loading="loading">
     <el-card>
-    <h4 slot="header">人员信息</h4>
+      <strong slot="header">人员信息</strong>
       <div v-if="!ryInfo">一般信息加载中……</div>
       <template v-else>
         <el-row>
@@ -22,7 +22,10 @@
           </el-col>
           <el-col :span="8">
             <div>
-              <img :style="photoSize" v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo" :src="getUrl(ryInfo.ryProfile.photo.id)" alt="正在加载照片">
+              <template v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo">
+                <div>照片</div>
+                <img :style="photoSize" :src="getUrl(ryInfo.ryProfile.photo.id)" alt="正在加载照片">
+              </template>
               <el-button v-else-if="isMe" @click="photoDialogVisible=true">上传个人照片</el-button>
             </div>
           </el-col>
@@ -30,7 +33,7 @@
 
       </template>
     </el-card>
-    <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签查看内容<i class="el-icon-caret-bottom"></i></div>
+    <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签可查看内容<i class="el-icon-caret-bottom"></i></div>
     <el-tabs type="border-card" v-model="activeTabName" @tab-click="handleTabClick">
       <el-tab-pane name="ryzcTab">
         <span slot="label"><i class="el-icon-star-on"></i>职称</span>

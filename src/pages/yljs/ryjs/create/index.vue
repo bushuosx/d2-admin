@@ -48,7 +48,6 @@ export default {
     return {
       selectvalue: null,
       selected: '2',
-      //   jslist: [{ id: '1', mc: '胸腔闭式引流术', dj: 2, decs: 'xqbsyys', hidden: false }, { id: '2', mc: '导尿术', decs: 'dns', dj: 1, hidden: false }],
       jslist: [],
       ksjslist: null,
       yyjslist: null,
@@ -57,6 +56,10 @@ export default {
     }
   },
   methods: {
+    ResetData () {
+      // Object.assign(this.$data, this.$options.data())
+      this.$refs.jsselector.ResetSelected()
+    },
     applyAll () {
       if (this.loading === true) {
         return
@@ -79,6 +82,7 @@ export default {
         this.loading = false
         if (res.code === 1) {
           router.push({ name: 'yljs-ry-js' })
+          this.ResetData()
         } else {
           message.error(res.msg)
         }
@@ -124,6 +128,6 @@ export default {
 
 <style>
 .el-select .el-input {
-  width: 160px;
+  width: 180px;
 }
 </style>
