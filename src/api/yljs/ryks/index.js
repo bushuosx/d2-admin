@@ -81,5 +81,14 @@ export default {
       return reject('ksid不能为空')
     }
     return parent.axios.get(BaseURL + '/getrybyks/' + ksid)
+  },
+  ban (IDList, Reason) {
+    if (!Reason) {
+      return reject('reason不能为空')
+    }
+    if (!Array.isArray(IDList)) {
+      return reject('IDList不能为空')
+    }
+    return parent.axios.put(BaseURL + '/ban', { IDList, Reason })
   }
 }
