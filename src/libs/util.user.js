@@ -86,5 +86,8 @@ export default {
         reject(err)
       })
     })
+  },
+  isLogon () {
+    return !!this.userId
   }
 }
