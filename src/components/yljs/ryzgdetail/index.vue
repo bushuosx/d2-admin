@@ -2,7 +2,7 @@
   <div>
     <el-form v-if="isKSManager || isMe || isApproved" label-width="120px" size="small">
       <el-form-item label="专业">
-        <strong>{{ryzg.zylb.mc}}</strong>
+        <strong>{{formartZYLB(ryzg.zylb)}}</strong>
       </el-form-item>
       <el-form-item label="年资">
         <strong>{{formartNZ(ryzg.zgsj)}}</strong>

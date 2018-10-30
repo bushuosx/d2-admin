@@ -5,7 +5,7 @@
         <strong v-if="ryzc.zcLevel">{{formartZcLevel(ryzc.zcLevel)}}</strong>
       </el-form-item>
       <el-form-item label="专业">
-        <strong>{{ryzc.zylb.mc}}</strong>
+        <strong>{{formartZYLB(ryzc.zylb)}}</strong>
       </el-form-item>
       <el-form-item label="年资">
         <strong>{{formartNZ(ryzc.zcsj)}}</strong>

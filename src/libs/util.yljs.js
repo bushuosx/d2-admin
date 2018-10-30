@@ -95,5 +95,12 @@ export default {
       default:
         return '未知'
     }
+  },
+  formartZYLB (zylb) {
+    if (zylb && zylb.bm && zylb.mc) {
+      return `${zylb.bm} - ${zylb.mc}`
+    } else {
+      return undefined
+    }
   }
 }

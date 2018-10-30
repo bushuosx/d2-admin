@@ -3,7 +3,7 @@
     <div class="ryzgdata" v-for="item in ryzglist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyzgClick(item)">
       <el-row>
         <el-col :span="8"><span>资格专业：</span></el-col>
-        <el-col :span="14"><strong style="color:#409EFF">{{item.zylb?item.zylb.mc:""}}</strong></el-col>
+        <el-col :span="14"><strong style="color:#409EFF">{{formartZYLB(item.zylb)}}</strong></el-col>
         <el-col :span="2">
           <i v-if="approved(item)" class="el-icon-success" style="color:#67C23A"></i>
           <i v-else-if="rejected(item)" class="el-icon-error" style="color:#F56C6C"></i>

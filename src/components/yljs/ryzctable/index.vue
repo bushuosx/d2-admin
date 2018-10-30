@@ -13,7 +13,7 @@
       </el-row>
       <el-row>
         <el-col :span="8"><span>专业：</span></el-col>
-        <el-col :span="16"><span>{{item.zylb?item.zylb.mc:""}}</span></el-col>
+        <el-col :span="16"><span>{{formartZYLB(item.zylb)}}</span></el-col>
       </el-row>
       <el-row>
         <el-col :span="8"><span>获得时间：</span></el-col>

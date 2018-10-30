@@ -2,7 +2,7 @@
   <el-form ref="ryzgedit" :rules="rules" :model="ryzg" label-width="100px">
     <el-form-item label="专业类别" prop="zylbId">
       <el-select v-model="ryzg.zylbId" filterable>
-        <el-option v-for="item in zylblist" :key="item.id" :label="item.mc" :value="item.id"></el-option>
+        <el-option v-for="item in zylblist" :key="item.id" :label="formartZYLB(item)" :value="item.id"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="获得时间" prop="zgsj">
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-// import zylbapi from '@/api/yljs/zylb'
+import helper from '../helper/index.js'
 export default {
   components: {
     'file-upload': () => import('@/components/fast-upload')
@@ -62,6 +62,7 @@ export default {
     //   }
     // }
     return {
+      ...helper,
       rules: {
         zylbId: [
           { required: true, message: '请选择专业类别', trigger: 'change' }
