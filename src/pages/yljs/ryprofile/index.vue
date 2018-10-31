@@ -140,7 +140,7 @@ export default {
               })
             } else {
               self.loading = false
-              self.$message.error('该人员还没有填写档案资料')
+              self.$message.warning('该人员还没有填写档案资料')
             }
           } else {
             // self.ryInfo = ryrst
@@ -158,22 +158,6 @@ export default {
     handleTabClick () {
       this.initedTab[this.activeTabName] = true
     },
-    // handelUpdateRyzc (val) {
-    //   if (val) {
-    //     let index = -1
-    //     for (let i in this.ryprofile.ryzCs) {
-    //       if (this.ryprofile.ryzCs[i].id === val.id) {
-    //         index = i
-    //         break
-    //       }
-    //     }
-    //     if (index === -1) {
-    //       this.ryprofile.ryzCs.push(val)
-    //     } else {
-    //       this.$set(this.ryprofile.ryzCs, index, val)
-    //     }
-    //   }
-    // }
     handlePhotoUploadSuccess (fileid, filedata) {
       this.photoDialogVisible = false
       // 更新ryprofile

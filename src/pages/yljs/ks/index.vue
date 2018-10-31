@@ -127,6 +127,9 @@ export default {
         if (res.code === 1) {
           this.ryList = res.data.ryList
           this.ksInfo = res.data.ks
+        } else if (res.code === 2) {
+          this.ksInfo = res.data.ks
+          this.$message.warning('此科室当前没有人员登记')
         } else {
           this.$message.error(res.msg)
         }

@@ -107,9 +107,8 @@ export default {
     processResponse (res) {
       this.loading = false
       if (res.code === 1) {
-        this.$message.success('审核完成')
         let response = res.data
-        if (response !== null && response !== undefined && response.length) {
+        if (Array.isArray(response)) {
           for (let i in response) {
             let index = -1
             for (let j in this.rykslist) {
@@ -123,6 +122,7 @@ export default {
             }
           }
         }
+        this.$message.success('审核完成')
       } else {
         this.$message.error(res.msg)
       }

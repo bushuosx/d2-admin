@@ -1,6 +1,6 @@
 <template>
   <d2-container>
-    <div slot="header">医疗技术授权管理系统首页</div>
+    <div slot="header">孝感市中心医院医务部信息管理系统--医疗技术应用授权管理系统</div>
     <div class="page-index">
       <div v-if="!isLogon"
         class="div-login">
