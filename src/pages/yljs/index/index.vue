@@ -1,25 +1,38 @@
 <template>
   <d2-container>
-    <div class="div-header" slot="header">孝感市中心医院医务部管理信息系统--医疗技术授权管理系统</div>
+    <div class="div-header"
+      slot="header">孝感市中心医院医务部管理信息系统--医疗技术授权管理系统</div>
     <div class="page-index">
-      <div v-if="!isLogon" class="div-login">
+      <div v-if="!isLogon"
+        class="div-login">
         <h2 class="div-login-header">欢迎使用《医疗技术临床应用授权管理系统》</h2>
-        <el-button @click="handleLogon" class="div-login-btn" type="primary" size="large">请登录</el-button>
+        <el-button @click="handleLogon"
+          class="div-login-btn"
+          type="primary"
+          size="large">请登录</el-button>
       </div>
-      <el-card v-else class="nav-card" v-for="(menu,i) in this.$root.__asideMenu[0].children" :key="i" shadow="always">
+      <el-card v-else
+        class="nav-card"
+        v-for="(menu,i) in this.$root.__asideMenu[0].children"
+        :key="i"
+        shadow="always">
         <div slot="header"><strong>{{menu.title}}</strong></div>
         <div class="nav-card-content">
-          <div v-for="(submenu,subi) in menu.children" :key="subi">
+          <div v-for="(submenu,subi) in menu.children"
+            :key="subi">
             <template v-if="submenu.children">
               <div>{{submenu.title}}</div>
-              <div v-for="(lastmenu,lasti) in submenu.children" :key="lasti" style="padding-left:2em;">
+              <div v-for="(lastmenu,lasti) in submenu.children"
+                :key="lasti"
+                style="padding-left:2em;">
                 <div class="div-link">
                   <d2-icon :name="lastmenu.icon"></d2-icon>
                   <router-link :to="{path:lastmenu.path}">{{lastmenu.title}}</router-link>
                 </div>
               </div>
             </template>
-            <div v-else class="div-link">
+            <div v-else
+              class="div-link">
               <d2-icon :name="submenu.icon"></d2-icon>
               <router-link :to="{path:submenu.path}">{{submenu.title}}</router-link>
             </div>
@@ -86,11 +99,14 @@ export default {
 }
 
 .div-login-header {
-  margin: 4em 0em 2em 4em;
+  font-size: 3em;
+  margin: 100px;
 }
 
 .div-login-btn {
-  margin-left: 20em;
+  font-size: 3em;
+  margin-left: 200px;
+  width: 200px;
 }
 .div-link * {
   margin: 0.4em;
