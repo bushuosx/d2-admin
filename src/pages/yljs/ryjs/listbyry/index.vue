@@ -3,7 +3,7 @@
     <el-card v-loading='loading'>
       <div slot="header">
         <h3>人员技术授权信息</h3>
-        <router-link v-if="isMe" :to="{name:'yljs-ryjs-create'}">申请新技术</router-link>
+        <el-button  v-if="isMe" @click="handleCreate" type="primary" plain size="small">申请新技术</el-button>
         <div v-else>以下是人员的技术授权</div>
       </div>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged" v-on:selection-changed="selectedChange" :ryjslist="ryjslist" :options="{showry:!isMe}"></ryjs-table>
@@ -106,6 +106,9 @@ export default {
       } else {
         this.$message.error(rst.msg)
       }
+    },
+    handleCreate () {
+      this.$router.push({ name: 'yljs-ryjs-create' })
     }
   }
 }

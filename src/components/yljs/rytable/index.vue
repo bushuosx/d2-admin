@@ -11,11 +11,12 @@
             </el-table-column>
             <el-table-column prop="gh" label="工号"></el-table-column>
             <el-table-column prop="xm" label="姓名"></el-table-column>
-            <el-table-column v-if="options && options.hideActioner!==true">
+            <el-table-column v-if="options && options.hideActioner!==true"
+            style="min-width:120px;">
                 <template slot-scope="scope">
                     <template v-if="options && options.hideDefaultActioner!==true">
-                        <el-button size="mini" @click="showzl(scope.row)">资料</el-button>
-                        <el-button size="mini" @click="showryjs(scope.row)">技术</el-button>
+                        <el-button size="mini" @click="showzl(scope.row)" type="primary" plain>资料</el-button>
+                        <el-button size="mini" @click="showryjs(scope.row)" type="primary" plain>技术</el-button>
                     </template>
                     <slot name="actioner" :ry="scope.row"></slot>
                 </template>
