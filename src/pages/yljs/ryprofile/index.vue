@@ -6,7 +6,7 @@
       <template v-else>
         <el-row>
           <el-col :span="8"
-            class="el-col-ryinfo">
+                  class="el-col-ryinfo">
             <el-row>
               <el-col :span="4"><span>姓名：</span></el-col>
               <el-col :span="4">{{ryInfo.xm}}</el-col>
@@ -25,11 +25,11 @@
               <template v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo">
                 <div>照片</div>
                 <img :style="photoSize"
-                  :src="getUrl(ryInfo.ryProfile.photo.id)"
-                  alt="正在加载照片">
+                     :src="getUrl(ryInfo.ryProfile.photo.id)"
+                     alt="正在加载照片">
               </template>
               <el-button v-else-if="isMe"
-                @click="photoDialogVisible=true">上传个人照片</el-button>
+                         @click="photoDialogVisible=true">上传个人照片</el-button>
             </div>
           </el-col>
         </el-row>
@@ -38,32 +38,33 @@
     </el-card>
     <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签可查看内容<i class="el-icon-caret-bottom"></i></div>
     <el-tabs type="border-card"
-      v-model="activeTabName"
-      @tab-click="handleTabClick">
+             v-model="activeTabName"
+             @tab-click="handleTabClick">
       <el-tab-pane name="ryzcTab">
         <span slot="label"><i class="el-icon-star-on"></i>职称</span>
         <ryzc-table v-if="initedTab.ryzcTab"
-          :ryInfo="ryInfo"></ryzc-table>
+                    :ryInfo="ryInfo"></ryzc-table>
       </el-tab-pane>
       <el-tab-pane name="ryzgTab">
         <span slot="label"><i class="el-icon-star-on"></i>资格</span>
         <ryzg-table v-if="initedTab.ryzgTab"
-          :ryInfo="ryInfo"></ryzg-table>
+                    :ryInfo="ryInfo"></ryzg-table>
       </el-tab-pane>
       <el-tab-pane name="ryxlTab">
         <span slot="label"><i class="el-icon-star-on"></i>学历</span>
         <ryxl-table v-if="initedTab.ryxlTab"
-          :ryInfo="ryInfo"></ryxl-table>
+                    :ryInfo="ryInfo"></ryxl-table>
       </el-tab-pane>
       <el-tab-pane name="ryxwTab">
         <span slot="label"><i class="el-icon-star-on"></i>学位</span>
         <ryxw-table v-if="initedTab.ryxwTab"
-          :ryInfo="ryInfo"></ryxw-table>
+                    :ryInfo="ryInfo"></ryxw-table>
       </el-tab-pane>
     </el-tabs>
 
     <el-dialog :visible.sync="photoDialogVisible"
-      title="上传个人照片">
+               title="上传个人照片"
+               width="80%">
       <image-uploader @Upload-Success="handlePhotoUploadSuccess"></image-uploader>
     </el-dialog>
   </d2-container>
@@ -137,14 +138,27 @@ export default {
                 } else {
                   self.$message.error(rst.msg)
                 }
+              }).catch(() => {
+                self.loading = false
               })
             } else {
               self.loading = false
               self.$message.warning('该人员还没有填写档案资料')
             }
           } else {
-            // self.ryInfo = ryrst
-            self.loading = false
+            // // 加载profile
+            // ryprofileapi.getbyry(self.ryid).then(rst => {
+            //   self.loading = false
+            //   if (rst.code === 1) {
+            //     ryrst.ryProfile = rst.data
+            //     self.ryInfo = ryrst
+            //   } else {
+            //     self.$message.error(rst.msg)
+            //   }
+            // }).catch(() => {
+            //   self.loading = false
+            // })
+            this.loading = false // 不加载具体数据了，放到各档案自行加载
           }
         } else {
           self.loading = false

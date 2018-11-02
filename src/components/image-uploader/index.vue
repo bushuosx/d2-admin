@@ -3,39 +3,39 @@
     <div>
       <div class="cropper">
         <VueCropper ref="cropper"
-          :img="option.img"
-          :outputSize="option.size"
-          :outputType="option.outputType"
-          :info="option.info"
-          :infoTrue="option.infoTrue"
-          :full="option.full"
-          :canMove="option.canMove"
-          :canMoveBox="option.canMoveBox"
-          :original="option.original"
-          :autoCrop="option.autoCrop"
-          :autoCropWidth="option.autoCropWidth"
-          :autoCropHeight="option.autoCropHeight"
-          :fixedBox="option.fixedBox"
-          :fixedNumber="option.fixedNumber"
-          :fixed="option.fixed"
-          :centerBox="option.centerBox"
-          :canScale="option.canScale"
-          @realTime="realTime"></VueCropper>
+                    :img="option.img"
+                    :outputSize="option.size"
+                    :outputType="option.outputType"
+                    :info="option.info"
+                    :infoTrue="option.infoTrue"
+                    :full="option.full"
+                    :canMove="option.canMove"
+                    :canMoveBox="option.canMoveBox"
+                    :original="option.original"
+                    :autoCrop="option.autoCrop"
+                    :autoCropWidth="option.autoCropWidth"
+                    :autoCropHeight="option.autoCropHeight"
+                    :fixedBox="option.fixedBox"
+                    :fixedNumber="option.fixedNumber"
+                    :fixed="option.fixed"
+                    :centerBox="option.centerBox"
+                    :canScale="option.canScale"
+                    @realTime="realTime"></VueCropper>
       </div>
       <div class="cropData">
-        <img :style="oneInchPhotoDiv"
-          alt="剪裁的图片"
-          :src="cropData">
+        <img :style="halfInchPhotoDiv"
+             alt="剪裁的图片"
+             :src="cropData">
       </div>
     </div>
     <div class="uploadFileSelector">
       <input type="file"
-        @change="handleFileChange"
-        accept=".jpg,.jpeg" />
+             @change="handleFileChange"
+             accept=".jpg,.jpeg" />
       <el-button :disabled="!file"
-        @click="handleClick"
-        type="primary"
-        size="small">上传</el-button>
+                 @click="handleClick"
+                 type="primary"
+                 size="small">上传</el-button>
     </div>
 
   </div>
@@ -51,6 +51,10 @@ export default {
       oneInchPhotoDiv: {
         height: oneInchPhoto.height + 'px',
         width: oneInchPhoto.width + 'px'
+      },
+      halfInchPhotoDiv: {
+        height: oneInchPhoto.height / 2 + 'px',
+        width: oneInchPhoto.width / 2 + 'px'
       },
       file: null,
       option: {
