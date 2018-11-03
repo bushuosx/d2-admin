@@ -4,7 +4,13 @@
       <div><span>科室：</span></div>
     </template>
     <ry-table :ryList="ryList">
-      <el-button v-if="isKSRoleManager" type="danger" slot="actioner" slot-scope="scope" @click="handleBan(scope.ry)" size="mini" plain>移除</el-button>
+      <el-button v-if="isKSRoleManager"
+        type="danger"
+        slot="actioner"
+        slot-scope="scope"
+        @click="handleBan(scope.ry)"
+        size="mini"
+        plain>移除</el-button>
     </ry-table>
   </d2-container>
 </template>
@@ -50,6 +56,10 @@ export default {
     },
     handleBan (ry) {
       if (ry) {
+        if (ry.id === user.userId) {
+          this.message.warning('不能移除自己')
+          return
+        }
         this.$prompt('此操作将从本科室中移除人员，若该人员有科室管理权限，将一并移除。请在下方输入操作原因：', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',

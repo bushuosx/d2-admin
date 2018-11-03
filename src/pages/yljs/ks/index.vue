@@ -3,24 +3,39 @@
     <el-card>
       <h3 slot="header">科室信息一览</h3>
       <div>
-        <div>
-          <span>科室：{{ksInfo?ksInfo.mc:""}}</span>
-        </div>
-        <div>
-          <span>人数：{{ksryCount}}</span>
-        </div>
+        <el-row>
+          <el-col :span="8">
+            <div>
+              <span>科室：{{ksInfo?ksInfo.mc:""}}</span>
+            </div>
+            <div>
+              <span>人数：{{ksryCount}}</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <el-button @click="handleShowJS"
+              type="primary"
+              plain>查看科室人员已授权技术</el-button>
+          </el-col>
+        </el-row>
       </div>
     </el-card>
     <el-card v-if="isksManager">
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-button @click="handleJSSH" type="primary" plain>审核技术授权</el-button>
+          <el-button @click="handleJSSH"
+            type="primary"
+            plain>审核技术授权</el-button>
         </el-col>
         <el-col :span="8">
-          <el-button @click="handleRKSH" type="primary" plain>审核入科申请</el-button>
+          <el-button @click="handleRKSH"
+            type="primary"
+            plain>审核入科申请</el-button>
         </el-col>
         <el-col :span="8">
-          <el-button @click="handleRYProfileKJSH" type="primary" plain>审核人员资料</el-button>
+          <el-button @click="handleRYProfileKJSH"
+            type="primary"
+            plain>审核人员资料</el-button>
         </el-col>
       </el-row>
     </el-card>
@@ -33,37 +48,47 @@
                 <el-table-column prop="gh" label="工号"></el-table-column>
                 <el-table-column prop="xm" label="姓名"></el-table-column>
               </el-table> -->
-              <ry-table :ryList="ryList" :options="{hideCounter:true}"></ry-table>
+              <ry-table :ryList="ryList"
+                :options="{hideCounter:true}"></ry-table>
             </div>
           </el-card>
         </el-col>
         <el-col :span="8">
           <el-card>职称
             <div v-if="Array.isArray(ryList)">
-              <mypie :data="ryList" :filter="zcfilter" @click-pie="handClickPieOnZC"></mypie>
+              <mypie :data="ryList"
+                :filter="zcfilter"
+                @click-pie="handClickPieOnZC"></mypie>
             </div>
+            <div v-else>暂无数据</div>
           </el-card>
         </el-col>
         <el-col :span="8">
           <el-card>学历
             <div v-if="Array.isArray(ryList)">
-              <mypie :data="ryList" :filter="xlfilter" @click-pie="handClickPieOnXL"></mypie>
+              <mypie :data="ryList"
+                :filter="xlfilter"
+                @click-pie="handClickPieOnXL"></mypie>
             </div>
-            <div>暂无数据</div>
+            <div v-else>暂无数据</div>
           </el-card>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="8">
           <el-card>年龄</el-card>
+          <div>暂未设计</div>
         </el-col>
         <el-col :span="8">
           <el-card>性别</el-card>
+          <div>暂未设计</div>
         </el-col>
       </el-row>
     </el-card>
-    <el-dialog :visible.sync="ryListDialogData.visible" :title="ryListDialogData.title + ' 人员列表'">
-      <ry-table :ryList="ryListDialogData.ryList" :options="{hideActioner:true}"></ry-table>
+    <el-dialog :visible.sync="ryListDialogData.visible"
+      :title="ryListDialogData.title + ' 人员列表'">
+      <ry-table :ryList="ryListDialogData.ryList"
+        :options="{hideActioner:true}"></ry-table>
     </el-dialog>
   </d2-container>
 </template>
@@ -168,6 +193,9 @@ export default {
       this.ryListDialogData.title = name
       this.ryListDialogData.ryList = this.ryList.filter(v => yljsHelper.formartZcLevel(v.zc) === name)
       this.ryListDialogData.visible = true
+    },
+    handleShowJS () {
+      this.$router.push({ name: 'yljs-ryjs-listbyks', params: { ksid: this.ksid } })
     }
   }
 }
