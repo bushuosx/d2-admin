@@ -1,14 +1,25 @@
 <template>
   <div v-loading="loading">
-    <div class="ryzgdata" v-for="item in ryzglist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyzgClick(item)">
+    <div class="ryzgdata"
+      v-for="item in ryzglist"
+      v-if="isMe || isKSManager || isValid(item)"
+      :key="item.id"
+      @click="handleRyzgClick(item)">
       <el-row>
         <el-col :span="8"><span>资格专业：</span></el-col>
         <el-col :span="14"><strong style="color:#409EFF">{{formartZYLB(item.zylb)}}</strong></el-col>
         <el-col :span="2">
-          <i v-if="approved(item)" class="el-icon-success" style="color:#67C23A"></i>
-          <i v-else-if="rejected(item)" class="el-icon-error" style="color:#F56C6C"></i>
-          <i v-else-if="needCommit(item)" class="el-icon-warning" style="color:#E6A23C"></i>
-          <i v-else class="el-icon-question"></i>
+          <i v-if="approved(item)"
+            class="el-icon-success"
+            style="color:#67C23A"></i>
+          <i v-else-if="rejected(item)"
+            class="el-icon-error"
+            style="color:#F56C6C"></i>
+          <i v-else-if="needCommit(item)"
+            class="el-icon-warning"
+            style="color:#E6A23C"></i>
+          <i v-else
+            class="el-icon-question"></i>
         </el-col>
       </el-row>
       <el-row>
@@ -20,20 +31,33 @@
         <el-col :span="16"><span>{{formartNZ(item.zgsj)}}</span></el-col>
       </el-row>
     </div>
-    <div class="ryzgdata" v-if="!hasData">
+    <div class="ryzgdata"
+      v-if="!hasData">
       <div>暂无数据</div>
     </div>
     <div v-if="isMe">
       <el-button @click="handleAdd">添加</el-button>
     </div>
-    <el-dialog :visible.sync="addVisible" title="添加人员执业资格证明">
-      <ryzg-edit :zylblist="zylblist" @edit-save="handleEditSaveFromAdd" @edit-cancel="addVisible=false"></ryzg-edit>
+    <el-dialog :visible.sync="addVisible"
+      title="添加人员执业资格证明">
+      <ryzg-edit :zylblist="zylblist"
+        @edit-save="handleEditSaveFromAdd"
+        @edit-cancel="addVisible=false"></ryzg-edit>
     </el-dialog>
-    <el-dialog :visible.sync="detailVisible" title="人员执业资格详细">
-      <ryzg-detail :ryzg="focusRyzg" @detail-update="handleDetailUpdate" @detail-edit="handleDetailEdit" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryzg-detail>
+    <el-dialog :visible.sync="detailVisible"
+      title="人员执业资格详细">
+      <ryzg-detail :ryzg="focusRyzg"
+        @detail-update="handleDetailUpdate"
+        @detail-edit="handleDetailEdit"
+        :isKSManager="isKSManager"
+        @detail-cancel="detailVisible=false"></ryzg-detail>
     </el-dialog>
-    <el-dialog :visible.sync="editVisible" title="修改人员执业资格证明">
-      <ryzg-edit :ryzg="focusRyzg" :zylblist="zylblist" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryzg-edit>
+    <el-dialog :visible.sync="editVisible"
+      title="修改人员执业资格证明">
+      <ryzg-edit :ryzg="focusRyzg"
+        :zylblist="zylblist"
+        @edit-save="handleEditSaveFromEdit"
+        @edit-cancel="editVisible=false"></ryzg-edit>
     </el-dialog>
   </div>
 </template>

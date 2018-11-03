@@ -1,14 +1,26 @@
 <template>
   <div v-loading="loading">
-    <div class="ryxldata" v-for="item in ryxllist" v-if="isMe || isValid(item)" :key="item.id" @click="handleRyxlClick(item)">
+    <div class="ryxldata"
+      v-for="item in ryxllist"
+      v-if="isMe || isKSManager || isValid(item)"
+      :key="item.id"
+      @click="handleRyxlClick(item)">
       <el-row>
         <el-col :span="8"><span>学历：</span></el-col>
-        <el-col :span="14"><span><strong v-if="item.xl" style="color:#409EFF">{{formartXL(item.xl)}}</strong></span></el-col>
+        <el-col :span="14"><span><strong v-if="item.xl"
+              style="color:#409EFF">{{formartXL(item.xl)}}</strong></span></el-col>
         <el-col :span="2">
-          <i v-if="approved(item)" class="el-icon-success" style="color:#67C23A"></i>
-          <i v-else-if="rejected(item)" class="el-icon-error" style="color:#F56C6C"></i>
-          <i v-else-if="needCommit(item)" class="el-icon-warning" style="color:#E6A23C"></i>
-          <i v-else class="el-icon-question"></i>
+          <i v-if="approved(item)"
+            class="el-icon-success"
+            style="color:#67C23A"></i>
+          <i v-else-if="rejected(item)"
+            class="el-icon-error"
+            style="color:#F56C6C"></i>
+          <i v-else-if="needCommit(item)"
+            class="el-icon-warning"
+            style="color:#E6A23C"></i>
+          <i v-else
+            class="el-icon-question"></i>
         </el-col>
       </el-row>
       <el-row>
@@ -20,20 +32,31 @@
         <el-col :span="16"><span>{{formartNZ(item.xlsj)}}</span></el-col>
       </el-row>
     </div>
-    <div class="ryxldata" v-if="!hasData">
+    <div class="ryxldata"
+      v-if="!hasData">
       <div>暂无数据</div>
     </div>
     <div v-if="isMe">
       <el-button @click="handleAdd">添加</el-button>
     </div>
-    <el-dialog :visible.sync="addVisible" title="添加人员学历证明">
-      <ryxl-edit @edit-save="handleEditSaveFromAdd" @edit-cancel="addVisible=false"></ryxl-edit>
+    <el-dialog :visible.sync="addVisible"
+      title="添加人员学历证明">
+      <ryxl-edit @edit-save="handleEditSaveFromAdd"
+        @edit-cancel="addVisible=false"></ryxl-edit>
     </el-dialog>
-    <el-dialog :visible.sync="detailVisible" title="人员学历详细">
-      <ryxl-detail :ryxl="focusRyxl" @detail-update="handleDetailUpdate" @detail-edit="handleDetailEdit" :isKSManager="isKSManager" @detail-cancel="detailVisible=false"></ryxl-detail>
+    <el-dialog :visible.sync="detailVisible"
+      title="人员学历详细">
+      <ryxl-detail :ryxl="focusRyxl"
+        @detail-update="handleDetailUpdate"
+        @detail-edit="handleDetailEdit"
+        :isKSManager="isKSManager"
+        @detail-cancel="detailVisible=false"></ryxl-detail>
     </el-dialog>
-    <el-dialog :visible.sync="editVisible" title="修改人员学历证明">
-      <ryxl-edit :ryxl="focusRyxl" @edit-save="handleEditSaveFromEdit" @edit-cancel="editVisible=false"></ryxl-edit>
+    <el-dialog :visible.sync="editVisible"
+      title="修改人员学历证明">
+      <ryxl-edit :ryxl="focusRyxl"
+        @edit-save="handleEditSaveFromEdit"
+        @edit-cancel="editVisible=false"></ryxl-edit>
     </el-dialog>
   </div>
 </template>
