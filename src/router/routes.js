@@ -25,7 +25,8 @@ const frameIn = [
     redirect: { name: 'help-about' },
     component: layoutHeaderAside,
     children: [
-      { path: 'about', name: `help-about`, component: () => import('@/pages/yljs/help/about'), meta: { title: '关于本站' } }
+      { path: 'about', name: `help-about`, component: () => import('@/pages/yljs/help/about'), meta: { title: '关于本站' } },
+      { path: 'doc', name: `help-doc`, component: () => import('@/pages/yljs/help/doc.vue'), meta: { title: '操作说明' } }
     ]
   },
 
