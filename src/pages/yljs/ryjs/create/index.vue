@@ -5,6 +5,7 @@
         <h2>申请技术授权</h2>
       </div>
       <div>使用相同支撑材料的授权申请可以批量进行</div>
+      <a href="/public/医疗技术临床应用授权申请表.docx">点击下载医疗技术授权申请表</a>
     </el-card>
     <el-card style="margin-top:10px">
       <div slot="header">
