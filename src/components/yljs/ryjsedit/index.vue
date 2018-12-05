@@ -1,13 +1,17 @@
 <template>
-    <div v-loading="loading">
-        <ryjs-detail :ryjs='ryjs' :options="options"></ryjs-detail>
-        <fast-upload title="更改为以下支撑材料" @file-changed="handleFileChanged"></fast-upload>
-        <div>
-            <el-button @click="deleteRyjs" type="error">删除此申请</el-button>
-            <el-button @click="cancelRyjs">取消编辑</el-button>
-            <el-button @click="saveRyjs" type="primary">保存更改</el-button>
-        </div>
+  <div v-loading="loading">
+    <ryjs-detail :ryjs='ryjs'
+                 :options="options"></ryjs-detail>
+    <fast-upload title="更改为以下支撑材料"
+                 @file-changed="handleFileChanged"></fast-upload>
+    <div>
+      <el-button @click="deleteRyjs"
+                 type="error">删除此申请</el-button>
+      <el-button @click="cancelRyjs">取消编辑</el-button>
+      <el-button @click="saveRyjs"
+                 type="primary">保存更改</el-button>
     </div>
+  </div>
 </template>
 
 <script>
@@ -46,11 +50,16 @@ export default {
       })
     },
     saveRyjs () {
-      if (!Array.isArray(this.fileidlist) || this.fileidlist.length === 0) {
-        this.$message.error('无支撑文件，不能保存')
-        // this.emitRyjs('save-edit', { code: 3, msg: '无支撑文件，不能保存' })
-        return
+      // if (!Array.isArray(this.fileidlist) || this.fileidlist.length === 0) {
+      //   this.$message.error('无支撑文件，不能保存')
+      //   // this.emitRyjs('save-edit', { code: 3, msg: '无支撑文件，不能保存' })
+      //   return
+      // }
+
+      if (!Array.isArray(this.fileidlist)) {
+        this.fileidlist = []
       }
+
       this.loading = true
       ryjsapi.update([this.ryjs.id], this.fileidlist).then(res => {
         // let rst

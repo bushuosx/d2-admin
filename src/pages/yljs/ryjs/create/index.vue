@@ -5,7 +5,7 @@
         <h2>申请技术授权</h2>
       </div>
       <div>使用相同支撑材料的授权申请可以批量进行</div>
-      <a href="/public/医疗技术临床应用授权申请表.docx">点击下载医疗技术授权申请表</a>
+      <!-- <a href="/public/医疗技术临床应用授权申请表.docx">点击下载医疗技术授权申请表</a> -->
     </el-card>
     <el-card style="margin-top:10px">
       <div slot="header">
@@ -26,7 +26,7 @@
       <!-- <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button> -->
     </el-card>
     <fast-upload @file-changed="handleFileChanged">
-      <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料</h2>
+      <h2 slot="title">步骤 2：选择申请上述技术授权的支撑材料(限制类技术须上传)</h2>
     </fast-upload>
     <el-card>
       <div slot="header">
@@ -71,10 +71,11 @@ export default {
         this.$msgbox({ message: '请先选择要申请授权的技术', title: '未选择技术', type: 'info' })
         return
       }
-      if (!this.fileidlist || !this.fileidlist.length || this.fileidlist.length === 0) {
-        this.$msgbox({ message: '请上传所需的支撑材料', title: '无支撑材料', type: 'info' })
-        return
-      }
+
+      // if (!this.fileidlist || !this.fileidlist.length || this.fileidlist.length === 0) {
+      //   this.$msgbox({ message: '请上传所需的支撑材料', title: '无支撑材料', type: 'info' })
+      //   return
+      // }
 
       this.loading = true
       let router = this.$router

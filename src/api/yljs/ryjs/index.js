@@ -63,11 +63,16 @@ export default {
     if (jsids === null || jsids === undefined || jsids.length === 0) {
       return reject('技术不能为空')
     }
-    if (fileids === null || fileids === undefined || fileids.length === 0) {
-      return reject('支撑材料不能为空')
+    // if (fileids === null || fileids === undefined || fileids.length === 0) {
+    //   return reject('支撑材料不能为空')
+    // }
+    // let url = this.BaseURL + '/postlist'
+
+    if (!Array.isArray(fileids)) {
+      fileids = []
     }
-    let url = this.BaseURL + '/postlist'
-    return parent.axios.post(url, { jsidlist: jsids, fileidlist: fileids, ryid: parent.getUserId() })
+    let url = this.BaseURL + '/postlistsimple'
+    return parent.axios.post(url, { jsidlist: jsids, fileidlist: fileids })
   },
   getneedkjsh (ksid, pageIndex = 1) {
     if (!ksid) {
@@ -122,9 +127,15 @@ export default {
     if (!Array.isArray(ryjsidlist) || ryjsidlist.length === 0) {
       return reject('ryjsid不能为空')
     }
-    if (!Array.isArray(fileIdList) || fileIdList.length === 0) {
-      return reject('支撑文件不能为空')
+
+    // if (!Array.isArray(fileIdList) || fileIdList.length === 0) {
+    //   return reject('支撑文件不能为空')
+    // }
+
+    if (!Array.isArray(fileIdList)) {
+      fileIdList = []
     }
+
     return parent.axios.put(BaseURL, { ryjsidlist, fileIdList })
   },
   delete (ryjsidlist) {
