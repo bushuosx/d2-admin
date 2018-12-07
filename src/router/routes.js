@@ -302,7 +302,7 @@ const frameIn = [
       { path: 'ry/js', name: `${pre}ry-js`, component: () => import('@/pages/yljs/ry/js'), meta: { ...meta, title: '技术列表' } },
       { path: 'ryjs/create', name: `${pre}ryjs-create`, component: () => import('@/pages/yljs/ryjs/create'), meta: { ...meta, title: '创建技术授权申请' } },
       { path: 'ry/ks', name: `${pre}ry-ks`, component: () => import('@/pages/yljs/ry/ks'), meta: { ...meta, title: '我的科室' } },
-      { path: 'ry/list', name: `${pre}ry-list`, component: () => import('@/pages/yljs/ry/list'), props: (route) => ({ title: route.params.title, ryList: route.params.ryList }), meta: { ...meta, title: '科室人员列表' } },
+      { path: 'ry/listbyjs', name: `${pre}ry-listbyjs`, component: () => import('@/pages/yljs/ry/listbyjs'), props: (route) => ({ tag1: route.params.tag1, tag2: route.params.tag2, ryList: route.params.ryList }), meta: { ...meta, title: '技术授权人员列表' } },
       { path: 'ry/role', name: `${pre}ry-role`, component: () => import('@/pages/yljs/ry/role'), meta: { ...meta, title: '我的网站角色' } },
       { path: 'ry/search', name: `${pre}ry-search`, component: () => import('@/pages/yljs/ry/search'), meta: { ...meta, title: '查询人员' } },
       { path: 'js', name: `${pre}js-index`, component: () => import('@/pages/yljs/js'), meta: { ...meta, title: '技术' } },

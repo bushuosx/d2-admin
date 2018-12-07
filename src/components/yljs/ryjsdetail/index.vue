@@ -42,7 +42,7 @@
         <el-col :span="12"><label>科室审核意见说明：</label><span>{{ryjs.kjshInfo.operateReason}}</span></el-col>
       </el-row>
       <el-row :gutter="10">
-        <el-col :span="12"><label>科室审核人：</label><span>{{ryjs.kjshInfo.operateName}}</span></el-col>
+        <el-col :span="12"><label>科室审核人：</label><span>{{ryjs.kjshInfo.operatorName}}</span></el-col>
         <el-col :span="12"><label>科室审核时间：</label><span>{{ryjs.kjshInfo.operateTime}}</span></el-col>
       </el-row>
     </div>
@@ -52,7 +52,7 @@
         <el-col :span="12"><label>医院审核意见说明：</label><span>{{ryjs.yjshInfo.operateReason}}</span></el-col>
       </el-row>
       <el-row :gutter="10">
-        <el-col :span="12"><label>医院审核人：</label><span>{{ryjs.yjshInfo.operateName}}</span></el-col>
+        <el-col :span="12"><label>医院审核人：</label><span>{{ryjs.yjshInfo.operatorName}}</span></el-col>
         <el-col :span="12"><label>医院审核时间：</label><span>{{ryjs.yjshInfo.operateTime}}</span></el-col>
       </el-row>
     </div>
