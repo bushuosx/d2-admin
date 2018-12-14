@@ -1,26 +1,42 @@
 <template>
-  <el-form ref="ryzcedit" :rules="rules" :model="ryzc" label-width="100px">
-    <el-form-item label="职称级别" prop="zcLevel">
+  <el-form ref="ryzcedit"
+           :rules="rules"
+           :model="ryzc"
+           label-width="100px">
+    <el-form-item label="职称级别"
+                  prop="zcLevel">
       <el-select v-model="ryzc.zcLevel">
-        <el-option v-for="item in zcLevelOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        <el-option v-for="item in zcLevelOptions"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.value"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="专业类别" prop="zylbId">
-      <el-select v-model="ryzc.zylbId" filterable>
-        <el-option v-for="item in zylblist" :key="item.id" :label="formartZYLB(item)" :value="item.id"></el-option>
+    <el-form-item label="专业类别"
+                  prop="zylbId">
+      <el-select v-model="ryzc.zylbId"
+                 filterable>
+        <el-option v-for="item in zylblist"
+                   :key="item.id"
+                   :label="formartZYLB(item)"
+                   :value="item.id"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="获得时间" prop="zcsj">
+    <el-form-item label="获得时间"
+                  prop="zcsj">
       <el-date-picker v-model="ryzc.zcsj"></el-date-picker>
     </el-form-item>
-    <el-form-item label="证书编码" prop="zcbm">
+    <el-form-item label="证书编码"
+                  prop="zcbm">
       <el-input v-model="ryzc.zcbm"></el-input>
     </el-form-item>
-    <el-form-item label="证明文件" prop="fileIdList">
+    <el-form-item label="证明文件"
+                  prop="fileIdList">
       <file-upload @file-changed="handleFileChanged"></file-upload>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleSave">保存</el-button>
+      <el-button type="primary"
+                 @click="handleSave">保存</el-button>
       <el-button @click="handleCancel">取消</el-button>
     </el-form-item>
   </el-form>
@@ -59,6 +75,16 @@ export default {
         callback()
       }
     }
+
+    // const validateArray = (rule, value, callback) => {
+    //   debugger
+    //   if (!Array.isArray(value) || value.length === 0) {
+    //     callback(new Error('证明文件不能为空'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
+
     // const validatezylb = (rule, value, callback) => {
     //   if (!value || !value.id) {
     //     callback(new Error('请选择职称的专业类别'))
@@ -103,7 +129,10 @@ export default {
   methods: {
     ...helper,
     handleFileChanged (val) {
-      this.ryzc.fileIdList = val
+      // this.ryzc.fileIdList = val
+      this.$set(this.ryzc, 'fileIdList', val)
+
+      // this.$refs['ryzcedit'].validate()
     },
     handleSave () {
       this.$refs['ryzcedit'].validate((valid) => {

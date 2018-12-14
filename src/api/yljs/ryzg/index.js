@@ -13,11 +13,12 @@ export default {
     }
     return parent.axios.post(BaseURL, { zylbId, zgsj, zgzsbm, fileIdList })
   },
-  update ({ id, zcLevel, zylbId, zgsj, zgzsbm, fileIdList }) {
-    if (!id || !zcLevel || !zylbId || !zgsj || !zgzsbm || !Array.isArray(fileIdList)) {
+  update ({ id, zylbId, zgsj, zgzsbm, fileIdList }) {
+    debugger
+    if (!id || !zylbId || !zgsj || !zgzsbm || !Array.isArray(fileIdList)) {
       return reject('update参数无效')
     }
-    return parent.axios.put(BaseURL, { id, zcLevel, zylbId, zgsj, zgzsbm, fileIdList })
+    return parent.axios.put(BaseURL, { id, zylbId, zgsj, zgzsbm, fileIdList })
   },
   get (ryzgid) {
     if (!ryzgid) {

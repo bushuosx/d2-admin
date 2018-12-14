@@ -1,21 +1,33 @@
 <template>
-  <el-form ref="ryxledit" :rules="rules" :model="ryxl" label-width="100px">
-    <el-form-item label="学历名称" prop="xl">
-      <el-select v-model="ryxl.xl" filterable>
-        <el-option v-for="item in xlOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+  <el-form ref="ryxledit"
+           :rules="rules"
+           :model="ryxl"
+           label-width="100px">
+    <el-form-item label="学历名称"
+                  prop="xl">
+      <el-select v-model="ryxl.xl"
+                 filterable>
+        <el-option v-for="item in xlOptions"
+                   :key="item.value"
+                   :label="item.label"
+                   :value="item.value"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="获得时间" prop="xlsj">
+    <el-form-item label="获得时间"
+                  prop="xlsj">
       <el-date-picker v-model="ryxl.xlsj"></el-date-picker>
     </el-form-item>
-    <el-form-item label="证书编码" prop="xlbm">
+    <el-form-item label="证书编码"
+                  prop="xlbm">
       <el-input v-model="ryxl.xlbm"></el-input>
     </el-form-item>
-    <el-form-item label="证明文件" prop="fileIdList">
+    <el-form-item label="证明文件"
+                  prop="fileIdList">
       <file-upload @file-changed="handleFileChanged"></file-upload>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleSave">保存</el-button>
+      <el-button type="primary"
+                 @click="handleSave">保存</el-button>
       <el-button @click="handleCancel">取消</el-button>
     </el-form-item>
   </el-form>
@@ -91,8 +103,8 @@ export default {
   // },
   methods: {
     handleFileChanged (val) {
-      // this.$set(this.ryxl, 'fileIdList', val)
-      this.ryxl.fileIdList = val
+      this.$set(this.ryxl, 'fileIdList', val)
+      // this.ryxl.fileIdList = val
     },
     handleSave () {
       this.$refs['ryxledit'].validate((valid) => {

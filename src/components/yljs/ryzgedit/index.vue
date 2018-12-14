@@ -1,21 +1,33 @@
 <template>
-  <el-form ref="ryzgedit" :rules="rules" :model="ryzg" label-width="100px">
-    <el-form-item label="专业类别" prop="zylbId">
-      <el-select v-model="ryzg.zylbId" filterable>
-        <el-option v-for="item in zylblist" :key="item.id" :label="formartZYLB(item)" :value="item.id"></el-option>
+  <el-form ref="ryzgedit"
+           :rules="rules"
+           :model="ryzg"
+           label-width="100px">
+    <el-form-item label="专业类别"
+                  prop="zylbId">
+      <el-select v-model="ryzg.zylbId"
+                 filterable>
+        <el-option v-for="item in zylblist"
+                   :key="item.id"
+                   :label="formartZYLB(item)"
+                   :value="item.id"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="获得时间" prop="zgsj">
+    <el-form-item label="获得时间"
+                  prop="zgsj">
       <el-date-picker v-model="ryzg.zgsj"></el-date-picker>
     </el-form-item>
-    <el-form-item label="证书编码" prop="zgzsbm">
+    <el-form-item label="证书编码"
+                  prop="zgzsbm">
       <el-input v-model="ryzg.zgzsbm"></el-input>
     </el-form-item>
-    <el-form-item label="证明文件" prop="fileIdList">
+    <el-form-item label="证明文件"
+                  prop="fileIdList">
       <file-upload @file-changed="handleFileChanged"></file-upload>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleSave">保存</el-button>
+      <el-button type="primary"
+                 @click="handleSave">保存</el-button>
       <el-button @click="handleCancel">取消</el-button>
     </el-form-item>
   </el-form>
@@ -88,7 +100,9 @@ export default {
   // },
   methods: {
     handleFileChanged (val) {
-      this.ryzg.fileIdList = val
+      // this.ryzg.fileIdList = val
+      this.$set(this.ryzg, 'fileIdList', val)
+      // debugger
     },
     handleSave () {
       this.$refs['ryzgedit'].validate((valid) => {
