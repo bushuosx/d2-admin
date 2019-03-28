@@ -57,7 +57,7 @@ export default {
     handleBan (ry) {
       if (ry) {
         if (ry.id === user.userId) {
-          this.message.warning('不能移除自己')
+          this.$message.warning('不能移除自己')
           return
         }
         this.$prompt('此操作将从本科室中移除人员，若该人员有科室管理权限，将一并移除。请在下方输入操作原因：', '提示', {

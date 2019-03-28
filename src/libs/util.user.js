@@ -89,5 +89,8 @@ export default {
   },
   isLogon () {
     return !!this.userId
+  },
+  isKSManager () {
+    return this.hasRoles([this.Roles.科级审核])
   }
 }

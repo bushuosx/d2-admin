@@ -12,16 +12,25 @@
         <h2>步骤 1：选择要申请的技术</h2>
       </div>
       <div style="width:50%;">
-        <el-input v-model="selectvalue" placeholder="请输入要查询的技术名称" class="input-with-select">
-          <el-select v-model="selected" slot="prepend" placeholder="请选择">
-            <el-option label="在全院技术中查询" value="1"></el-option>
-            <el-option label="在科室技术中查询" value="2"></el-option>
+        <el-input v-model="selectvalue"
+                  placeholder="请输入要查询的技术名称"
+                  class="input-with-select">
+          <el-select v-model="selected"
+                     slot="prepend"
+                     placeholder="请选择">
+            <el-option label="在全院技术中查询"
+                       value="1"></el-option>
+            <el-option label="在科室技术中查询"
+                       value="2"></el-option>
           </el-select>
-          <el-button @click="getjslist" slot="append" icon="el-icon-search">开始加载</el-button>
+          <el-button @click="getjslist"
+                     slot="append"
+                     icon="el-icon-search">开始加载</el-button>
         </el-input>
       </div>
 
-      <jstransfer ref="jsselector" v-bind:jslist="jslist"></jstransfer>
+      <jstransfer ref="jsselector"
+                  v-bind:jslist="jslist"></jstransfer>
 
       <!-- <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button> -->
     </el-card>
@@ -32,7 +41,8 @@
       <div slot="header">
         <h2>步骤 3：提交申请，并等待审核</h2>
       </div>
-      <el-button type="primary" @click="applyAll">提交</el-button>
+      <el-button type="primary"
+                 @click="applyAll">提交</el-button>
     </el-card>
   </d2-container>
 </template>
@@ -41,6 +51,7 @@
 import jstransfer from '@/components/yljs/js/jstransfer.1.vue'
 import ryjsapi from '@/api/yljs/ryjs'
 import jsapi from '@/api/yljs/js'
+import ksjsapi from '@/api/yljs/ksjs'
 
 export default {
   name: 'yljs-ryjs-create',
@@ -59,6 +70,7 @@ export default {
   methods: {
     ResetData () {
       // Object.assign(this.$data, this.$options.data())
+      this.jslist = []
       this.$refs.jsselector.ResetSelected()
     },
     applyAll () {
@@ -101,7 +113,17 @@ export default {
       }
       let data = this.$data
       this.loading = true
-      jsapi.getbyname(this.selectvalue).then(res => {
+      let api = null
+      if (this.selected === '2') {
+        api = ksjsapi.getbynameforusercreate(this.selectvalue)
+      } else if (this.selected === '1') {
+        api = jsapi.getbyname(this.selectvalue)
+      } else {
+        this.loading = false
+        this.$message.error('程序错误')
+      }
+
+      api.then(res => {
         this.loading = false
         if (res.code === 1) {
           data.jslist = res.data

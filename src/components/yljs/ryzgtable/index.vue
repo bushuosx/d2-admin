@@ -1,40 +1,43 @@
 <template>
   <div v-loading="loading">
     <div class="ryzgdata"
-      v-for="item in ryzglist"
-      v-if="isMe || isKSManager || isValid(item)"
-      :key="item.id"
-      @click="handleRyzgClick(item)">
-      <el-row>
-        <el-col :span="8"><span>资格专业：</span></el-col>
-        <el-col :span="14"><strong style="color:#409EFF">{{formartZYLB(item.zylb)}}</strong></el-col>
-        <el-col :span="2">
-          <i v-if="approved(item)"
-            class="el-icon-success"
-            style="color:#67C23A"></i>
-          <i v-else-if="rejected(item)"
-            class="el-icon-error"
-            style="color:#F56C6C"></i>
-          <i v-else-if="needCommit(item)"
-            class="el-icon-warning"
-            style="color:#E6A23C"></i>
-          <i v-else
-            class="el-icon-question"></i>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><span>获得时间：</span></el-col>
-        <el-col :span="16"><span>{{formartDate(item.zgsj)}}</span></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><span>年资：</span></el-col>
-        <el-col :span="16"><span>{{formartNZ(item.zgsj)}}</span></el-col>
-      </el-row>
-    </div>
-    <div class="ryzgdata"
-      v-if="!hasData">
+         v-if="!hasData">
       <div>暂无数据</div>
     </div>
+    <div v-else
+         class="ryzgdata"
+         v-for="item in ryzglist"
+         :key="item.id"
+         @click="handleRyzgClick(item)">
+      <template v-if="isMe || isKSManager || isValid(item)">
+        <el-row>
+          <el-col :span="8"><span>资格专业：</span></el-col>
+          <el-col :span="14"><strong style="color:#409EFF">{{formartZYLB(item.zylb)}}</strong></el-col>
+          <el-col :span="2">
+            <i v-if="approved(item)"
+               class="el-icon-success"
+               style="color:#67C23A"></i>
+            <i v-else-if="rejected(item)"
+               class="el-icon-error"
+               style="color:#F56C6C"></i>
+            <i v-else-if="needCommit(item)"
+               class="el-icon-warning"
+               style="color:#E6A23C"></i>
+            <i v-else
+               class="el-icon-question"></i>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8"><span>获得时间：</span></el-col>
+          <el-col :span="16"><span>{{formartDate(item.zgsj)}}</span></el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8"><span>年资：</span></el-col>
+          <el-col :span="16"><span>{{formartNZ(item.zgsj)}}</span></el-col>
+        </el-row>
+      </template>
+    </div>
+
     <div v-if="isMe">
       <el-button @click="handleAdd">添加</el-button>
     </div>
@@ -96,7 +99,7 @@ export default {
       return !!this.ryInfo && this.ryInfo.id === user.userId
     },
     isKSManager () {
-      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid
+      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid && user.hasRoles([user.Roles.科级审核])
     }
   },
   created () {

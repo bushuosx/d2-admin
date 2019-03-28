@@ -1,62 +1,66 @@
 <template>
   <div v-loading="loading">
     <div class="ryxwdata"
-      v-for="item in ryxwlist"
-      v-if="isMe || isKSManager || isValid(item)"
-      :key="item.id"
-      @click="handleRyxlClick(item)">
-      <el-row>
-        <el-col :span="8"><span>学位：</span></el-col>
-        <el-col :span="14"><span><strong v-if="item.xw"
-              style="color:#409EFF">{{formartXW(item.xw)}}</strong></span></el-col>
-        <el-col :span="2">
-          <i v-if="approved(item)"
-            class="el-icon-success"
-            style="color:#67C23A"></i>
-          <i v-else-if="rejected(item)"
-            class="el-icon-error"
-            style="color:#F56C6C"></i>
-          <i v-else-if="needCommit(item)"
-            class="el-icon-warning"
-            style="color:#E6A23C"></i>
-          <i v-else
-            class="el-icon-question"></i>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><span>获得时间：</span></el-col>
-        <el-col :span="16"><span>{{formartDate(item.xwsj)}}</span></el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="8"><span>年资：</span></el-col>
-        <el-col :span="16"><span>{{formartNZ(item.xwsj)}}</span></el-col>
-      </el-row>
-    </div>
-    <div class="ryxwdata"
-      v-if="!hasData">
+         v-if="!hasData">
       <div>暂无数据</div>
     </div>
+    <div v-else
+         class="ryxwdata"
+         v-for="item in ryxwlist"
+         :key="item.id"
+         @click="handleRyxlClick(item)">
+      <template v-if="isMe || isKSManager || isValid(item)">
+        <el-row>
+          <el-col :span="8"><span>学位：</span></el-col>
+          <el-col :span="14"><span><strong v-if="item.xw"
+                      style="color:#409EFF">{{formartXW(item.xw)}}</strong></span></el-col>
+          <el-col :span="2">
+            <i v-if="approved(item)"
+               class="el-icon-success"
+               style="color:#67C23A"></i>
+            <i v-else-if="rejected(item)"
+               class="el-icon-error"
+               style="color:#F56C6C"></i>
+            <i v-else-if="needCommit(item)"
+               class="el-icon-warning"
+               style="color:#E6A23C"></i>
+            <i v-else
+               class="el-icon-question"></i>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8"><span>获得时间：</span></el-col>
+          <el-col :span="16"><span>{{formartDate(item.xwsj)}}</span></el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="8"><span>年资：</span></el-col>
+          <el-col :span="16"><span>{{formartNZ(item.xwsj)}}</span></el-col>
+        </el-row>
+      </template>
+
+    </div>
+
     <div v-if="isMe">
       <el-button @click="handleAdd">添加</el-button>
     </div>
     <el-dialog :visible.sync="addVisible"
-      title="添加人员学位证明">
+               title="添加人员学位证明">
       <ryxw-edit @edit-save="handleEditSaveFromAdd"
-        @edit-cancel="addVisible=false"></ryxw-edit>
+                 @edit-cancel="addVisible=false"></ryxw-edit>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible"
-      title="人员学位详细">
+               title="人员学位详细">
       <ryxw-detail :ryxw="focusRyxl"
-        @detail-update="handleDetailUpdate"
-        @detail-edit="handleDetailEdit"
-        :isKSManager="isKSManager"
-        @detail-cancel="detailVisible=false"></ryxw-detail>
+                   @detail-update="handleDetailUpdate"
+                   @detail-edit="handleDetailEdit"
+                   :isKSManager="isKSManager"
+                   @detail-cancel="detailVisible=false"></ryxw-detail>
     </el-dialog>
     <el-dialog :visible.sync="editVisible"
-      title="修改人员学位证明">
+               title="修改人员学位证明">
       <ryxw-edit :ryxw="focusRyxl"
-        @edit-save="handleEditSaveFromEdit"
-        @edit-cancel="editVisible=false"></ryxw-edit>
+                 @edit-save="handleEditSaveFromEdit"
+                 @edit-cancel="editVisible=false"></ryxw-edit>
     </el-dialog>
   </div>
 </template>
@@ -94,7 +98,7 @@ export default {
       return !!this.ryInfo && this.ryInfo.id === user.userId
     },
     isKSManager () {
-      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid
+      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid && user.hasRoles([user.Roles.科级审核])
     }
   },
   created () {

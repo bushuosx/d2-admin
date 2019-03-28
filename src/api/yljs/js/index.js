@@ -37,7 +37,6 @@ export default {
     if (!date) {
       return reject('date不能为空')
     }
-
     return parent.axios.get(BaseURL + '/getjsbmkname/' + date)
   },
   importbmk (bmkList, time) {
@@ -47,7 +46,6 @@ export default {
     if (!time) {
       return reject('time不能为空')
     }
-
     return parent.axios.post(BaseURL + '/importjsbmk', { bmkList, time }, { timeout: 90000 })
   },
   setjsbmdy (jsbmList, time) {
@@ -65,5 +63,4 @@ export default {
     }
     return parent.axios.post(BaseURL + '/importjs', jsList, { timeout: 90000 })
   }
-
 }
