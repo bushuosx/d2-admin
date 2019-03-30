@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow:auto;max-height:600px;">
+  <div>
     <table class="ksryreporttable">
       <caption>医院人员信息完善情况报表</caption>
       <thead>

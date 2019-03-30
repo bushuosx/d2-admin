@@ -1,5 +1,5 @@
 <template>
-  <div style="overflow:auto;max-height:600px;">
+  <div>
     <table class="jslisttable">
       <caption>{{caption}}
         <strong>{{jsList.length}}</strong>项</caption>
@@ -15,8 +15,8 @@
       <tbody>
         <template v-if="hasAnyData">
           <tr v-for="js in jsList"
-              v-bind:key="js.id"
-              class="jslistrow">
+            v-bind:key="js.id"
+            class="jslistrow">
             <td>{{js.mc}}</td>
             <td>{{js.dj}}</td>
             <td>{{js.jsbm}}</td>
