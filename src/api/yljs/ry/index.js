@@ -60,5 +60,8 @@ export default {
       return reject('data不能为空')
     }
     return parent.axios.post(BaseURL + '/importemployees', data, { timeout: 40000 })
+  },
+  getksryreportlist () {
+    return parent.axios.get(BaseURL + '/getksryreportlist')
   }
 }

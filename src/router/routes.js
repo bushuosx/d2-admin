@@ -336,6 +336,7 @@ const frameIn = [
       { path: `manage/js/importjs`, name: `${pre}manage-js-importjs`, component: () => import('@/pages/yljs/manage/js/importjs.vue'), meta: { ...meta, title: '导入技术' } },
       { path: `manage/js/importbmk`, name: `${pre}manage-js-importbmk`, component: () => import('@/pages/yljs/manage/js/importbmk.vue'), meta: { ...meta, title: '导入技术编码库' } },
       { path: `manage/js/setjsbmdy`, name: `${pre}manage-js-setjsbmdy`, component: () => import('@/pages/yljs/manage/js/setjsbmdy.vue'), meta: { ...meta, title: '设置技术编码对应' } },
+      { path: `manage/report/ksryreport`, name: `${pre}manage-report-ksryreport`, component: () => import('@/pages/yljs/manage/report/ksryreport.vue'), meta: { ...meta, title: '全院人员授权情况报表' } },
 
       { path: 'iframe', name: `d2-container-frame`, component: () => import('@/components/d2-container-frame'), props: true, meta: { ...meta, title: '外链' } },
 
