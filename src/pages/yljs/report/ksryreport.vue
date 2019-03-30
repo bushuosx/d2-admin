@@ -32,9 +32,9 @@ export default {
         } else {
           this.$message.error(res.msg)
         }
-      }
-
-      )
+      }).catch(err => {
+        this.$message.error(err.message ? err.message : err)
+      })
     }
   }
 }
