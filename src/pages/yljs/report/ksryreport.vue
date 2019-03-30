@@ -25,10 +25,16 @@ export default {
     fetchData () {
       this.loading = true
 
+      let sortks = function (a, b) {
+        if (!a.ks || !a.ks.mc) return 1
+        if (!b.ks || !b.ks.mc) return -1
+        return a.ks.mc.localeCompare(b.ks.mc, 'zh')
+      }
+
       ryapi.getksryreportlist().then(res => {
         this.loading = false
         if (res.code === 1) {
-          this.ksryreptlist = res.data
+          this.ksryreptlist = res.data.sort(sortks)
         } else {
           this.$message.error(res.msg)
         }
