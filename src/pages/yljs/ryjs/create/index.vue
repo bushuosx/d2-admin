@@ -107,9 +107,10 @@ export default {
     },
     getjslist () {
       // 从服务器加载
-      let msg = this.$message
-      if (!this.selectvalue || setInterval === undefined) {
-        msg({ message: '请输入查询条件', type: 'error' })
+      // let msg = this.$message
+      if (!this.selectvalue && this.selected !== '2') {
+        this.$message.error('请输入查询条件')
+        return
       }
       let data = this.$data
       this.loading = true
@@ -128,7 +129,7 @@ export default {
         if (res.code === 1) {
           data.jslist = res.data
         } else {
-          msg.error(res.msg)
+          this.$message.error(res.msg)
         }
       }).catch(() => {
         this.loading = false

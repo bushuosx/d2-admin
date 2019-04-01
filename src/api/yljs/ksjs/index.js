@@ -34,8 +34,8 @@ export default {
     return parent.axios.post(url, { JSIDList })
   },
   getbynameforusercreate (name) {
-    if (!name) {
-      return reject('名称关键字不能为空')
+    if (name === null || name === undefined) {
+      name = ''
     }
     let url = this.BaseURL + '/getbynameforusercreate/' + name
 
