@@ -90,5 +90,8 @@ export default {
       return reject('IDList不能为空')
     }
     return parent.axios.put(BaseURL + '/ban', { IDList, Reason })
+  },
+  banryks (ryid, ksid) {
+    return parent.axios.put(BaseURL + '/banryks', { ryid, ksid })
   }
 }

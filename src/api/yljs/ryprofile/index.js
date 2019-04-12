@@ -27,5 +27,11 @@ export default {
       return reject('fileid不能为空')
     }
     return parent.axios.patch(BaseURL + '/updatephoto/' + fileid)
+  },
+  delryphoto (ryid) {
+    if (!ryid) {
+      return reject('人员ID不能为空')
+    }
+    return parent.axios.patch(BaseURL + '/delryphoto/' + ryid)
   }
 }
