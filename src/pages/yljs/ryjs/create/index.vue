@@ -30,7 +30,8 @@
       </div>
 
       <jstransfer ref="jsselector"
-                  v-bind:jslist="jslist"></jstransfer>
+                  v-bind:jslist="jslist"
+                  v-bind:allowSelectAll="allowSelectAllJS"></jstransfer>
 
       <!-- <el-button @click="testjs" style="color:#F56C6C;">性能测试---使用的时候记得和方法一起删除</el-button> -->
     </el-card>
@@ -65,6 +66,11 @@ export default {
       yyjslist: null,
       fileidlist: null,
       loading: false
+    }
+  },
+  computed: {
+    allowSelectAllJS () {
+      return this.selected === '2'
     }
   },
   methods: {

@@ -5,25 +5,25 @@
       <el-row style="margin-top:6px">
         <el-col :span="6">
           <el-input v-model="jsfilter.mc"
-            placeholder="输入技术名称"
-            clearable>
+                    placeholder="输入技术名称"
+                    clearable>
             <span slot="prepend">按名称</span>
           </el-input>
         </el-col>
         <el-col style="margin-left:6px"
-          :span="6">
+                :span="6">
           <el-input v-model="jsfilter.bm"
-            placeholder="输入技术编码"
-            clearable>
+                    placeholder="输入技术编码"
+                    clearable>
             <span slot="prepend">按编码</span>
           </el-input>
         </el-col>
         <el-col style="margin-left:6px"
-          :span="6">
+                :span="6">
           <el-input v-model="jsfilter.dj"
-            type="Number"
-            placeholder="输入技术等级"
-            clearable>
+                    type="Number"
+                    placeholder="输入技术等级"
+                    clearable>
             <span slot="prepend">按等级</span>
           </el-input>
         </el-col>
@@ -37,7 +37,14 @@
               <strong>{{jslist.length}}</strong>项</caption>
             <thead>
               <tr>
-                <th></th>
+                <th>
+                  <template v-if="allowSelectAll">
+                    <input type="checkbox"
+                           v-model="allSelected"
+                           @click="onSelectAll"
+                           v-bind:disabled="!Array.isArray(filtedJsList) || filtedJsList.length === 0"
+                           value="全选">全选</template>
+                </th>
                 <th>技术名称</th>
                 <th>等级</th>
                 <th>编码</th>
@@ -47,12 +54,12 @@
             </thead>
             <tbody>
               <tr v-for="js in filtedJsList"
-                v-bind:key="js.id"
-                v-show="!js.hidden"
-                @click="clickcheck(js)"
-                class="jslistrow">
+                  v-bind:key="js.id"
+                  v-show="!js.hidden"
+                  @click="clickcheck(js)"
+                  class="jslistrow">
                 <td><input type="checkbox"
-                    v-model="js.checked"></td>
+                         v-model="js.checked"></td>
                 <td>{{js.mc}}</td>
                 <td>{{js.dj}}</td>
                 <td>{{js.jsbm}}</td>
@@ -69,22 +76,22 @@
           <div style="text-align: center;">准备申请的技术
             <strong>{{selectedjslist.length}}</strong>项</div>
           <el-table class="selectedtable"
-            size="mini"
-            border
-            :data="selectedjslist">
+                    size="mini"
+                    border
+                    :data="selectedjslist">
             <el-table-column width="40">
               <template slot-scope="scope">
                 <el-button class="removeselected"
-                  type="danger"
-                  size="mini"
-                  icon="el-icon-close"
-                  @click="removeselected(scope.row)"
-                  circle></el-button>
+                           type="danger"
+                           size="mini"
+                           icon="el-icon-close"
+                           @click="removeselected(scope.row)"
+                           circle></el-button>
               </template>
             </el-table-column>
             <el-table-column label="技术名称"
-              sortable
-              prop="mc">
+                             sortable
+                             prop="mc">
             </el-table-column>
           </el-table>
         </div>
@@ -96,7 +103,8 @@
 <script>
 export default {
   props: {
-    jslist: Array
+    jslist: Array,
+    allowSelectAll: Boolean
   },
   components: {
     'jslisttable': () => import('@/components/yljs/jslist')
@@ -124,7 +132,8 @@ export default {
   data () {
     return {
       jsfilter: { mc: null, bm: null, dj: null },
-      selectedjslist: []
+      selectedjslist: [],
+      allSelected: false
     }
   },
   methods: {
@@ -134,7 +143,7 @@ export default {
       } else {
         item.checked = false
       }
-      let checked = item.checked
+
       let index = -1
       for (let i = 0; i < this.selectedjslist.length; i++) {
         if (this.selectedjslist[i].id === item.id) {
@@ -143,6 +152,7 @@ export default {
         }
       }
 
+      let checked = item.checked
       if (index === -1) {
         if (checked) this.selectedjslist.push(item)
       } else if (!checked) {
@@ -170,6 +180,28 @@ export default {
         this.jslist[i].checked = false
       }
       Object.assign(this.$data, this.$options.data())
+    },
+    onSelectAll () {
+      // checkbox的点击操作发生在状态更新前！
+      const checked = this.allSelected !== true
+
+      for (let i in this.filtedJsList) {
+        const item = this.filtedJsList[i]
+        item.checked = checked
+        let index = -1
+        for (let i = 0; i < this.selectedjslist.length; i++) {
+          if (this.selectedjslist[i].id === item.id) {
+            index = i
+            break
+          }
+        }
+
+        if (index === -1) {
+          if (checked) this.selectedjslist.push(item)
+        } else if (!checked) {
+          this.selectedjslist.splice(index, 1)
+        }
+      }
     }
   }
 }
