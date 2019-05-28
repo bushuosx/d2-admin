@@ -40,9 +40,9 @@ export default {
 
       // 重新加载菜单
       // 设置顶栏菜单
-      this.commit('d2admin/menu/headerSet', getHeaderMenu(state.info))
+      this.commit('d2admin/menu/headerSet', getHeaderMenu(this))
       // 初始化菜单搜索功能
-      this.commit('d2admin/search/init', getHeaderMenu(state.info))
+      this.commit('d2admin/search/init', getHeaderMenu(this))
     }
   },
   getters: {

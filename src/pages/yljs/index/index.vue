@@ -1,30 +1,30 @@
 <template>
   <d2-container>
     <div class="div-header"
-      slot="header">孝感市中心医院医务部管理信息系统--医疗技术授权管理系统</div>
+         slot="header">孝感市中心医院医务部管理信息系统--医疗技术授权管理系统</div>
     <div class="page-index">
       <div v-if="!isLogon"
-        class="div-login">
+           class="div-login">
         <h2 class="div-login-header">欢迎使用《医疗技术临床应用授权管理系统》</h2>
         <el-button @click="handleLogon"
-          class="div-login-btn"
-          type="primary"
-          size="large">请登录</el-button>
+                   class="div-login-btn"
+                   type="primary"
+                   size="large">请登录</el-button>
       </div>
       <el-card v-else
-        class="nav-card"
-        v-for="(menu,i) in this.$root.__asideMenu[0].children"
-        :key="i"
-        shadow="always">
+               class="nav-card"
+               v-for="(menu,i) in this.$root.__asideMenu[0].children"
+               :key="i"
+               shadow="always">
         <div slot="header"><strong>{{menu.title}}</strong></div>
         <div class="nav-card-content">
           <div v-for="(submenu,subi) in menu.children"
-            :key="subi">
+               :key="subi">
             <template v-if="submenu.children">
               <div>{{submenu.title}}</div>
               <div v-for="(lastmenu,lasti) in submenu.children"
-                :key="lasti"
-                style="padding-left:2em;">
+                   :key="lasti"
+                   style="padding-left:2em;">
                 <div class="div-link">
                   <d2-icon :name="lastmenu.icon"></d2-icon>
                   <router-link :to="{path:lastmenu.path}">{{lastmenu.title}}</router-link>
@@ -32,7 +32,7 @@
               </div>
             </template>
             <div v-else
-              class="div-link">
+                 class="div-link">
               <d2-icon :name="submenu.icon"></d2-icon>
               <router-link :to="{path:submenu.path}">{{submenu.title}}</router-link>
             </div>
@@ -44,14 +44,16 @@
   </d2-container>
 </template>
 <script>
-import user from '@/libs/util.user.js'
+import userutil from '@/libs/util.user.js'
 export default {
   components: {
     'd2-icon': () => import('@/components/d2-icon')
   },
   computed: {
     isLogon () {
-      return user.isLogon()
+      // debugger
+      let tmp = userutil(this.$store)
+      return tmp.isLogon()
     }
   },
   methods: {
@@ -80,7 +82,7 @@ export default {
 }
 .nav-card {
   width: 30%;
-  height: 30%;
+  height: 40%;
   margin-left: 1em;
   margin-top: 1em;
   display: inline-block;

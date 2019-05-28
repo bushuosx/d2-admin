@@ -54,7 +54,9 @@
                    @detail-update="handleDetailUpdate"
                    @detail-edit="handleDetailEdit"
                    :isKSManager="isKSManager"
-                   @detail-cancel="detailVisible=false"></ryxw-detail>
+                   :isMe="isMe"
+                   @detail-cancel="detailVisible=false"
+                   @detail-delete="handleDeleted"></ryxw-detail>
     </el-dialog>
     <el-dialog :visible.sync="editVisible"
                title="修改人员学位证明">
@@ -67,12 +69,16 @@
 
 <script>
 import helper from '../helper/index.js'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 import ryxwapi from '@/api/yljs/ryxw'
 export default {
   props: {
     ryInfo: {
       type: Object
+    },
+    activedKsid: { // 响应操作的科室
+      type: String,
+      required: false
     }
   },
   data () {
@@ -94,22 +100,25 @@ export default {
     hasData () {
       return Array.isArray(this.ryxwlist) && this.ryxwlist.length > 0
     },
+    user () {
+      return userUtil(this.$store)
+    },
     isMe () {
-      return !!this.ryInfo && this.ryInfo.id === user.userId
+      return !!this.ryInfo && this.ryInfo.id === this.user.id
     },
     isKSManager () {
-      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid && user.hasRoles([user.Roles.科级审核])
+      return !!this.user && this.user.isKSManager(this.activedKsid)
     }
   },
-  created () {
-    this.fetchRyxlList(this.ryInfo)
-  },
   watch: {
-    ryInfo: function (n, o) { this.fetchRyxlList(n) }
+    ryInfo: {
+      handler: function (n) { this.fetchRyxwList(n) },
+      immediate: true
+    }
   },
   methods: {
     ...helper,
-    fetchRyxlList (ry) {
+    fetchRyxwList (ry) {
       this.detailVisible = false
       this.focusRyxl = null
       this.addVisible = false
@@ -117,8 +126,8 @@ export default {
       this.zylblist = []
       this.ryxwlist = []
       this.loading = false
-      if (ry && ry.ryProfile && ry.ryProfile.id) {
-        ryxwapi.getbyprofile(ry.ryProfile.id).then(res => {
+      if (ry && ry.profile && ry.profile.id) {
+        ryxwapi.getbyprofile(ry.profile.id).then(res => {
           if (res.code === 1) {
             this.ryxwlist = res.data
           } else {
@@ -176,9 +185,9 @@ export default {
     handleEditSaveFromAdd (val) {
       this.addVisible = false
       this.loading = true
-      if (!val.ryProfileID) {
+      if (!val.profileID) {
         // add
-        // val.profileId = this.ryInfo.ryProfile.id
+        // val.profileId = this.ryInfo.profile.id
         ryxwapi.create(val).then(res => {
           this.loading = false
           if (res.code === 1) {
@@ -197,7 +206,7 @@ export default {
     handleEditSaveFromEdit (val) {
       // debugger
       this.editVisible = false
-      if (!!val.ryProfileID && val.ryProfileID === this.ryInfo.ryProfile.id) {
+      if (!!val.profileID && val.profileID === this.ryInfo.profile.id) {
         // edit
         this.loading = true
         ryxwapi.update(val).then(res => {
@@ -232,6 +241,13 @@ export default {
     },
     rejected (row) {
       return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 3
+    },
+    handleDeleted (id) {
+      this.detailVisible = false
+      var i = this.ryxwlist.findIndex(v => v.id === id)
+      if (i !== -1) {
+        this.ryxwlist.splice(i, 1)
+      }
     }
   }
 }

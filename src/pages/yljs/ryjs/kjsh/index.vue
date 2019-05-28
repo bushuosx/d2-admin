@@ -6,22 +6,22 @@
     </div>
     <el-card v-loading='loading'>
       <ryjs-table v-on:ryjs-changed="handleRyjsChanged"
-        v-on:selection-changed="selectedChange"
-        :ryjslist="ryjslist"
-        :options="{showry:true,isKjshManager}"></ryjs-table>
+                  v-on:selection-changed="selectedChange"
+                  :ryjslist="ryjslist"
+                  :options="{showry:true,isKjshManager,ksid}"></ryjs-table>
       <div v-if="isKjshManager"
-        style="margin-top:10px">
+           style="margin-top:10px">
         <el-button :disabled='anySelected !== true'
-          @click="handleResolveAll"
-          type="primary"
-          plain>批量通过</el-button>
+                   @click="handleResolveAll"
+                   type="primary"
+                   plain>批量通过</el-button>
         <el-button :disabled='anySelected !== true'
-          @click="handleRejectAll"
-          type="warning"
-          plain>批量拒绝</el-button>
+                   @click="handleRejectAll"
+                   type="warning"
+                   plain>批量拒绝</el-button>
       </div>
       <my-pagination :pageIndex="pageIndex"
-        @page-index-change="fetchData"></my-pagination>
+                     @page-index-change="fetchData"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -31,7 +31,7 @@
  * 此页面需科级审核权限
  */
 import ryjsapi from '@/api/yljs/ryjs'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 export default {
   name: 'yljs-ryjs-kjsh',
   components: {
@@ -53,8 +53,11 @@ export default {
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
     },
+    user () {
+      return userUtil(this.$store)
+    },
     isKjshManager () {
-      return user.hasRoles([user.Roles.科级审核]) && user.ksid === this.ksid
+      return this.user.isKJSHManager(this.ksid)
     }
   },
   created () {

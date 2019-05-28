@@ -62,5 +62,23 @@ export default {
       return reject('jsList只能为数组')
     }
     return parent.axios.post(BaseURL + '/importjs', jsList, { timeout: 90000 })
+  },
+  getalljsreport () {
+    return parent.axios.get(BaseURL + '/getalljsreport')
+  },
+  getapprovedjsreport () {
+    return parent.axios.get(BaseURL + '/getapprovedjsreport')
+  },
+  searchjs (option) {
+    if (!option) {
+      return reject('option不能为空')
+    }
+    return parent.axios.post(BaseURL + '/search', option)
+  },
+  updatejs (js) {
+    if (!js) {
+      return reject('js不能为空')
+    }
+    return parent.axios.post(BaseURL + '/update', js)
   }
 }

@@ -49,17 +49,23 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getneedkjsh/' + ksid)
   },
-  approvekjsh (ryksidlist) {
+  approvekjsh (ksid, ryksidlist) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
     if (ryksidlist === null || ryksidlist === undefined || !ryksidlist.length) {
       return reject('ryksidlist不能为空')
     }
-    return parent.axios.patch(BaseURL + '/approvekjsh', ryksidlist)
+    return parent.axios.patch(BaseURL + '/approvekjsh/' + ksid, ryksidlist)
   },
-  rejectkjsh (ryksidlist) {
+  rejectkjsh (ksid, ryksidlist) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
     if (ryksidlist === null || ryksidlist === undefined || !ryksidlist.length) {
       return reject('ryksidlist不能为空')
     }
-    return parent.axios.patch(BaseURL + '/rejectkjsh', ryksidlist)
+    return parent.axios.patch(BaseURL + '/rejectkjsh/' + ksid, ryksidlist)
   },
   reedit (ryksid) {
     if (ryksid === null || ryksid === undefined || ryksid === '') {
@@ -73,8 +79,11 @@ export default {
     }
     return parent.axios.patch(BaseURL + '/commit/' + ryksid)
   },
-  getprofileneedkjsh () {
-    return parent.axios.get(BaseURL + '/getprofileneedkjsh')
+  getprofileneedkjsh (ksid) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getprofileneedkjsh/' + ksid)
   },
   getrybyks (ksid) {
     if (!ksid) {
@@ -82,16 +91,46 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getrybyks/' + ksid)
   },
-  ban (IDList, Reason) {
-    if (!Reason) {
+  // ban (IDList, Reason) {
+  //   if (!Reason) {
+  //     return reject('reason不能为空')
+  //   }
+  //   if (!Array.isArray(IDList)) {
+  //     return reject('IDList不能为空')
+  //   }
+  //   return parent.axios.put(BaseURL + '/ban', { IDList, Reason })
+  // },
+  ban (ryid, ksid, reason) {
+    if (!ryid) {
+      return reject('ryid不能为空')
+    }
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    if (!reason) {
       return reject('reason不能为空')
     }
-    if (!Array.isArray(IDList)) {
-      return reject('IDList不能为空')
-    }
-    return parent.axios.put(BaseURL + '/ban', { IDList, Reason })
+    return parent.axios.put(BaseURL + '/ban', { ryid, ksid, reason })
   },
-  banryks (ryid, ksid) {
-    return parent.axios.put(BaseURL + '/banryks', { ryid, ksid })
+  banallksofry (ryid, reason) {
+    if (!ryid) {
+      return reject('ryid不能为空')
+    }
+
+    return parent.axios.put(BaseURL + '/banallksofry', { ryid, reason })
+  },
+  banmyryks (ryksid) {
+    if (!ryksid) {
+      return reject('ryksid不能为空')
+    }
+
+    return parent.axios.put(BaseURL + '/banmyryks/' + ryksid)
+  },
+  getneedkjshcount (ksid) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+
+    return parent.axios.get(BaseURL + '/getneedkjshcount/' + ksid)
   }
 }

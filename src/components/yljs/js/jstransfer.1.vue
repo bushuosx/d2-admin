@@ -5,25 +5,25 @@
       <el-row style="margin-top:6px">
         <el-col :span="6">
           <el-input v-model="jsfilter.mc"
-            placeholder="输入技术名称"
-            clearable>
+                    placeholder="输入技术名称"
+                    clearable>
             <span slot="prepend">按名称</span>
           </el-input>
         </el-col>
         <el-col style="margin-left:6px"
-          :span="6">
+                :span="6">
           <el-input v-model="jsfilter.bm"
-            placeholder="输入技术编码"
-            clearable>
+                    placeholder="输入技术编码"
+                    clearable>
             <span slot="prepend">按编码</span>
           </el-input>
         </el-col>
         <el-col style="margin-left:6px"
-          :span="6">
+                :span="6">
           <el-input v-model="jsfilter.dj"
-            type="Number"
-            placeholder="输入技术等级"
-            clearable>
+                    type="Number"
+                    placeholder="输入技术等级"
+                    clearable>
             <span slot="prepend">按等级</span>
           </el-input>
         </el-col>
@@ -39,25 +39,26 @@
               <tr>
                 <th></th>
                 <th>技术名称</th>
-                <th>等级</th>
                 <th>编码</th>
-                <th>专业</th>
-                <th>说明</th>
+                <th>等级</th>
+                <th>限制性技术</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="js in filtedJsList"
-                v-bind:key="js.id"
-                v-show="!js.hidden"
-                @click="clickcheck(js)"
-                class="jslistrow">
+                  v-bind:key="js.id"
+                  v-show="!js.hidden"
+                  @click="clickcheck(js)"
+                  class="jslistrow">
                 <td><input type="checkbox"
-                    v-model="js.checked"></td>
+                         v-model="js.checked"></td>
                 <td>{{js.mc}}</td>
+                <td>{{js.bm}}</td>
                 <td>{{js.dj}}</td>
-                <td>{{js.jsbm}}</td>
-                <td>{{js.zylb}}</td>
-                <td>{{js.sm}}</td>
+                <td>
+                  <el-tag type="warning"
+                          v-if="js.limited===true">是</el-tag>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -69,22 +70,22 @@
           <div style="text-align: center;">准备申请的技术
             <strong>{{selectedjslist.length}}</strong>项</div>
           <el-table class="selectedtable"
-            size="mini"
-            border
-            :data="selectedjslist">
+                    size="mini"
+                    border
+                    :data="selectedjslist">
             <el-table-column width="40">
               <template slot-scope="scope">
                 <el-button class="removeselected"
-                  type="danger"
-                  size="mini"
-                  icon="el-icon-close"
-                  @click="removeselected(scope.row)"
-                  circle></el-button>
+                           type="danger"
+                           size="mini"
+                           icon="el-icon-close"
+                           @click="removeselected(scope.row)"
+                           circle></el-button>
               </template>
             </el-table-column>
             <el-table-column label="技术名称"
-              sortable
-              prop="mc">
+                             sortable
+                             prop="mc">
             </el-table-column>
           </el-table>
         </div>
@@ -113,10 +114,14 @@ export default {
       )
       return rst
     },
+    hasLimitedJS () {
+      let i = this.selectedjslist.findIndex(x => x.limited === true)
+      return i !== -1
+    },
     filtedJsList: function () {
       return this.jslist.filter(v =>
         (!this.jsfilter.mc || (v.mc && v.mc.indexOf(this.jsfilter.mc) !== -1)) &&
-        (!this.jsfilter.bm || (v.jsbm && v.jsbm.indexOf(this.jsfilter.bm) !== -1)) &&
+        (!this.jsfilter.bm || (v.bm && v.bm.indexOf(this.jsfilter.bm) !== -1)) &&
         (!this.jsfilter.dj || v.dj === Number(this.jsfilter.dj))
       )
     }

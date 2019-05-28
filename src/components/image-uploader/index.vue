@@ -1,32 +1,39 @@
 <template>
   <div v-loading="loading">
     <div>
-      <div class="cropper">
-        <VueCropper ref="cropper"
-                    :img="option.img"
-                    :outputSize="option.size"
-                    :outputType="option.outputType"
-                    :info="option.info"
-                    :infoTrue="option.infoTrue"
-                    :full="option.full"
-                    :canMove="option.canMove"
-                    :canMoveBox="option.canMoveBox"
-                    :original="option.original"
-                    :autoCrop="option.autoCrop"
-                    :autoCropWidth="option.autoCropWidth"
-                    :autoCropHeight="option.autoCropHeight"
-                    :fixedBox="option.fixedBox"
-                    :fixedNumber="option.fixedNumber"
-                    :fixed="option.fixed"
-                    :centerBox="option.centerBox"
-                    :canScale="option.canScale"
-                    @realTime="realTime"></VueCropper>
+      <div class="imageDiv">
+        <div class="imageDiv-header">将要上传的图片</div>
+        <div class="cropData">
+          <img :style="halfInchPhotoDiv"
+               alt="剪裁的图片"
+               :src="cropData">
+        </div>
       </div>
-      <div class="cropData">
-        <img :style="halfInchPhotoDiv"
-             alt="剪裁的图片"
-             :src="cropData">
+      <div class="imageDiv">
+        <div class="imageDiv-header">原始图片</div>
+        <div class="cropper">
+          <VueCropper ref="cropper"
+                      :img="option.img"
+                      :outputSize="option.outputSize"
+                      :outputType="option.outputType"
+                      :info="option.info"
+                      :infoTrue="option.infoTrue"
+                      :full="option.full"
+                      :canMove="option.canMove"
+                      :canMoveBox="option.canMoveBox"
+                      :original="option.original"
+                      :autoCrop="option.autoCrop"
+                      :autoCropWidth="option.autoCropWidth"
+                      :autoCropHeight="option.autoCropHeight"
+                      :fixedBox="option.fixedBox"
+                      :fixedNumber="option.fixedNumber"
+                      :fixed="option.fixed"
+                      :centerBox="option.centerBox"
+                      :canScale="option.canScale"
+                      @realTime="realTime"></VueCropper>
+        </div>
       </div>
+
     </div>
     <div class="uploadFileSelector">
       <input type="file"
@@ -125,19 +132,20 @@ export default {
 </script>
 
 <style>
-.cropper {
+div.imageDiv {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10px;
+}
+div.imageDiv-header {
+  font-size: 1.5em;
+  //font: bold;
+}
+div.cropper {
   width: 640px;
-  height: 360px;
-  display: inline-block;
+  height: 480px;
 }
-.show-preview {
-  display: inline-block;
-}
-.cropData {
-  margin-left: 0.5em;
-  display: inline-block;
-}
-.uploadFileSelector {
+div.uploadFileSelector {
   margin-top: 1em;
 }
 </style>

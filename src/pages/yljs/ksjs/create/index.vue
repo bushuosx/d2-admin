@@ -3,7 +3,8 @@
     <strong slot="header">增加科室技术</strong>
     <div>
       <el-input v-model="searchValue"
-                placeholder="请输入要查询的技术关键字">
+                placeholder="请输入要查询的技术关键字"
+                class="searcherinput">
         <template slot="prepend">从全院技术库中查询：</template>
         <el-button slot="append"
                    icon="el-icon-search"
@@ -13,7 +14,8 @@
     <jstransfer ref="jsselector"
                 v-bind:jslist="jslist"></jstransfer>
 
-    <el-button type="primary" @click="applyall">提交</el-button>
+    <el-button type="primary"
+               @click="applyall">提交</el-button>
   </d2-container>
 </template>
 
@@ -31,6 +33,9 @@ export default {
       searchValue: null
     }
   },
+  props: {
+    ksid: String
+  },
   methods: {
     getjslist () {
       // 从服务器加载
@@ -41,7 +46,7 @@ export default {
 
       let data = this.$data
       this.loading = true
-      ksjsapi.getbynameforcreate(this.searchValue).then(res => {
+      ksjsapi.getbynameforcreate(this.ksid, this.searchValue).then(res => {
         this.loading = false
         if (res.code === 1) {
           data.jslist = res.data
@@ -70,11 +75,11 @@ export default {
 
       this.loading = true
       let router = this.$router
-      ksjsapi.createksjs(jsids).then((res) => {
+      ksjsapi.createksjs(this.ksid, jsids).then((res) => {
         this.loading = false
         if (res.code === 1) {
           this.ResetData()
-          router.push({ name: 'yljs-ksjs-list' })
+          router.push({ name: 'yljs-ksjs-list', ksid: this.ksid })
         } else {
           this.$message.error(res.msg)
         }
@@ -86,3 +91,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.searcherinput{
+  max-width: 50%;
+}
+</style>

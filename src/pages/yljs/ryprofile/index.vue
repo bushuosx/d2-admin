@@ -6,7 +6,7 @@
       <template v-else>
         <el-row>
           <el-col :span="8"
-            class="el-col-ryinfo">
+                  class="el-col-ryinfo">
             <el-row>
               <el-col :span="4"><span>姓名：</span></el-col>
               <el-col :span="8">{{ryInfo.xm}}</el-col>
@@ -15,21 +15,25 @@
               <el-col :span="4"><span>工号：</span></el-col>
               <el-col :span="8">{{ryInfo.gh}}</el-col>
             </el-row>
-            <el-row v-if="ryInfo.ryks && ryInfo.ryks.ks">
+            <el-row>
               <el-col :span="4"><span>科室：</span></el-col>
-              <el-col :span="8">{{ryInfo.ryks.ks.mc}}</el-col>
+              <el-col :span="8">{{formartKS(ryInfo.ksList)}}</el-col>
+            </el-row>
+            <el-row v-if="ryInfo.profile">
+              <el-col :span="4"><span>岗位：</span></el-col>
+              <el-col :span="8">{{formartGW(ryInfo.profile.gw)}}</el-col>
             </el-row>
           </el-col>
           <el-col :span="8">
             <div>
-              <template v-if="ryInfo.ryProfile && ryInfo.ryProfile.photo">
+              <template v-if="ryInfo.profile && ryInfo.profile.photo">
                 <div>照片</div>
                 <img :style="photoSize"
-                  :src="getUrl(ryInfo.ryProfile.photo.id)"
-                  alt="正在加载照片">
+                     :src="getUrl(ryInfo.profile.photo.id)"
+                     alt="正在加载照片">
               </template>
               <el-button v-else-if="isMe"
-                @click="photoDialogVisible=true">上传个人照片</el-button>
+                         @click="photoDialogVisible=true">上传个人照片</el-button>
             </div>
           </el-col>
         </el-row>
@@ -38,33 +42,37 @@
     </el-card>
     <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签可查看内容<i class="el-icon-caret-bottom"></i></div>
     <el-tabs type="border-card"
-      v-model="activeTabName"
-      @tab-click="handleTabClick">
+             v-model="activeTabName"
+             @tab-click="handleTabClick">
       <el-tab-pane name="ryzcTab">
         <span slot="label"><i class="el-icon-star-on"></i>职称</span>
         <ryzc-table v-if="initedTab.ryzcTab"
-          :ryInfo="ryInfo"></ryzc-table>
+                    :ryInfo="ryInfo"
+                    :activedKsid="ksid"></ryzc-table>
       </el-tab-pane>
       <el-tab-pane name="ryzgTab">
         <span slot="label"><i class="el-icon-star-on"></i>资格</span>
         <ryzg-table v-if="initedTab.ryzgTab"
-          :ryInfo="ryInfo"></ryzg-table>
+                    :ryInfo="ryInfo"
+                    :activedKsid="ksid"></ryzg-table>
       </el-tab-pane>
       <el-tab-pane name="ryxlTab">
         <span slot="label"><i class="el-icon-star-on"></i>学历</span>
         <ryxl-table v-if="initedTab.ryxlTab"
-          :ryInfo="ryInfo"></ryxl-table>
+                    :ryInfo="ryInfo"
+                    :activedKsid="ksid"></ryxl-table>
       </el-tab-pane>
       <el-tab-pane name="ryxwTab">
         <span slot="label"><i class="el-icon-star-on"></i>学位</span>
         <ryxw-table v-if="initedTab.ryxwTab"
-          :ryInfo="ryInfo"></ryxw-table>
+                    :ryInfo="ryInfo"
+                    :activedKsid="ksid"></ryxw-table>
       </el-tab-pane>
     </el-tabs>
 
     <el-dialog :visible.sync="photoDialogVisible"
-      title="上传个人照片"
-      width="80%">
+               title="上传个人照片"
+               width="80%">
       <image-uploader @Upload-Success="handlePhotoUploadSuccess"></image-uploader>
     </el-dialog>
   </d2-container>
@@ -73,7 +81,8 @@
 <script>
 import ryapi from '@/api/yljs/ry'
 import ryprofileapi from '@/api/yljs/ryprofile'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
+import yljsUtil from '@/libs/util.yljs.js'
 import filedownloadapi from '@/api/yljs/filedownload'
 
 export default {
@@ -89,6 +98,10 @@ export default {
     ryid: {
       type: String,
       required: true
+    },
+    ksid: { // 从审核界面传入的ksid
+      type: String,
+      required: false
     }
   },
   data () {
@@ -114,8 +127,11 @@ export default {
     }
   },
   computed: {
+    user () {
+      return userUtil(this.$store)
+    },
     isMe () {
-      return this.ryid === user.userId
+      return this.ryid === this.user.id
     }
   },
   methods: {
@@ -128,12 +144,12 @@ export default {
         if (res.code === 1) {
           let ryrst = res.data
           self.ryInfo = ryrst
-          if (!ryrst.ryProfile) {
+          if (!ryrst.profile) {
             if (self.isMe) {
               ryprofileapi.getmyprofile().then(rst => {
                 self.loading = false
                 if (rst.code === 1) {
-                  ryrst.ryProfile = rst.data
+                  ryrst.profile = rst.data
                   self.ryInfo = ryrst
                 } else {
                   self.$message.error(rst.msg)
@@ -150,7 +166,7 @@ export default {
             // ryprofileapi.getbyry(self.ryid).then(rst => {
             //   self.loading = false
             //   if (rst.code === 1) {
-            //     ryrst.ryProfile = rst.data
+            //     ryrst.profile = rst.data
             //     self.ryInfo = ryrst
             //   } else {
             //     self.$message.error(rst.msg)
@@ -169,6 +185,12 @@ export default {
         self.$message.error(err.message ? err.message : err)
       })
     },
+    formartKS (kslist) {
+      return yljsUtil.formartKSList(kslist)
+    },
+    formartGW (gw) {
+      return yljsUtil.formartGW(gw)
+    },
     handleTabClick () {
       this.initedTab[this.activeTabName] = true
     },
@@ -180,28 +202,29 @@ export default {
         this.loading = false
         if (res.code === 1) {
           this.photoData = filedata
-          this.ryInfo.ryProfile.photo = res.data.photo
+          this.ryInfo.profile.photo = res.data.photo
         } else {
           this.$message.error(res.msg)
         }
       }).catch(() => {
         this.loading = false
       })
-    },
-    downloadPhoto () {
-      if (!this.ryInfo || !this.ryInfo.ryProfile || !this.ryInfo.ryProfile.photo) {
-        return false
-      }
-      filedownloadapi.getFile('shared', this.ryInfo.ryProfile.photo.id).then(res => {
-        // console.log(res)
-
-        let fr = new FileReader()
-        fr.onload = (ev) => {
-          this.photoData = ev.target.result
-        }
-        fr.readAsDataURL(res.data)
-      })
     }
+    // ,
+    // downloadPhoto () {
+    //   if (!this.ryInfo || !this.ryInfo.profile || !this.ryInfo.profile.photo) {
+    //     return false
+    //   }
+    //   filedownloadapi.getFile('shared', this.ryInfo.profile.photo.id).then(res => {
+    //     // console.log(res)
+
+    //     let fr = new FileReader()
+    //     fr.onload = (ev) => {
+    //       this.photoData = ev.target.result
+    //     }
+    //     fr.readAsDataURL(res.data)
+    //   })
+    // }
   }
 }
 </script>

@@ -22,11 +22,11 @@ export default {
       'info'
     ]),
     isLogon () {
-      return !!this.info && !!this.info.uuid
+      return !!this.info && !!this.info.id
     },
     helloMessage () {
       if (this.isLogon) {
-        return `你好 ${this.info.name}`
+        return `你好 ${this.info.xm}`
       } else {
         return '你好，请登录'
       }

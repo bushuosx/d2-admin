@@ -16,8 +16,17 @@ function pathInit ({
   validator = () => true,
   defaultValue = ''
 }) {
-  const uuid = util.cookies.get('uuid') || 'ghost-uuid'
+  // const uuid = util.cookies.get('uuid') || 'ghost-uuid'
   // const uuid = util.user.userId || 'ghost-uuid'
+  let uuid
+  if (util.user.info) {
+    uuid = util.user.info.id
+  }
+  if (!uuid) {
+    // uuid = 'undefined-uuid'
+    user = false
+  }
+  // const uuid = this.$store.d2admin.user.info ? this.$store.d2admin.user.info.id : 'undefined-uuid'
   const currentPath = `${dbName}.${user ? `user.${uuid}` : 'public'}${path ? `.${path}` : ''}`
   const value = db.get(currentPath).value()
   if (!(value !== undefined && validator(value))) {

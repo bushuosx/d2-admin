@@ -23,8 +23,10 @@
               style="width: 100%">
       <el-table-column label="科室">
         <template slot-scope="scope">
-          <template v-if="scope.row.ryks && scope.row.ryks.ks">
-            <router-link :to="{name:'yljs-ks-index',params:{ksid:scope.row.ryks.ks.id}}">{{scope.row.ryks.ks.mc}}</router-link>
+          <template v-if="Array.isArray( scope.row.ksList) && scope.row.ksList.length > 0">
+            <router-link v-for="(ks,index) in scope.row.ksList"
+                         :key="index"
+                         :to="{name:'yljs-ks-index',params:{ksid:ks.id}}">{{ks.mc}}</router-link>
           </template>
         </template>
       </el-table-column>
@@ -34,6 +36,24 @@
       <el-table-column prop="xm"
                        label="姓名">
       </el-table-column>
+      <template v-if="showProfile">
+        <el-table-column label="岗位">
+          <template slot-scope="scope">
+            <span>{{formartGW(scope.row.profile.gw)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="性别">
+          <template slot-scope="scope">
+            <span>{{formartXB(scope.row.profile.xb)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="账号是否禁用">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.banned===true"
+                    type="danger">已禁用</el-tag>
+          </template>
+        </el-table-column>
+      </template>
       <el-table-column label="操作">
         <template slot-scope="scope">
           <slot name="actioner"
@@ -47,9 +67,12 @@
 
 <script>
 import ryapi from '@/api/yljs/ry'
-
+import util from '@/libs/util.yljs.js'
 export default {
   name: 'yljs-ry-search',
+  props: {
+    showProfile: Boolean
+  },
   data () {
     return {
       rylist: [],
@@ -57,6 +80,8 @@ export default {
       selected: 'xm' }
   },
   methods: {
+    formartGW: util.formartGW,
+    formartXB: util.formartXB,
     getuser () {
       if (!this.name) {
         this.$message.warning('搜索内容不能为空')

@@ -1,12 +1,11 @@
 import Constants from './Constants'
 
 const getChildren = function (user) {
-  if (!user || !user.uuid) {
+  if (!user || !user.id) {
     return [{ title: Constants.InvalidMessage }]
   } else {
-    const userid = user.uuid
     return [
-      { path: `${Constants.BaseUrl}/ryjs/listbyry/${userid}`, icon: 'list', title: '个人技术一览' },
+      { path: `${Constants.BaseUrl}/ryjs/listbyry/${user.id}`, icon: 'list', title: '个人技术一览' },
       { path: `${Constants.BaseUrl}/ryjs/create`, icon: 'calendar-plus-o', title: '申请技术授权' }
     ]
   }

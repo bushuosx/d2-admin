@@ -14,18 +14,25 @@
       <div style="width:50%;">
         <el-input v-model="selectvalue"
                   placeholder="请输入要查询的技术名称"
-                  class="input-with-select">
+                  class="input-with-select"
+                  :disabled="!hasAnyKS">
           <el-select v-model="selected"
                      slot="prepend"
-                     placeholder="请选择">
-            <el-option label="在全院技术中查询"
-                       value="1"></el-option>
-            <el-option label="在科室技术中查询"
-                       value="2"></el-option>
+                     placeholder="请选择科室">
+            <el-option v-for="(ks,index) in user.ksList"
+                       :key="index"
+                       :label="'从'+ks.mc+'中查询'"
+                       :value="ks.id"></el-option>
           </el-select>
           <el-button @click="getjslist"
                      slot="append"
-                     icon="el-icon-search">开始加载</el-button>
+                     icon="el-icon-search">
+            <el-tooltip content="仅加载未申请的技术"
+                        placement="top"
+                        effect="light">
+              <span>开始加载</span>
+            </el-tooltip>
+          </el-button>
         </el-input>
       </div>
 
@@ -50,8 +57,9 @@
 <script>
 import jstransfer from '@/components/yljs/js/jstransfer.1.vue'
 import ryjsapi from '@/api/yljs/ryjs'
-import jsapi from '@/api/yljs/js'
+// import jsapi from '@/api/yljs/js'
 import ksjsapi from '@/api/yljs/ksjs'
+import userUtil from '@/libs/util.user.js'
 
 export default {
   name: 'yljs-ryjs-create',
@@ -59,12 +67,20 @@ export default {
   data () {
     return {
       selectvalue: null,
-      selected: '2',
+      selected: '',
       jslist: [],
       ksjslist: null,
       yyjslist: null,
       fileidlist: null,
       loading: false
+    }
+  },
+  computed: {
+    user () {
+      return userUtil(this.$store)
+    },
+    hasAnyKS () {
+      return !!this.user && Array.isArray(this.user.ksList) && this.user.ksList.length > 0
     }
   },
   methods: {
@@ -84,10 +100,13 @@ export default {
         return
       }
 
-      // if (!this.fileidlist || !this.fileidlist.length || this.fileidlist.length === 0) {
-      //   this.$msgbox({ message: '请上传所需的支撑材料', title: '无支撑材料', type: 'info' })
-      //   return
-      // }
+      if (!Array.isArray(this.fileidlist) || this.fileidlist.length === 0) {
+        let hasLimited = this.$refs.jsselector.hasLimitedJS
+        if (hasLimited === true) {
+          this.$msgbox({ message: '你选择的技术含有限制类技术，请上传所需的支撑材料', title: '限制类技术须有支撑材料', type: 'info' })
+          return
+        }
+      }
 
       this.loading = true
       let router = this.$router
@@ -95,7 +114,7 @@ export default {
       ryjsapi.createryjs(jsids, this.fileidlist).then((res) => {
         this.loading = false
         if (res.code === 1) {
-          router.push({ name: 'yljs-ry-js' })
+          router.push({ name: 'yljs-ryjs-listbyry', params: { ryid: this.user.id } })
           this.ResetData()
         } else {
           message.error(res.msg)
@@ -108,20 +127,20 @@ export default {
     getjslist () {
       // 从服务器加载
       // let msg = this.$message
-      if (!this.selectvalue && this.selected !== '2') {
-        this.$message.error('请输入查询条件')
+      if (!this.selected) {
+        this.$message.error('请选择一个科室')
         return
       }
       let data = this.$data
       this.loading = true
       let api = null
-      if (this.selected === '2') {
-        api = ksjsapi.getbynameforusercreate(this.selectvalue)
-      } else if (this.selected === '1') {
-        api = jsapi.getbyname(this.selectvalue)
+      if (this.selected) {
+        api = ksjsapi.getbynameforusercreate(this.selected, this.selectvalue)
+        // } else if (this.selected === '1') {
+        //   api = jsapi.getbyname(this.selectvalue)
       } else {
         this.loading = false
-        this.$message.error('程序错误')
+        this.$message.error('没有选择任何有效的科室')
       }
 
       api.then(res => {

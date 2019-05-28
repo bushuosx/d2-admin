@@ -3,7 +3,7 @@
     <div slot="header"><strong>人员技术授权信息</strong></div>
     <div v-if="options && options.showry===true">
       <el-row :gutter="10">
-        <el-col :span="12"><label>科室：</label><span>{{ryjs.ry.ks}}</span></el-col>
+        <el-col :span="12"><label>科室：</label><span>{{formartKS(ryjs.ry.ksList)}}</span></el-col>
         <el-col :span="12"></el-col>
       </el-row>
       <el-row :gutter="10">
@@ -18,7 +18,7 @@
     <div>
       <el-row :gutter="10">
         <el-col :span="12"><label>技术名称：</label><span>{{ryjs.js.mc}}</span></el-col>
-        <el-col :span="12"><label>技术编码：</label><span>{{ryjs.js.jsbm}}</span></el-col>
+        <el-col :span="12"><label>技术编码：</label><span>{{ryjs.js.bm}}</span></el-col>
       </el-row>
       <el-row :gutter="10">
         <el-col :span="12"><label>技术等级：</label><span>{{ryjs.js.dj}}</span></el-col>
@@ -80,7 +80,8 @@ export default {
     'file-list': () => import('../filelist')
   },
   methods: {
-    formartSH: yljsHelper.formartSH
+    formartSH: yljsHelper.formartSH,
+    formartKS: yljsHelper.formartKSList
   }
 }
 </script>

@@ -102,5 +102,47 @@ export default {
     } else {
       return undefined
     }
+  },
+  formartKSList (kslist) {
+    if (!Array.isArray(kslist) || kslist.length === 0) {
+      return '无'
+    }
+    return kslist.map(x => x.mc).join('，')
+  },
+  formartGW (gw) {
+    switch (gw) {
+      case 1:
+        return '医师'
+      case 2:
+        return '护士'
+      case 3:
+        return '技士'
+      case 4:
+        return '行政人员'
+      case 5:
+        return '后勤人员'
+      case 10:
+        return '医学实习生'
+      case 11:
+        return '进修医师'
+      case 12:
+        return '规培医师'
+      case 20:
+        return '护理实习生'
+      case 21:
+        return '进修护师'
+      default:
+        return '未知'
+    }
+  },
+  formartXB (xb) {
+    switch (xb) {
+      case 1:
+        return '男'
+      case 2:
+        return '女'
+      default:
+        return '未知'
+    }
   }
 }

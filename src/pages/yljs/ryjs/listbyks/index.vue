@@ -2,14 +2,15 @@
   <d2-container>
     <el-card v-loading='loading'>
       <div slot="header">
-        <h3>人员技术</h3>
-        <div>以下是科室人员的技术授权</div>
+        <h3>科室人员的技术授权</h3>
       </div>
-      <js-report :jsReport="ksjsReport"
-                 :options="{showcount:true}"
+      <jssearch @jssearch-click='handClick'></jssearch>
+
+      <js-report style="margin-top:16px"
+                 :jsReport="ksjsReport"
                  @click-js="handleClickJS"></js-report>
       <my-pagination :pageIndex="pageIndex"
-                     @page-index-change="fetchData"></my-pagination>
+                     @page-index-change="handlePageIndexChande"></my-pagination>
     </el-card>
   </d2-container>
 </template>
@@ -22,6 +23,7 @@ import ryjsapi from '@/api/yljs/ryjs'
 export default {
   name: 'yljs-ryjs-listbyks',
   components: {
+    'jssearch': () => import('@/components/yljs/jssearch'),
     'js-report': () => import('@/components/yljs/jsreport'),
     'my-pagination': () => import('@/components/MyPagination')
   },
@@ -31,29 +33,39 @@ export default {
   data () {
     return {
       loading: true,
-      ksjsReport: null,
-      pageIndex: 1
+      ksjsReport: [],
+      pageIndex: 1,
+      searchOtion: {}
     }
   },
   created () {
-    this.fetchData(1)
+    this.fetchData()
   },
   methods: {
-    fetchData (val) {
-      this.pageIndex = val
+    fetchData () {
       this.loading = true
-      ryjsapi.getbyks(this.ksid, val).then(res => {
+      this.ksjsReport = []
+      this.searchOtion.ksid = this.ksid
+      this.searchOtion.pageIndex = this.pageIndex
+      ryjsapi.searchjsreport(this.searchOtion).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.ksjsReport = res.data
-        } else if (res.code === 2) {
-          this.$message.warning('没有查询到更多数据')
         } else {
           this.$message.error(res.msg)
         }
       }).catch(() => {
         this.loading = false
       })
+    },
+    handClick (val) {
+      this.searchOtion = val
+      this.pageIndex = 1
+      this.fetchData()
+    },
+    handlePageIndexChande (val) {
+      this.pageIndex = val
+      this.fetchData()
     },
     handleClickJS (js) {
       if (js) {

@@ -14,28 +14,38 @@
           </el-col>
           <el-col :span="8">
             <el-button @click="handleShowJS"
-              type="primary"
-              plain>查看科室人员已授权技术</el-button>
+                       type="primary"
+                       plain>查看科室人员已授权技术</el-button>
           </el-col>
         </el-row>
       </div>
     </el-card>
     <el-card v-if="isksManager">
+      <strong slot="header">管理</strong>
       <el-row :gutter="10">
         <el-col :span="8">
-          <el-button @click="handleJSSH"
-            type="primary"
-            plain>审核技术授权</el-button>
+          <el-badge :hidden="jscount === 0"
+                    :value="jscount">
+            <el-button @click="handleJSSH"
+                       type="primary"
+                       plain>审核技术授权</el-button>
+          </el-badge>
         </el-col>
         <el-col :span="8">
-          <el-button @click="handleRKSH"
-            type="primary"
-            plain>审核入科申请</el-button>
+          <el-badge :hidden="kscount === 0"
+                    :value="kscount">
+            <el-button @click="handleRKSH"
+                       type="primary"
+                       plain>审核入科申请</el-button>
+          </el-badge>
         </el-col>
         <el-col :span="8">
-          <el-button @click="handleRYProfileKJSH"
-            type="primary"
-            plain>审核人员资料</el-button>
+          <el-badge :hidden="profilecount === 0"
+                    :value="profilecount">
+            <el-button @click="handleRYProfileKJSH"
+                       type="primary"
+                       plain>审核人员资料</el-button>
+          </el-badge>
         </el-col>
       </el-row>
     </el-card>
@@ -49,7 +59,7 @@
                 <el-table-column prop="xm" label="姓名"></el-table-column>
               </el-table> -->
               <ry-table :ryList="ryList"
-                :options="{hideCounter:true}"></ry-table>
+                        :options="{hideCounter:true}"></ry-table>
             </div>
           </el-card>
         </el-col>
@@ -57,8 +67,8 @@
           <el-card>职称
             <div v-if="Array.isArray(ryList)">
               <mypie :data="ryList"
-                :filter="zcfilter"
-                @click-pie="handClickPieOnZC"></mypie>
+                     :filter="zcfilter"
+                     @click-pie="handClickPieOnZC"></mypie>
             </div>
             <div v-else>暂无数据</div>
           </el-card>
@@ -67,8 +77,8 @@
           <el-card>学历
             <div v-if="Array.isArray(ryList)">
               <mypie :data="ryList"
-                :filter="xlfilter"
-                @click-pie="handClickPieOnXL"></mypie>
+                     :filter="xlfilter"
+                     @click-pie="handClickPieOnXL"></mypie>
             </div>
             <div v-else>暂无数据</div>
           </el-card>
@@ -86,17 +96,17 @@
       </el-row>
     </el-card>
     <el-dialog :visible.sync="ryListDialogData.visible"
-      :title="ryListDialogData.title + ' 人员列表'">
+               :title="ryListDialogData.title + ' 人员列表'">
       <ry-table :ryList="ryListDialogData.ryList"
-        :options="{hideActioner:true}"></ry-table>
+                :options="{hideActioner:true}"></ry-table>
     </el-dialog>
   </d2-container>
 </template>
 
 <script>
-import role from '@/libs/util.user.js'
+import userutil from '@/libs/util.user.js'
 import ksapi from '@/api/yljs/ks'
-// import ryxlapi from '@/api/yljs/ryxl'
+import ryksapi from '@/api/yljs/ryks'
 import yljsHelper from '@/libs/util.yljs.js'
 export default {
   name: 'yljs-ks-index',
@@ -116,10 +126,14 @@ export default {
       ryListDialogData: {
         visible: false,
         ryList: null
-      }
+      },
+      needkjshreport: null
     }
   },
   computed: {
+    user () {
+      return userutil(this.$store)
+    },
     ksryCount () {
       if (!Array.isArray(this.ryList)) {
         return 0
@@ -128,10 +142,31 @@ export default {
       }
     },
     isksManager () {
-      if (!this.ksid) {
+      if (!this.user) {
         return false
       }
-      return role.hasRoles([role.Roles.科级审核]) && role.ksid === this.ksid
+      return this.user.hasAnyPermission([this.user.Permissions.科级审核], this.ksid)
+    },
+    jscount () {
+      if (this.needkjshreport && this.needkjshreport.jscount) {
+        return this.needkjshreport.jscount
+      } else {
+        return 0
+      }
+    },
+    kscount () {
+      if (this.needkjshreport && this.needkjshreport.kscount) {
+        return this.needkjshreport.kscount
+      } else {
+        return 0
+      }
+    },
+    profilecount () {
+      if (this.needkjshreport && this.needkjshreport.profilecount) {
+        return this.needkjshreport.profilecount
+      } else {
+        return 0
+      }
     }
   },
   created () {
@@ -159,15 +194,20 @@ export default {
           this.$message.error(res.msg)
         }
       }).catch(() => { this.loading = false })
+
+      this.fetchNeedKjsh()
     },
-    // fetchKsRyXl () {
-    //   this.ryxlListOfKs = null
-    //   return ryxlapi.getksryxl(this.ksid).then(res => {
-    //     if (res.code === 1) {
-    //       this.ryxlListOfKs = res.data
-    //     }
-    //   })
-    // },
+    fetchNeedKjsh () {
+      if (this.isksManager) {
+        this.needkjshreport = null
+        ryksapi.getneedkjshcount(this.ksid).then(res => {
+          if (res.code === 1) {
+            this.needkjshreport = res.data
+            // console.log(report)
+          }
+        })
+      }
+    },
     zcfilter (item) {
       return { key: yljsHelper.formartZcLevel(item.zc), index: item.zc }
     },

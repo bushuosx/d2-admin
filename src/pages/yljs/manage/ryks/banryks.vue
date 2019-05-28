@@ -15,7 +15,7 @@
 
 <script>
 import ryapi from '@/api/yljs/ryks'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 
 export default {
   name: 'yljs-manage-ryks-banryks',
@@ -23,16 +23,19 @@ export default {
     'rysearch': () => import('@/components/yljs/rysearch')
   },
   computed: {
+    user () {
+      return userUtil(this.$store)
+    },
     isYYRoleManager () {
-      return !!user && user.hasRoles([user.Roles.医院角色管理权限])
+      return this.user.hasAnyPermission([this.user.Permissions.医院角色管理权限])
     }
   },
   methods: {
     banryks (ry) {
       if (!ry || !ry.id) { return this.$message.error('人员ID不能为空') }
-      if (!ry.ryks || !ry.ryks.ks) { return this.$message.error('人员目前没有科室，无需操作') }
+      if (!Array.isArray(ry.ksList) || ry.ksList.length === 0) { return this.$message.error('人员目前没有科室，无需操作') }
 
-      ryapi.banryks(ry.id, ry.ryks.ks.id)
+      ryapi.banallksofry(ry.id)
         .then(
           res => {
             if (res.code !== 1) {

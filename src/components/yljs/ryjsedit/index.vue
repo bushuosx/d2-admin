@@ -6,7 +6,7 @@
                  @file-changed="handleFileChanged"></fast-upload>
     <div>
       <el-button @click="deleteRyjs"
-                 type="error">删除此申请</el-button>
+                 type="danger">删除此申请</el-button>
       <el-button @click="cancelRyjs">取消编辑</el-button>
       <el-button @click="saveRyjs"
                  type="primary">保存更改</el-button>
@@ -38,12 +38,6 @@ export default {
     deleteRyjs () {
       this.loading = true
       ryjsapi.delete([this.ryjs.id]).then(res => {
-        // let rst
-        // if (res.code !== 1) {
-        //   rst = { code: 3, msg: res.msg }
-        // } else {
-        //   rst = res
-        // }
         this.emitRyjs('delete-edit', res)
       }).catch(err => {
         this.emitRyjs('delete-edit', { code: 3, msg: err.message })

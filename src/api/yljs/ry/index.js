@@ -49,12 +49,12 @@ export default {
   refreshMe () {
     return parent.axios.get(BaseURL + '/refreshme')
   },
-  setksmanager (data) {
-    if (!Array.isArray(data) || data.length === 0) {
-      return reject('data不能为空')
-    }
-    return parent.axios.post(BaseURL + '/setksmanager', data)
-  },
+  // setksmanager (data) {
+  //   if (!Array.isArray(data) || data.length === 0) {
+  //     return reject('data不能为空')
+  //   }
+  //   return parent.axios.post(BaseURL + '/setksmanager', data)
+  // },
   importEmployees (data) {
     if (!Array.isArray(data) || data.length === 0) {
       return reject('data不能为空')
@@ -63,5 +63,11 @@ export default {
   },
   getksryreportlist () {
     return parent.axios.get(BaseURL + '/getksryreportlist')
+  },
+  updatery (ry) {
+    if (!ry) {
+      return reject('ry不能为空')
+    }
+    return parent.axios.put(BaseURL + '/update', ry)
   }
 }

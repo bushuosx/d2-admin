@@ -1,75 +1,145 @@
 <template>
   <div>
-    <el-table :data="ryjslist" :row-class-name="tableRowClassName" @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" width="55"></el-table-column>
+    <el-table :data="ryjslist"
+              :row-class-name="tableRowClassName"
+              @selection-change="handleSelectionChange"
+              style="width: 100%">
+      <el-table-column type="selection"
+                       width="55"></el-table-column>
       <template v-if="options && options.showks===true">
-        <el-table-column prop="ry.ks.mc" label="科室"></el-table-column>
+        <el-table-column prop="ry.ks.mc"
+                         label="科室"></el-table-column>
       </template>
       <template v-if="options && options.showry===true">
-        <el-table-column prop="ry.gh" label="工号"></el-table-column>
-        <el-table-column prop="ry.xm" label="姓名"></el-table-column>
+        <el-table-column prop="ry.gh"
+                         label="工号"></el-table-column>
+        <el-table-column prop="ry.xm"
+                         label="姓名"></el-table-column>
       </template>
-      <el-table-column prop="js.mc" label="技术名称"></el-table-column>
-      <el-table-column prop="js.bm" label="编码"></el-table-column>
-      <el-table-column prop="js.dj" label="等级"></el-table-column>
-      <el-table-column label="审核状态" width="180">
+      <el-table-column prop="js.mc"
+                       label="技术名称"></el-table-column>
+      <el-table-column prop="js.bm"
+                       label="编码"></el-table-column>
+      <el-table-column prop="js.dj"
+                       label="等级"></el-table-column>
+      <el-table-column label="限制性技术">
+        <template slot-scope="scope">
+          <el-tag type="warning"
+                  v-if="scope.row.js.limited===true">是</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="审核状态"
+                       width="180">
         <template slot-scope="scope">
           <template v-if="isBanned(scope.row)">
-            <el-button icon="el-icon-delete" disabled size="mini">已禁用</el-button>
+            <el-button icon="el-icon-delete"
+                       disabled
+                       size="mini">已禁用</el-button>
           </template>
           <template v-else-if="approved(scope.row)">
-            <el-button @click="showDetail(scope.row)" icon="el-icon-success" type="text" size="mini">已审核</el-button>
+            <el-button @click="showDetail(scope.row)"
+                       icon="el-icon-success"
+                       type="text"
+                       size="mini">已审核</el-button>
           </template>
           <template v-else-if="rejected(scope.row)">
             <!-- <el-button v-if="isMe(scope.row)" @click="showEdit(scope.row)" icon="el-icon-error">已驳回</el-button> -->
-            <el-button v-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-error" size="mini">已驳回</el-button>
+            <el-button v-if="isMe(scope.row)"
+                       @click="showDetail(scope.row)"
+                       icon="el-icon-error"
+                       size="mini">已驳回</el-button>
             <span v-else><i class="el-icon-error"></i>已驳回</span>
           </template>
           <template v-else-if="needkjsh(scope.row)">
-            <el-button v-if="options && options.isKjshManager" @click="handleKjsh(scope.row)" size="mini">科级审核</el-button>
-            <el-button v-else-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-question" type="text" size="mini">等待科级审核</el-button>
+            <el-button v-if="options && options.isKjshManager"
+                       @click="handleKjsh(scope.row)"
+                       size="mini">科级审核</el-button>
+            <el-button v-else-if="isMe(scope.row)"
+                       @click="showDetail(scope.row)"
+                       icon="el-icon-question"
+                       type="text"
+                       size="mini">等待科级审核</el-button>
             <span v-else>等待科级审核</span>
           </template>
           <template v-else-if="needyjsh(scope.row)">
-            <el-button v-if="options && options.isYjshManager" @click="handleYjsh(scope.row)" size="mini"><strong>院级</strong>审核</el-button>
-            <el-button v-else-if="isMe(scope.row)" @click="showDetail(scope.row)" icon="el-icon-question" type="text" size="mini">等待<strong>院级</strong>审核</el-button>
+            <el-button v-if="options && options.isYjshManager"
+                       @click="handleYjsh(scope.row)"
+                       size="mini"><strong>院级</strong>审核</el-button>
+            <el-button v-else-if="isMe(scope.row)"
+                       @click="showDetail(scope.row)"
+                       icon="el-icon-question"
+                       type="text"
+                       size="mini">等待<strong>院级</strong>审核</el-button>
             <span v-else>等待<strong>院级</strong>审核</span>
           </template>
           <template v-else-if="needcommit(scope.row)">
             <template v-if="isMe(scope.row)">
-              <el-button @click="handleCommit(scope.row)" icon="el-icon-upload" size="mini">提交</el-button>
-              <el-button @click="showEdit(scope.row)" icon="el-icon-edit" size="mini">编辑</el-button>
+              <el-button @click="handleCommit(scope.row)"
+                         icon="el-icon-upload"
+                         size="mini">提交</el-button>
+              <el-button @click="showEdit(scope.row)"
+                         icon="el-icon-edit"
+                         size="mini">编辑</el-button>
             </template>
             <span v-else>待提交</span>
           </template>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-loading="loading" title="查看详细" :visible.sync="detailVisible" width="80%">
+    <el-dialog v-loading="loading"
+               title="查看详细"
+               :visible.sync="detailVisible"
+               width="80%">
       <ryjs-detail :ryjs="focusRyjs">
-        <span slot="footer" class="dialog-footer" slot-scope="scope">
+        <span slot="footer"
+              class="dialog-footer"
+              slot-scope="scope">
           <el-button @click="detailVisible = false">关闭</el-button>
-          <el-button v-if="rejected(scope.data) && isMe(scope.data)" @click="handleReedit" icon="el-icon-error" type="warning" plain>申请已被驳回,点击重新编辑</el-button>
+          <el-button v-if="rejected(scope.data) && isMe(scope.data)"
+                     @click="handleReedit"
+                     icon="el-icon-error"
+                     type="warning"
+                     plain>申请已被驳回,点击重新编辑</el-button>
         </span>
       </ryjs-detail>
     </el-dialog>
-    <el-dialog v-loading="loading" title="编辑申请" :visible.sync="editVisible" width="80%">
-      <ryjs-edit :ryjs="focusRyjs" @save-edit="handleSaveEdit" @delete-edit="handleDeleteEdit" @cancel-edit="handleCancelEdit"></ryjs-edit>
+    <el-dialog v-loading="loading"
+               title="编辑申请"
+               :visible.sync="editVisible"
+               width="80%">
+      <ryjs-edit :ryjs="focusRyjs"
+                 @save-edit="handleSaveEdit"
+                 @delete-edit="handleDeleteEdit"
+                 @cancel-edit="handleCancelEdit"></ryjs-edit>
     </el-dialog>
-    <el-dialog v-loading="loading" title="科级审核" :visible.sync="kjshVisible" width="80%">
+    <el-dialog v-loading="loading"
+               title="科级审核"
+               :visible.sync="kjshVisible"
+               width="80%">
       <ryjs-detail :ryjs="focusRyjs"></ryjs-detail>
-      <span slot="footer" class="dialog-footer">
-        <el-input v-model="reason" placeholder="请输入审核结果的说明"><span slot="prepend">审核理由：</span></el-input>
-        <el-button type="warning" @click="rejectKjsh">驳回申请</el-button>
-        <el-button type="primary" @click="approveKjsh">审核通过</el-button>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-input v-model="reason"
+                  placeholder="请输入审核结果的说明"><span slot="prepend">审核理由：</span></el-input>
+        <el-button type="warning"
+                   @click="rejectKjsh">驳回申请</el-button>
+        <el-button type="primary"
+                   @click="approveKjsh">审核通过</el-button>
       </span>
     </el-dialog>
-    <el-dialog v-loading="loading" title="院级审核" :visible.sync="yjshVisible" width="80%">
+    <el-dialog v-loading="loading"
+               title="院级审核"
+               :visible.sync="yjshVisible"
+               width="80%">
       <ryjs-detail :ryjs="focusRyjs"></ryjs-detail>
-      <span slot="footer" class="dialog-footer">
-        <el-input v-model="reason" placeholder="请输入审核结果的说明"><span slot="prepend">审核理由：</span></el-input>
-        <el-button type="warning" @click="rejectYjsh">驳回申请</el-button>
-        <el-button type="primary" @click="approveYjsh">审核通过</el-button>
+      <span slot="footer"
+            class="dialog-footer">
+        <el-input v-model="reason"
+                  placeholder="请输入审核结果的说明"><span slot="prepend">审核理由：</span></el-input>
+        <el-button type="warning"
+                   @click="rejectYjsh">驳回申请</el-button>
+        <el-button type="primary"
+                   @click="approveYjsh">审核通过</el-button>
       </span>
     </el-dialog>
   </div>
@@ -78,7 +148,7 @@
 <script>
 // import router from '@/router/index.js'
 import ryjsapi from '@/api/yljs/ryjs'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 export default {
   props: {
     ryjslist: Array,
@@ -87,7 +157,8 @@ export default {
       default: function () {
         return {
           showry: true,
-          isKjshManager: false
+          isKjshManager: false,
+          ksid: null
         }
       }
     }
@@ -107,6 +178,11 @@ export default {
       loading: false
     }
   },
+  computed: {
+    user () {
+      return userUtil(this.$store)
+    }
+  },
   methods: {
     isBanned (row) {
       return row.banned === true
@@ -119,7 +195,7 @@ export default {
       if (!row.ry) {
         return false
       }
-      return row.ry.id === user.userId
+      return row.ry.id === this.user.id
     },
     handleReedit () {
       // 先要求重新编辑
@@ -192,7 +268,7 @@ export default {
     approveKjsh () {
       this.loading = true
       let rst = null
-      ryjsapi.approveKjsh([this.focusRyjs.id], this.reason).then(res => {
+      ryjsapi.approveKjsh(this.options.ksid, [this.focusRyjs.id], this.reason).then(res => {
         rst = res
         this.emitRyjsChange(this.focusRyjs.id, rst)
       }).catch(err => {
@@ -203,7 +279,7 @@ export default {
     rejectKjsh () {
       this.loading = true
       let rst = null
-      ryjsapi.rejectKjsh([this.focusRyjs.id], this.reason).then(res => {
+      ryjsapi.rejectKjsh(this.options.ksid, [this.focusRyjs.id], this.reason).then(res => {
         rst = res
         this.emitRyjsChange(this.focusRyjs.id, rst)
       }).catch(err => {
@@ -249,8 +325,15 @@ export default {
       // this.$emit('ryjs-changed', rowid, rst)
       this.editVisible = false
     },
-    handleDeleteEdit (rowid, rst) {
-      this.$emit('ryjs-changed', rowid, rst)
+    handleDeleteEdit (rowid, res) {
+      // debugger
+      if (res.code === 1) {
+        this.$emit('ryjs-deleted', rowid, res.data)
+      } else if (res.code === 2) {
+        this.$message.warning(res.msg)
+      } else {
+        this.$messgae.error(res.msg)
+      }
       this.editVisible = false
     }
   }

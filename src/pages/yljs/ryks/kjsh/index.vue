@@ -5,23 +5,36 @@
       <div>以下是申请加入本科室，但目前还没有通过审核的人员</div>
     </div>
     <el-card v-loading='loading'>
-      <el-table :data="rykslist" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="工号" prop="ry.gh"></el-table-column>
-        <el-table-column label="姓名" prop="ry.xm"></el-table-column>
-        <el-table-column v-if="isSuper" label="科室" prop="ks.mc"></el-table-column>
-        <el-table-column label="申请理由" prop="createLog.operateReason"></el-table-column>
-        <el-table-column label="申请时间" prop="createLog.operateTime"></el-table-column>
+      <el-table :data="rykslist"
+                style="width: 100%"
+                @selection-change="handleSelectionChange">
+        <el-table-column type="selection"
+                         width="55"></el-table-column>
+        <el-table-column label="工号"
+                         prop="ry.gh"></el-table-column>
+        <el-table-column label="姓名"
+                         prop="ry.xm"></el-table-column>
+        <el-table-column v-if="isSuper"
+                         label="科室"
+                         prop="ks.mc"></el-table-column>
+        <el-table-column label="申请理由"
+                         prop="createLog.operateReason"></el-table-column>
+        <el-table-column label="申请时间"
+                         prop="createLog.operateTime"></el-table-column>
         <el-table-column>
           <template slot-scope="scope">
-            <el-button @click="handleResolve(scope.row)" type="primary">通过</el-button>
-            <el-button @click="handleReject(scope.row)" type="error">拒绝</el-button>
+            <el-button @click="handleResolve(scope.row)"
+                       type="primary">通过</el-button>
+            <el-button @click="handleReject(scope.row)"
+                       type="error">拒绝</el-button>
           </template>
         </el-table-column>
       </el-table>
       <div>
-        <el-button :disabled='anySelected !== true' @click="handleResolveAll">批量通过</el-button>
-        <el-button :disabled='anySelected !== true' @click="handleRejectAll">批量拒绝</el-button>
+        <el-button :disabled='anySelected !== true'
+                   @click="handleResolveAll">批量通过</el-button>
+        <el-button :disabled='anySelected !== true'
+                   @click="handleRejectAll">批量拒绝</el-button>
       </div>
     </el-card>
   </d2-container>
@@ -32,7 +45,7 @@
  * 此页面需科级审核权限
  */
 import ryksapi from '@/api/yljs/ryks'
-import role from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 export default {
   name: 'yljs-ryks-kjsh',
   props: {
@@ -46,8 +59,11 @@ export default {
     }
   },
   computed: {
+    user () {
+      return userUtil(this.$store)
+    },
     isSuper () {
-      return role.hasRoles([role.Roles.超级管理权限])
+      return this.user.hasAnyPermission([this.user.Permissions.超级管理权限])
     },
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
@@ -98,11 +114,11 @@ export default {
     },
     approvekjsh (rst) {
       this.loading = true
-      ryksapi.approvekjsh(rst).then(this.processResponse).catch(() => { this.loading = false })
+      ryksapi.approvekjsh(this.ksid, rst).then(this.processResponse).catch(() => { this.loading = false })
     },
     rejectkjsh (rst) {
       this.loading = true
-      ryksapi.rejectkjsh(rst).then(this.processResponse).catch(() => { this.loading = false })
+      ryksapi.rejectkjsh(this.ksid, rst).then(this.processResponse).catch(() => { this.loading = false })
     },
     processResponse (res) {
       this.loading = false

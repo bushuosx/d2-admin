@@ -8,20 +8,28 @@
           <th>技术名称</th>
           <th>等级</th>
           <th>编码</th>
+          <th>限制性技术</th>
           <th>专业</th>
-          <th>说明</th>
+          <th v-if="showActioner"></th>
         </tr>
       </thead>
       <tbody>
         <template v-if="hasAnyData">
           <tr v-for="js in jsList"
-            v-bind:key="js.id"
-            class="jslistrow">
+              v-bind:key="js.id"
+              class="jslistrow">
             <td>{{js.mc}}</td>
             <td>{{js.dj}}</td>
-            <td>{{js.jsbm}}</td>
-            <td>{{js.zylb}}</td>
-            <td>{{js.sm}}</td>
+            <td>{{js.bm}}</td>
+            <td>
+              <el-tag type="warning"
+                      v-if="js.limited===true">是</el-tag>
+            </td>
+            <td>{{js.zylb===null?null:js.zylb.mc}}</td>
+            <td v-if="showActioner">
+              <slot name="actioner"
+                    :js="js"></slot>
+            </td>
           </tr>
         </template>
         <template v-else>
@@ -38,16 +46,12 @@ export default {
     jsList: {
       type: Array
     },
-    caption: String
+    caption: String,
+    showActioner: Boolean
   },
   computed: {
     hasAnyData () {
       return Array.isArray(this.jsList) && this.jsList.length > 0
-    }
-  },
-  methods: {
-    clickcheck (js) {
-      js.checked = !js.checked
     }
   }
 }

@@ -11,11 +11,11 @@ export default {
 
   },
   getallks () {
-    if (parent.debug) {
-      return parent.resolve([{ id: 'ad1169', bm: '1169', mc: '呼吸2' }, { id: 'ad1170', bm: '1170', mc: '呼吸3' }])
-    } else {
-      return parent.axios.get(BaseURL + '/getallks')
-    }
+    return parent.axios.get(BaseURL + '/getallks')
+    // if (parent.debug) {
+    //   return parent.resolve([{ id: 'ad1169', bm: '1169', mc: '呼吸2' }, { id: 'ad1170', bm: '1170', mc: '呼吸3' }])
+    // } else {
+    // }
   },
   loadksry (ksid) {
     if (!ksid) {

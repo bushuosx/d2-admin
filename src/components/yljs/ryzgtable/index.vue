@@ -42,38 +42,44 @@
       <el-button @click="handleAdd">添加</el-button>
     </div>
     <el-dialog :visible.sync="addVisible"
-      title="添加人员执业资格证明">
+               title="添加人员执业资格证明">
       <ryzg-edit :zylblist="zylblist"
-        @edit-save="handleEditSaveFromAdd"
-        @edit-cancel="addVisible=false"></ryzg-edit>
+                 @edit-save="handleEditSaveFromAdd"
+                 @edit-cancel="addVisible=false"></ryzg-edit>
     </el-dialog>
     <el-dialog :visible.sync="detailVisible"
-      title="人员执业资格详细">
+               title="人员执业资格详细">
       <ryzg-detail :ryzg="focusRyzg"
-        @detail-update="handleDetailUpdate"
-        @detail-edit="handleDetailEdit"
-        :isKSManager="isKSManager"
-        @detail-cancel="detailVisible=false"></ryzg-detail>
+                   @detail-update="handleDetailUpdate"
+                   @detail-edit="handleDetailEdit"
+                   :isKSManager="isKSManager"
+                   :isMe="isMe"
+                   @detail-cancel="detailVisible=false"
+                   @detail-delete="handleDeleted"></ryzg-detail>
     </el-dialog>
     <el-dialog :visible.sync="editVisible"
-      title="修改人员执业资格证明">
+               title="修改人员执业资格证明">
       <ryzg-edit :ryzg="focusRyzg"
-        :zylblist="zylblist"
-        @edit-save="handleEditSaveFromEdit"
-        @edit-cancel="editVisible=false"></ryzg-edit>
+                 :zylblist="zylblist"
+                 @edit-save="handleEditSaveFromEdit"
+                 @edit-cancel="editVisible=false"></ryzg-edit>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import helper from '../helper/index.js'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 import ryzgapi from '@/api/yljs/ryzg'
 import zylbapi from '@/api/yljs/zylb'
 export default {
   props: {
     ryInfo: {
       type: Object
+    },
+    activedKsid: { // 响应操作的科室
+      type: String,
+      required: false
     }
   },
   data () {
@@ -95,18 +101,21 @@ export default {
     hasData () {
       return Array.isArray(this.ryzglist) && this.ryzglist.length > 0
     },
+    user () {
+      return userUtil(this.$store)
+    },
     isMe () {
-      return !!this.ryInfo && this.ryInfo.id === user.userId
+      return !!this.ryInfo && this.ryInfo.id === this.user.id
     },
     isKSManager () {
-      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid && user.hasRoles([user.Roles.科级审核])
+      return !!this.user && this.user.isKSManager(this.activedKsid)
     }
   },
-  created () {
-    this.fetchRyzgList(this.ryInfo)
-  },
   watch: {
-    ryInfo: function (n, o) { this.fetchRyzgList(n) }
+    ryInfo: {
+      handler: function (n) { this.fetchRyzgList(n) },
+      immediate: true
+    }
   },
   methods: {
     ...helper,
@@ -118,8 +127,8 @@ export default {
       this.zylblist = []
       this.ryzglist = []
       this.loading = false
-      if (ry && ry.ryProfile && ry.ryProfile.id) {
-        ryzgapi.getbyprofile(ry.ryProfile.id).then(res => {
+      if (ry && ry.profile && ry.profile.id) {
+        ryzgapi.getbyprofile(ry.profile.id).then(res => {
           if (res.code === 1) {
             this.ryzglist = res.data
           } else {
@@ -188,9 +197,9 @@ export default {
     handleEditSaveFromAdd (val) {
       this.addVisible = false
       this.loading = true
-      if (!val.ryProfileID) {
+      if (!val.profileID) {
         // add
-        // val.profileId = this.ryInfo.ryProfile.id
+        // val.profileId = this.ryInfo.profile.id
         ryzgapi.create(val).then(res => {
           this.loading = false
           if (res.code === 1) {
@@ -209,7 +218,7 @@ export default {
     handleEditSaveFromEdit (val) {
       this.editVisible = false
       this.loading = true
-      if (val.ryProfileID === this.ryInfo.ryProfile.id) {
+      if (val.profileID === this.ryInfo.profile.id) {
         // edit
         ryzgapi.update(val).then(res => {
           this.loading = false
@@ -243,6 +252,13 @@ export default {
     },
     rejected (row) {
       return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 3
+    },
+    handleDeleted (id) {
+      this.detailVisible = false
+      var i = this.ryzglist.findIndex(v => v.id === id)
+      if (i !== -1) {
+        this.ryzglist.splice(i, 1)
+      }
     }
   }
 }

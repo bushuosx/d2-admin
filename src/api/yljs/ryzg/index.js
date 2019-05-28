@@ -55,5 +55,11 @@ export default {
       return reject('ryzgid不能为空')
     }
     return parent.axios.patch(BaseURL + '/reedit/' + ryzgid)
+  },
+  delete (id) {
+    if (!id) {
+      return reject('id不能为空')
+    }
+    return parent.axios.post(BaseURL + '/delete/' + id)
   }
 }

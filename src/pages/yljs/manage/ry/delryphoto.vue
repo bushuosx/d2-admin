@@ -15,7 +15,7 @@
 
 <script>
 import ryapi from '@/api/yljs/ryprofile'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 
 export default {
   name: 'yljs-manage-ry-delryphoto',
@@ -23,8 +23,11 @@ export default {
     'rysearch': () => import('@/components/yljs/rysearch')
   },
   computed: {
+    user () {
+      return userUtil(this.$store)
+    },
     isYYRoleManager () {
-      return !!user && user.hasRoles([user.Roles.医院角色管理权限])
+      return this.user.hasAnyPermission([this.user.Permissions.医院角色管理权限])
     }
   },
   methods: {

@@ -1,7 +1,5 @@
 import parent from '../index'
 
-import user from '@/libs/util.user.js'
-
 const BaseURL = parent.BaseURL + '/ksjs'
 
 function reject (msg) {
@@ -10,34 +8,56 @@ function reject (msg) {
 
 export default {
   BaseURL,
-  getbynameforcreate (name) {
+  getbynameforcreate (ksid, name) {
+    if (!ksid) {
+      reject('ksid不能为空')
+    }
+
     if (!name) {
       return reject('名称关键字不能为空')
     }
-    let url = this.BaseURL + '/getbynameforcreate/' + name
+    let url = this.BaseURL + '/getbynameforcreate/' + ksid + '/' + name
 
     return parent.axios.get(url)
   },
-  getksjslist () {
-    let url = this.BaseURL + '/getksjslist'
+  getksjslist (ksid) {
+    if (!ksid) {
+      reject('ksid不能为空')
+    }
+    let url = this.BaseURL + '/getksjslist/' + ksid
     return parent.axios.get(url)
   },
-  createksjs (JSIDList) {
-    if (!user.hasRoles([user.Roles.科室技术创建])) {
-      return reject('权限不足')
+  createksjs (ksid, JSIDList) {
+    if (!ksid) {
+      reject('ksid不能为空')
     }
 
     if (!Array.isArray(JSIDList) || JSIDList.length === 0) {
-      return reject('技术不能为空')
+      return reject('技术列表不能为空')
     }
-    let url = this.BaseURL + '/createksjs'
+    let url = this.BaseURL + '/createksjs/' + ksid
     return parent.axios.post(url, { JSIDList })
   },
-  getbynameforusercreate (name) {
-    if (name === null || name === undefined) {
-      name = ''
+  deleteksjs (ksid, JSIDList) {
+    if (!ksid) {
+      reject('ksid不能为空')
     }
-    let url = this.BaseURL + '/getbynameforusercreate/' + name
+
+    if (!Array.isArray(JSIDList) || JSIDList.length === 0) {
+      return reject('技术列表不能为空')
+    }
+    let url = this.BaseURL + '/deleteksjs/' + ksid
+    return parent.axios.post(url, { JSIDList })
+  },
+  getbynameforusercreate (ksid, name) {
+    if (!ksid) {
+      reject('ksid不能为空')
+    }
+
+    let url = this.BaseURL + '/getbynameforusercreate/' + ksid
+    if (name !== null && name !== undefined) {
+      url += '/' + name
+    }
 
     return parent.axios.get(url)
   }

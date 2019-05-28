@@ -29,10 +29,10 @@ router.beforeEach((to, from, next) => {
     // 请根据自身业务需要修改
     // const token = util.cookies.get('token')
 
-    const token = util.cookies.get('uuid')
-    // const token = util.user.userId
+    // const token = util.cookies.get('uuid')
+    const token = util.user(router.app.$store)
 
-    if (token && token !== 'undefined' && token !== 'Ghost') {
+    if (!!token && token !== 'Ghost') {
       next()
     } else {
       // const userInfo = store.state.d2admin.user.info

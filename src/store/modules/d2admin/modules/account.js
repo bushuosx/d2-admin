@@ -15,18 +15,30 @@ export default {
       // console.log(Cookies.get())
 
       // 要检索的值
-      let token
-      let uuid
-      let name
-      let roles
-      let ksid
-      let profileid
+      let spauser = {}
+      let spatoken
 
       // debug登录
       if (debug === true) {
         // token = 'guesttoken'
         console.log(process.env)
-        debugger
+        // debugger
+        let uuid
+        let name
+        let ksid
+        let profileid
+        // 全权限
+        const fillallpermissions = true
+        let permissions = []
+        if (fillallpermissions) {
+          const ALLPermisions = util.user().Permissions
+          for (let v in ALLPermisions) {
+            permissions.push({ value: ALLPermisions[v], name: v })
+          }
+        } else {
+          permissions.push({ value: 9600, name: '科室角色管理权限' })
+        }
+
         if (process.env.VUE_APP_PC === 'JJPC') {
           uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69'.toLowerCase() // JJPC
           ksid = 'ef11af9f-8cdb-4d2c-3386-08d62c131173'.toLowerCase() // JJPC
@@ -34,56 +46,40 @@ export default {
           name = 'jjpc'
         } else {
           uuid = '019932A8-194D-4785-66F5-08D622B6098B'.toLowerCase() // YWBPC
-          ksid = 'bc139d6b-f23a-440d-ac80-08d622bc65bd' // ywbpc
+          ksid = 'bc139d6b-f23a-440d-ac80-08d622bc65bd'.toLowerCase()// ywbpc
           profileid = 'AA0946D2-0906-4A44-DD40-08D62CC2AF83'.toLowerCase() // ywbpc
           name = 'ywbpc'
         }
-        roles = [101, 102, 103, 201, 202, 203, 301, 302, 303, 401, 402, 403, 9001, 9002, 9600, 9700, 9800, 9900]
+        spauser = { id: uuid, ksList: [{ id: ksid, mc: '呼吸2' }], roleList: [{ permissions, ks: { id: ksid, mc: '呼吸2' } }], xm: name, profile: { id: profileid } }
       } else {
         // 查看Cookie，是否已完成登录
-        uuid = Cookies.get('spasub')
-        token = Cookies.get('spatoken')
-        let profile = JSON.parse(Cookies.get('spaprofile'))
-        name = profile.Name
-        roles = profile.Permissions
-        ksid = profile.KSID
-        profileid = profile.ProfileID
+        // uuid = Cookies.get('spasub')
+        spatoken = Cookies.get('spatoken')
+
+        spauser = JSON.parse(Cookies.get('spauser'))
+
         // name = Cookies.get('spaname')
         // roles = Cookies.get('sparoles')
         // ksid = Cookies.get('spaksid')
 
-        if (!uuid) {
+        if (!spauser || !spauser.id || !spatoken) {
           return
-        }
-        if (!token) {
-          return
-        }
-        if (!name) {
-          name = uuid
         }
       }
 
       // 移除不必要的token
-      Cookies.remove('spasub')
       Cookies.remove('spatoken')
-      Cookies.remove('spaprofile')
+      Cookies.remove('spauser')
       // Cookies.remove('spaname')
       // Cookies.remove('sparoles')
       // Cookies.remove('spaksid')
 
-      // 设置自留cookie
-      util.cookies.set('uuid', uuid)
+      // // 设置自留cookie
+      // util.cookies.set('uuid', spauser.id)
 
       // util.cookies.set('token', token) // 这里是jj删除的
       // 设置 vuex 用户信息
-      commit('d2admin/user/set', {
-        name,
-        uuid,
-        token,
-        roles,
-        ksid,
-        profileid
-      }, { root: true })
+      commit('d2admin/user/set', spauser, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
       commit('load')
       // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址
@@ -94,25 +90,16 @@ export default {
       vm.$router.replace(path ? { path } : { path: '/yljs' })
     },
     /**
-     * @description 注销用户并返回登录页面
-     * @param {Object} param context
-     * @param {Object} param vm {Object} vue 实例
-     * @param {Object} param confirm {Boolean} 是否需要确认
-     */
+    * @description 注销用户并返回登录页面
+    * @param {Object} param context
+    * @param {Object} param vm {Object} vue 实例
+    * @param {Object} param confirm {Boolean} 是否需要确认
+    */
     logout ({ commit }, { vm, confirm = false }) {
       /**
       * @description 注销
       */
       function logout () {
-        // 删除cookie
-        // util.cookies.remove('token') // 这里是jj删除的
-        util.cookies.remove('uuid')
-        // Cookies.remove('access-token')
-        // // 跳转路由
-        // vm.$router.push({
-        //   name: 'yljs'
-        // })
-
         window.location.href = '/account/logout/yljs'
       }
       // 判断是否需要确认
@@ -136,7 +123,6 @@ export default {
       }
     }
   },
-
   mutations: {
     /**
      * @description 用户登录后从持久化数据加载一系列的设置

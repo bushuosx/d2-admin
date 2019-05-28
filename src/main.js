@@ -71,7 +71,7 @@ new Vue({
   },
   computed: {
     __asideMenu () {
-      return getAsideMenu(this.$store.state.d2admin.user.info)
+      return getAsideMenu(this.$store)
     }
   },
   watch: {

@@ -87,17 +87,23 @@ export default {
     }
     return parent.axios.get(url)
   },
-  approveKjsh (idlist, reason) {
+  approveKjsh (ksid, idlist, reason) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
     if (!idlist || !Array.isArray(idlist)) {
       return reject('idlist必须是数组！')
     }
-    return parent.axios.put(BaseURL + '/approvekjsh', { idlist, reason })
+    return parent.axios.put(BaseURL + '/approvekjsh/' + ksid, { idlist, reason })
   },
-  rejectKjsh (idlist, reason) {
+  rejectKjsh (ksid, idlist, reason) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
     if (!idlist || !Array.isArray(idlist)) {
       return reject('idlist必须是数组！')
     }
-    return parent.axios.put(BaseURL + '/rejectkjsh', { idlist, reason })
+    return parent.axios.put(BaseURL + '/rejectkjsh/' + ksid, { idlist, reason })
   },
   approveYjsh (idlist, reason) {
     if (!idlist || !Array.isArray(idlist)) {
@@ -142,7 +148,7 @@ export default {
     if (!Array.isArray(ryjsidlist) || ryjsidlist.length === 0) {
       return reject('ryjsid不能为空')
     }
-    return parent.axios.patch(BaseURL + '/delete', ryjsidlist)
+    return parent.axios.put(BaseURL + '/delete', ryjsidlist)
   },
   getneedyjsh (ksid, pageIndex = 1) {
     let url
@@ -167,5 +173,21 @@ export default {
       return reject('jsid不能为空')
     }
     return parent.axios.get(BaseURL + '/getrybyksandjs/' + ksid + '/' + jsid)
+  },
+  searchjsreport ({ mc, bm, dj, limited, ksid, pageIndex, pageSize }) {
+    return parent.axios.post(BaseURL + '/searchjsreport', { mc, bm, dj, limited, ksid, pageIndex, pageSize })
+  },
+  getrylistbyjs (jsid) {
+    if (!jsid) {
+      return reject('jsid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getrylistbyjs/' + jsid)
+  },
+  search (option) {
+    if (!option) {
+      return reject('option不能为空')
+    }
+
+    return parent.axios.post(BaseURL + '/search', option)
   }
 }

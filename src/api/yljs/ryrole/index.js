@@ -19,8 +19,8 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getrolesofry/' + ryid)
   },
-  getmyallroles () {
-    return parent.axios.get(BaseURL + '/getallrolesofry/' + parent.getUserId())
+  getmyallowedroles () {
+    return parent.axios.get(BaseURL + '/getmyallowedroles')
   },
   getmyroles () {
     return parent.axios.get(BaseURL + '/getbyry/' + parent.getUserId())
@@ -31,14 +31,14 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getbyrole/' + roleid)
   },
-  updaterolesofry (ryid, roleidlist) {
-    if (ryid === null || ryid === undefined || ryid === '') {
+  updaterolesofry (ryid, ryrolelist) {
+    if (!ryid) {
       return reject('ryid不能为空')
     }
-    if (roleidlist === null || roleidlist === undefined || roleidlist.length === undefined) {
-      return reject('roleidlist不能为空')
+    if (!Array.isArray(ryrolelist)) {
+      return reject('ryrolelist应该是一个数组')
     }
-    return parent.axios.post(BaseURL + '/updaterolesofry', { ryid, roleidlist })
+    return parent.axios.post(BaseURL + '/updaterolesofry/' + ryid, ryrolelist)
   },
   supertome () {
     return parent.axios.post(BaseURL + '/supertome', { ryid: parent.getUserId() })

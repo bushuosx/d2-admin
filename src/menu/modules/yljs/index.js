@@ -1,3 +1,4 @@
+import Constants from './modules/Constants'
 import myprofile from './modules/myprofile'
 import myks from './modules/myks'
 import myjs from './modules/myjs'
@@ -5,46 +6,38 @@ import myyy from './modules/myyy'
 import manage from './modules/manage'
 import help from './modules/help'
 
-// const getLoginUrl = function () {
-//   if (process.env.NODE_ENV === 'production') {
-//     return 'http://172.16.128.43/account/login/yljs'
-//   } else {
-//     return '/account/login/yljs'
-//   }
-// }
+import util from '@/libs/util'
 
-const isLogon = function (userInfo) {
-  return !!userInfo && !!userInfo.uuid
-}
-
-const hasAnyRole = function (userInfo) {
-  return !!userInfo && Array.isArray(userInfo.roles) && userInfo.roles.length > 0
-}
-
-const getChildren = function (userInfo) {
+const getChildren = function (store) {
+  // debugger
+  let user = util.user(store)
   let rst = []
-  if (isLogon(userInfo)) {
-    rst.push(
-      myprofile(userInfo),
-      myks(userInfo),
-      myjs(userInfo),
-      myyy(userInfo)
-    )
-    if (hasAnyRole(userInfo)) {
-      rst.push(manage(userInfo))
-    }
+
+  if (!user) {
+    return rst
   }
-  rst.push(help())
+
+  // console.log(Constants.BaseUrl)
+  // debugger
+
+  if (user.isLogon()) {
+    Constants.pushIfItem(rst, myprofile(user))
+    Constants.pushIfItem(rst, myks(user))
+    Constants.pushIfItem(rst, myjs(user))
+    Constants.pushIfItem(rst, myyy(user))
+    Constants.pushIfItem(rst, manage(user))
+  }
+  Constants.pushIfItem(rst, help())
   return rst
 }
 
-const getMunu = function (userInfo) {
+const getMenu = function (store) {
   return {
     path: '/yljs',
     title: '医疗技术管理系统',
     icon: 'medkit',
-    children: getChildren(userInfo)
+    children: getChildren(store)
   }
 }
 
-export default getMunu
+export default getMenu

@@ -60,5 +60,11 @@ export default {
       return reject('ksid不能为空')
     }
     return parent.axios.get(BaseURL + '/getksryxl/' + ksid)
+  },
+  delete (id) {
+    if (!id) {
+      return reject('id不能为空')
+    }
+    return parent.axios.post(BaseURL + '/delete/' + id)
   }
 }

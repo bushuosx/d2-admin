@@ -1,8 +1,10 @@
 import log from './util.log.js'
 import cookies from './util.cookies.js'
+import user from './util.user.js'
 let util = {
   cookies,
-  log
+  log,
+  user
 }
 
 /**

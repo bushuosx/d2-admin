@@ -59,7 +59,9 @@
                    @detail-update="handleDetailUpdate"
                    @detail-edit="handleDetailEdit"
                    :isKSManager="isKSManager"
-                   @detail-cancel="detailVisible=false"></ryzc-detail>
+                   :isMe="isMe"
+                   @detail-cancel="detailVisible=false"
+                   @detail-delete="handleDeleted"></ryzc-detail>
     </el-dialog>
     <el-dialog :visible.sync="editVisible"
                title="修改人员职称证明">
@@ -73,13 +75,17 @@
 
 <script>
 import helper from '../helper/index.js'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 import ryzcapi from '@/api/yljs/ryzc'
 import zylbapi from '@/api/yljs/zylb'
 export default {
   props: {
     ryInfo: {
       type: Object
+    },
+    activedKsid: { // 响应操作的科室
+      type: String,
+      required: false
     }
   },
   data () {
@@ -101,18 +107,21 @@ export default {
     hasData () {
       return Array.isArray(this.ryzclist) && this.ryzclist.length > 0
     },
+    user () {
+      return userUtil(this.$store)
+    },
     isMe () {
-      return !!this.ryInfo && this.ryInfo.id === user.userId
+      return !!this.ryInfo && this.ryInfo.id === this.user.id
     },
     isKSManager () {
-      return !!this.ryInfo && !!this.ryInfo.ryks && !!this.ryInfo.ryks.ks && this.ryInfo.ryks.ks.id === user.ksid && user.hasRoles([user.Roles.科级审核])
+      return !!this.user && this.user.isKSManager(this.activedKsid)
     }
   },
-  created () {
-    this.fetchRyzcList(this.ryInfo)
-  },
   watch: {
-    ryInfo: function (n, o) { this.fetchRyzcList(n) }
+    ryInfo: {
+      handler: function (n) { this.fetchRyzcList(n) },
+      immediate: true
+    }
   },
   methods: {
     ...helper,
@@ -124,8 +133,8 @@ export default {
       this.zylblist = []
       this.ryzclist = []
       this.loading = false
-      if (ry && ry.ryProfile && ry.ryProfile.id) {
-        ryzcapi.getbyprofile(ry.ryProfile.id).then(res => {
+      if (ry && ry.profile && ry.profile.id) {
+        ryzcapi.getbyprofile(ry.profile.id).then(res => {
           if (res.code === 1) {
             this.ryzclist = res.data
           } else {
@@ -194,9 +203,9 @@ export default {
     handleEditSaveFromAdd (val) {
       this.addVisible = false
       this.loading = true
-      if (!val.ryProfileID) {
+      if (!val.profileID) {
         // add
-        // val.profileId = this.ryInfo.ryProfile.id
+        // val.profileId = this.ryInfo.profile.id
         ryzcapi.create(val).then(res => {
           this.loading = false
           if (res.code === 1) {
@@ -215,7 +224,7 @@ export default {
     handleEditSaveFromEdit (val) {
       this.editVisible = false
       this.loading = true
-      if (val.ryProfileID === this.ryInfo.ryProfile.id) {
+      if (val.profileID === this.ryInfo.profile.id) {
         // edit
         ryzcapi.update(val).then(res => {
           this.loading = false
@@ -249,6 +258,13 @@ export default {
     },
     rejected (row) {
       return !!row && !!row.kjshInfo && row.kjshInfo.operateCode === 3
+    },
+    handleDeleted (id) {
+      this.detailVisible = false
+      var i = this.ryzclist.findIndex(v => v.id === id)
+      if (i !== -1) {
+        this.ryzclist.splice(i, 1)
+      }
     }
   }
 }

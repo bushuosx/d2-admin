@@ -31,7 +31,7 @@
  * 此页面需科级审核权限
  */
 import ryjsapi from '@/api/yljs/ryjs'
-import user from '@/libs/util.user.js'
+import userUtil from '@/libs/util.user.js'
 export default {
   name: 'yljs-ryjs-yjsh',
   components: {
@@ -53,8 +53,11 @@ export default {
     anySelected () {
       return this.multipleSelection !== null && this.multipleSelection !== undefined && this.multipleSelection.length > 0
     },
+    user () {
+      return userUtil(this.$store)
+    },
     isYjshManager () {
-      return user.hasRoles([user.Roles.院级审核])
+      return this.user.isYJSHManager()
     }
   },
   created () {

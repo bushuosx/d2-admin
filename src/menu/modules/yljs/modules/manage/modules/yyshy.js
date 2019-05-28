@@ -1,8 +1,8 @@
 import Constants from '../../Constants'
 
 const getChildren = function (user) {
-  if (!user || !Constants.hasRoles(user, [Constants.Roles.院级审核])) {
-    return [{ title: Constants.InvalidMessage }]
+  if (!user || !user.hasAnyPermission([user.Permissions.院级审核])) {
+    return undefined
   } else {
     return [
       { path: `${Constants.BaseUrl}/ryjs/yjsh`, icon: 'clipboard', title: '医疗技术院级审核' },
@@ -14,9 +14,14 @@ const getChildren = function (user) {
 }
 
 export default function (user) {
-  return {
-    title: '院级审核员',
-    icon: 'table',
-    children: getChildren(user)
+  let children = getChildren(user)
+  if (!Array.isArray(children) || children.length === 0) {
+    return undefined
+  } else {
+    return {
+      title: '院级审核员',
+      icon: 'table',
+      children
+    }
   }
 }

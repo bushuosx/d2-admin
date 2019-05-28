@@ -9,7 +9,7 @@ export default {
   APIServer,
   axios,
   getUserId () {
-    return store.state.d2admin.user.info.uuid
+    return store.state.d2admin.user.info.id
   },
   debug,
   resolve (data) {

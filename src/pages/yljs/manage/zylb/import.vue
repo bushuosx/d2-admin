@@ -8,33 +8,42 @@
         <li>等待服务器返回操作结果</li>
       </ol>
     </div>
-    <import-excel ref="iexcel" @header-change="handleHeaderChange"></import-excel>
+    <import-excel ref="iexcel"
+                  @header-change="handleHeaderChange"></import-excel>
     <div>
       <div>在上述数据中选择匹配的列</div>
       <div>以下标记*的列，为必选项</div>
       <el-form label-width="100px">
         <el-form-item label="*专业编码">
           <el-select v-model="bmHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+                       :key="rowIndex"
+                       :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="*专业名称">
           <el-select v-model="mcHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+                       :key="rowIndex"
+                       :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="说明">
           <el-select v-model="smHeader">
-            <el-option v-for="(row,rowIndex) in headers" :key="rowIndex" :value="row"></el-option>
+            <el-option v-for="(row,rowIndex) in headers"
+                       :key="rowIndex"
+                       :value="row"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="handleSubmit">保存设置</el-button>
+          <el-button type="primary"
+                     @click="handleSubmit">保存设置</el-button>
         </el-form-item>
       </el-form>
       <div v-if="faildList">
         <div><strong>以下内容没有导入成功,共{{faildList.length}}个</strong></div>
-        <span v-for="(item,index) in faildList" :key="index">{{item.gh}}；</span>
+        <span v-for="(item,index) in faildList"
+              :key="index">{{item.mc}}；</span>
       </div>
     </div>
   </d2-container>
