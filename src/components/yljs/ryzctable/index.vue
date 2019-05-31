@@ -58,6 +58,7 @@
       <ryzc-detail :ryzc="focusRyzc"
                    @detail-update="handleDetailUpdate"
                    @detail-edit="handleDetailEdit"
+                   :activedKsid="activedKsid"
                    :isKSManager="isKSManager"
                    :isMe="isMe"
                    @detail-cancel="detailVisible=false"
@@ -242,7 +243,7 @@ export default {
     handleDetailUpdate (val) {
       this.focusRyzc = val
       this.updateRyzcList(val)
-      // this.detailVisible=false
+      this.detailVisible = false
     },
     handleDetailEdit () {
       this.detailVisible = false

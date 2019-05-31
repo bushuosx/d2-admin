@@ -82,6 +82,10 @@ export default {
     isMe: {
       type: Boolean,
       default: false
+    },
+    activedKsid: { // 响应操作的科室
+      type: String,
+      required: false
     }
   },
   data () {
@@ -118,7 +122,7 @@ export default {
       this.$emit('detail-cancel')
     },
     handleApprove () {
-      ryxlapi.approvekjsh(this.ryxl.id, this.reason).then(res => {
+      ryxlapi.approvekjsh(this.activedKsid, this.ryxl.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {
@@ -133,7 +137,7 @@ export default {
         return false
       }
 
-      ryxlapi.rejectkjsh(this.ryxl.id, this.reason).then(res => {
+      ryxlapi.rejectkjsh(this.activedKsid, this.ryxl.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {

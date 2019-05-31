@@ -1,85 +1,29 @@
 import util from '@/libs/util.js'
-import Cookies from 'js-cookie'
+import Oidc from '@/api/oidc'
 export default {
   namespaced: true,
   actions: {
-    logincallback ({
-      commit
-    }, {
-      vm,
-      debug = false,
-      route = {
-        name: 'yljs'
-      } }) {
+    logincallback ({ commit },
+      {
+        vm,
+        yljsuser,
+        route = {
+          name: 'yljs'
+        }
+      }) {
       // debugger
       // console.log(Cookies.get())
 
-      // 要检索的值
-      let spauser = {}
-      let spatoken
-
-      // debug登录
-      if (debug === true) {
-        // token = 'guesttoken'
-        console.log(process.env)
-        // debugger
-        let uuid
-        let name
-        let ksid
-        let profileid
-        // 全权限
-        const fillallpermissions = true
-        let permissions = []
-        if (fillallpermissions) {
-          const ALLPermisions = util.user().Permissions
-          for (let v in ALLPermisions) {
-            permissions.push({ value: ALLPermisions[v], name: v })
-          }
-        } else {
-          permissions.push({ value: 9600, name: '科室角色管理权限' })
-        }
-
-        if (process.env.VUE_APP_PC === 'JJPC') {
-          uuid = '5097B183-ADEF-4DB5-FD12-08D620975F69'.toLowerCase() // JJPC
-          ksid = 'ef11af9f-8cdb-4d2c-3386-08d62c131173'.toLowerCase() // JJPC
-          profileid = 'A3A2C82E-1BFA-4AE2-30FE-08D62C19313E'.toLowerCase()
-          name = 'jjpc'
-        } else {
-          uuid = '019932A8-194D-4785-66F5-08D622B6098B'.toLowerCase() // YWBPC
-          ksid = 'bc139d6b-f23a-440d-ac80-08d622bc65bd'.toLowerCase()// ywbpc
-          profileid = 'AA0946D2-0906-4A44-DD40-08D62CC2AF83'.toLowerCase() // ywbpc
-          name = 'ywbpc'
-        }
-        spauser = { id: uuid, ksList: [{ id: ksid, mc: '呼吸2' }], roleList: [{ permissions, ks: { id: ksid, mc: '呼吸2' } }], xm: name, profile: { id: profileid } }
+      // 记录uuid
+      if (!yljsuser || !yljsuser.id) {
+        vm.$message.error('登录出错:用户ID未知')
+        return
       } else {
-        // 查看Cookie，是否已完成登录
-        // uuid = Cookies.get('spasub')
-        spatoken = Cookies.get('spatoken')
-
-        spauser = JSON.parse(Cookies.get('spauser'))
-
-        // name = Cookies.get('spaname')
-        // roles = Cookies.get('sparoles')
-        // ksid = Cookies.get('spaksid')
-
-        if (!spauser || !spauser.id || !spatoken) {
-          return
-        }
+        util.cookies.set('userid', yljsuser.id)
       }
 
-      // 移除不必要的token
-      Cookies.remove('spatoken')
-      Cookies.remove('spauser')
-      // Cookies.remove('spaname')
-      // Cookies.remove('sparoles')
-      // Cookies.remove('spaksid')
-
-      // // 设置自留cookie
-      // util.cookies.set('uuid', spauser.id)
-
-      // util.cookies.set('token', token) // 这里是jj删除的
       // 设置 vuex 用户信息
-      commit('d2admin/user/set', spauser, { root: true })
+      commit('d2admin/user/set', yljsuser, { root: true })
       // 用户登录后从持久化数据加载一系列的设置
       commit('load')
       // 更新路由 尝试去获取 cookie 里保存的需要重定向的页面完整地址
@@ -100,7 +44,17 @@ export default {
       * @description 注销
       */
       function logout () {
-        window.location.href = '/account/logout/yljs'
+        // Cookies.remove('spatoken')
+        // Cookies.remove('spauser')
+        util.cookies.remove('userid')
+
+        // 设置 vuex 用户信息
+        commit('d2admin/user/set', {}, { root: true })
+        // 用户登录后从持久化数据加载一系列的设置
+        commit('load')
+
+        // window.location.href = '/yljs'
+        Oidc.logout()
       }
       // 判断是否需要确认
       if (confirm) {
@@ -121,6 +75,12 @@ export default {
       } else {
         logout()
       }
+    },
+    login ({ commit }, { vm, redirectUrl }) {
+      if (redirectUrl) {
+        util.cookies.set('redirect', redirectUrl)
+      }
+      return Oidc.login()
     }
   },
   mutations: {

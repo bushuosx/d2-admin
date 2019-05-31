@@ -52,6 +52,7 @@
       <ryzg-detail :ryzg="focusRyzg"
                    @detail-update="handleDetailUpdate"
                    @detail-edit="handleDetailEdit"
+                   :activedKsid="activedKsid"
                    :isKSManager="isKSManager"
                    :isMe="isMe"
                    @detail-cancel="detailVisible=false"
@@ -234,9 +235,9 @@ export default {
       }
     },
     handleDetailUpdate (val) {
+      this.detailVisible = false
       this.focusRyzg = val
       this.updateRyzgList(val)
-      // this.detailVisible=false
     },
     handleDetailEdit () {
       this.detailVisible = false

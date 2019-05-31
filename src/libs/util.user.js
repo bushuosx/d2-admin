@@ -71,7 +71,7 @@ export default function (store) {
       for (let i in permissions) {
         // 遍历用户的角色
         for (let j in myroles) {
-          let index = myroles[j].permissions.findIndex(x => x.value === permissions[i])
+          let index = myroles[j].role.permissions.findIndex(x => x.value === permissions[i])
           if (index !== -1) {
             if (isKSPermission(permissions[i]) && !dotcheckks) {
               // 检验科室
@@ -98,12 +98,12 @@ export default function (store) {
       if (!Array.isArray(permissions)) {
         return false
       }
-      const myroles = info ? info.roleList : undefined
-      if (!Array.isArray(myroles) || myroles.length === 0) {
-        return false
-      }
+      // const myroles = info ? info.roleList : undefined
+      // if (!Array.isArray(myroles) || myroles.length === 0) {
+      //   return false
+      // }
       for (let i in permissions) {
-        let index = myroles.permissions.findIndex(v => v.value === permissions[i])
+        let index = role.permissions.findIndex(v => v.value === permissions[i])
         if (index !== -1) {
           return true
         }

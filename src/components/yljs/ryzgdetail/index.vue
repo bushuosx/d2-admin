@@ -82,6 +82,10 @@ export default {
     isMe: {
       type: Boolean,
       default: false
+    },
+    activedKsid: { // 响应操作的科室
+      type: String,
+      required: false
     }
   },
   data () {
@@ -118,7 +122,7 @@ export default {
       this.$emit('detail-cancel')
     },
     handleApprove () {
-      ryzgapi.approvekjsh(this.ryzg.id, this.reason).then(res => {
+      ryzgapi.approvekjsh(this.activedKsid, this.ryzg.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {
@@ -133,7 +137,7 @@ export default {
         return false
       }
 
-      ryzgapi.rejectkjsh(this.ryzg.id, this.reason).then(res => {
+      ryzgapi.rejectkjsh(this.activedKsid, this.ryzg.id, this.reason).then(res => {
         if (res.code === 1) {
           this.emitUpdate(res.data)
         } else {

@@ -69,5 +69,14 @@ export default {
       return reject('ry不能为空')
     }
     return parent.axios.put(BaseURL + '/update', ry)
+  },
+  getorcreate ({ id, gh, create, token }) {
+    if (!id) {
+      return reject('id不能为空')
+    }
+    if (token) {
+      parent.axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+    }
+    return parent.axios.post(BaseURL + '/getorcreate', { id, gh, create })
   }
 }

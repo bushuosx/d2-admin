@@ -33,7 +33,7 @@ function errorLog (err) {
 
 // 创建一个 axios 实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_API,
+  // baseURL: process.env.VUE_APP_API,
   timeout: 8000 // 请求超时时间
 })
 
@@ -54,7 +54,7 @@ service.interceptors.request.use(
     // debugger
     // 在请求发送之前做一些处理
     if ((/^https:\/\/|http:\/\//.test(config.url))) {
-      let token = store.state.d2admin.user.info.token
+      let token = store.state.d2admin.user.info.access_token
       if (token && token !== 'undefined') {
         // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
         config.headers['Authorization'] = 'Bearer ' + token

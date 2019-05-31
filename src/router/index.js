@@ -8,6 +8,8 @@ import util from '@/libs/util.js'
 // 路由数据
 import routes from './routes'
 
+// import Oidc from '@/api/oidc'
+
 Vue.use(VueRouter)
 
 // 导出路由 在 main.js 里使用
@@ -29,10 +31,10 @@ router.beforeEach((to, from, next) => {
     // 请根据自身业务需要修改
     // const token = util.cookies.get('token')
 
-    // const token = util.cookies.get('uuid')
-    const token = util.user(router.app.$store)
+    const token = util.cookies.get('userid')
+    // const token = util.user(router.app.$store)
 
-    if (!!token && token !== 'Ghost') {
+    if (!!token && token !== 'Guest') {
       next()
     } else {
       // const userInfo = store.state.d2admin.user.info
@@ -42,12 +44,14 @@ router.beforeEach((to, from, next) => {
       //
       // 将当前预计打开的页面完整地址临时存储 登录后继续跳转
       // 这个 cookie(redirect) 会在登录后自动删除
-      util.cookies.set('redirect', to.fullPath)
+      // util.cookies.set('redirect', to.fullPath)
       // 没有登录的时候跳转到登录界面
       // next({
       //   name: 'login'
       // })
-      window.location.href = '/account/login/yljs'
+
+      // window.location.href = '/account/login/yljs'
+      store.dispatch('d2admin/account/login', { redirectUrl: to.fullPath }).then(() => { next() })
     }
   } else {
     // 不需要身份校验 直接通过

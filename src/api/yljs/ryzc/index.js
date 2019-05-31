@@ -31,17 +31,23 @@ export default {
     }
     return parent.axios.get(BaseURL + '/getbyprofile/' + profileid)
   },
-  approvekjsh (id, reason) {
+  approvekjsh (ksid, id, reason) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
     if (!id) {
       return reject('ryzcid不能为空')
     }
-    return parent.axios.put(BaseURL + '/approvekjsh', { id, reason })
+    return parent.axios.put(BaseURL + '/approvekjsh/' + ksid, { id, reason })
   },
-  rejectkjsh (id, reason) {
+  rejectkjsh (ksid, id, reason) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
     if (!id) {
       return reject('ryzcid不能为空')
     }
-    return parent.axios.put(BaseURL + '/rejectkjsh', { id, reason })
+    return parent.axios.put(BaseURL + '/rejectkjsh/' + ksid, { id, reason })
   },
   commit (ryzcid) {
     if (!ryzcid) {

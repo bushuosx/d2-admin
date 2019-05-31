@@ -1,15 +1,15 @@
 <template>
-  <d2-container>
+  <d2-container v-loading="loading">
     <strong slot="header">所有科室列表</strong>
     <el-card>
       <div style="width:30%">
         <el-input v-model="ksname"
-          placeholder="输入科室名称以过滤下列信息"
-          :clearable="true">
+                  placeholder="输入科室名称以过滤下列信息"
+                  :clearable="true">
         </el-input>
       </div>
       <kstable v-if="Array.isArray(filtedKsList)"
-        :kslist="filtedKsList"></kstable>
+               :kslist="filtedKsList"></kstable>
     </el-card>
   </d2-container>
 </template>
@@ -25,17 +25,22 @@ export default {
     return {
       kslist: null,
       ksname: null,
-      filtedKsList: null
+      filtedKsList: null,
+      loading: false
     }
   },
   created () {
+    this.loading = true
     ksapi.getallks().then(res => {
+      this.loading = false
       if (res.code === 1) {
         this.kslist = res.data
         this.filteKSList()
       } else {
         this.$message.error(res.msg)
       }
+    }).catch(() => {
+      this.loading = false
     })
   },
   watch: {

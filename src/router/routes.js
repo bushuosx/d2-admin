@@ -325,7 +325,7 @@ const frameIn = [
       { path: 'ryrole/index/:ryid', name: `${pre}ryrole-index`, component: () => import('@/pages/yljs/ryrole'), props: true, meta: { ...meta, title: '人员角色信息' } },
       { path: 'ryrole/supertome', name: `${pre}ryrole-supertome`, component: () => import('@/pages/yljs/ryrole/supertome'), meta: { ...meta, title: '给我力量吧' } },
       { path: 'ryrole/manage/', name: `${pre}ryrole-manage`, component: () => import('@/pages/yljs/ryrole/manage'), meta: { ...meta, title: '人员权限分配' } },
-      { path: 'ryprofile/index/:ryid', name: `${pre}ryprofile-index`, component: () => import('@/pages/yljs/ryprofile/index.vue'), props: true, meta: { ...meta, title: '人员详细资料' } },
+      { path: 'ryprofile/index/:ryid', name: `${pre}ryprofile-index`, component: () => import('@/pages/yljs/ryprofile/index.vue'), props: (route) => ({ ryid: route.params.ryid, ksid: route.params.ksid }), meta: { ...meta, title: '人员详细资料' } },
       { path: 'ryprofile/needkjsh/:ksid', name: `${pre}ryprofile-needkjsh`, component: () => import('@/pages/yljs/ryprofile/needkjsh.vue'), props: true, meta: { ...meta, title: '档案等待审核的人员' } },
 
       { path: 'manage/ry/setksmanager', name: `${pre}manage-ry-setksmanager`, component: () => import('@/pages/yljs/manage/ry/setksmanager.vue'), meta: { ...meta, title: '增加科室管理员' } },

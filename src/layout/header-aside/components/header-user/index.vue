@@ -2,12 +2,16 @@
   <el-dropdown class="d2-mr">
     <span class="btn-text">{{helloMessage}}</span>
     <el-dropdown-menu slot="dropdown">
-      <el-dropdown-item v-if="isLogon" @click.native="logOff">
-        <d2-icon name="power-off" class="d2-mr-5" />
+      <el-dropdown-item v-if="isLogon"
+                        @click.native="logOff">
+        <d2-icon name="power-off"
+                 class="d2-mr-5" />
         注销
       </el-dropdown-item>
-      <el-dropdown-item v-else @click.native="logIn">
-        <d2-icon name="key" class="d2-mr-5" />
+      <el-dropdown-item v-else
+                        @click.native="logIn">
+        <d2-icon name="key"
+                 class="d2-mr-5" />
         登录
       </el-dropdown-item>
     </el-dropdown-menu>
@@ -34,7 +38,7 @@ export default {
   },
   methods: {
     ...mapActions('d2admin/account', [
-      'logout'
+      'logout', 'login'
     ]),
     /**
      * @description 登出
@@ -46,7 +50,8 @@ export default {
       })
     },
     logIn () {
-      window.location.href = '/account/login/yljs'
+      // window.location.href = '/account/login/yljs'
+      this.login({ vm: this })
     }
   }
 }
