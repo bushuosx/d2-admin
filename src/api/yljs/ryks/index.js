@@ -132,5 +132,18 @@ export default {
     }
 
     return parent.axios.get(BaseURL + '/getneedkjshcount/' + ksid)
+  },
+  updatezw ({ ryid, ksid, zw }) {
+    if (!ryid) {
+      return reject('ryid不能为空')
+    }
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    if (!zw) {
+      return reject('zw不能为空')
+    }
+
+    return parent.axios.put(BaseURL + '/updatezw', { ryid, ksid, zw })
   }
 }

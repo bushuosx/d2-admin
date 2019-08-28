@@ -11,6 +11,8 @@
             <div>
               <span>人数：{{ksryCount}}</span>
             </div>
+            <div>科室主任：<span>{{kzrInfo}}</span></div>
+            <div v-if="fzrInfo">科室副主任：<span>{{fzrInfo}}</span></div>
           </el-col>
           <el-col :span="8">
             <el-button @click="handleShowJS"
@@ -53,7 +55,8 @@
       <el-row>
         <el-col :span="8">
           <el-card>人员
-            <div v-if="ryList">
+            <div v-if="ryList"
+                 style="max-height: 400px;overflow-y: auto;">
               <!-- <el-table :data="ryList">
                 <el-table-column prop="gh" label="工号"></el-table-column>
                 <el-table-column prop="xm" label="姓名"></el-table-column>
@@ -86,12 +89,12 @@
       </el-row>
       <el-row>
         <el-col :span="8">
-          <el-card>年龄</el-card>
-          <div>暂未设计</div>
+          <el-card>年龄<div>暂未设计</div>
+          </el-card>
         </el-col>
         <el-col :span="8">
-          <el-card>性别</el-card>
-          <div>暂未设计</div>
+          <el-card>性别<div>暂未设计</div>
+          </el-card>
         </el-col>
       </el-row>
     </el-card>
@@ -166,6 +169,30 @@ export default {
         return this.needkjshreport.profilecount
       } else {
         return 0
+      }
+    },
+    kzrInfo () {
+      if (!Array.isArray(this.ryList) || this.ryList.length === 0) {
+        return null
+      } else {
+        let kzr = this.ryList.filter(v => v.zw === 20).map(v => v.xm)
+        if (!Array.isArray(kzr) || kzr.length === 0) {
+          return null
+        } else {
+          return kzr.join(',')
+        }
+      }
+    },
+    fzrInfo () {
+      if (!Array.isArray(this.ryList) || this.ryList.length === 0) {
+        return ''
+      } else {
+        let kzr = this.ryList.filter(v => v.zw === 21).map(v => v.xm)
+        if (!Array.isArray(kzr) || kzr.length === 0) {
+          return null
+        } else {
+          return kzr.join(',')
+        }
       }
     }
   },

@@ -80,5 +80,11 @@ export default {
       return reject('js不能为空')
     }
     return parent.axios.post(BaseURL + '/update', js)
+  },
+  setjsdj (jslist) {
+    if (!Array.isArray(jslist)) {
+      return reject('jslist不能为空')
+    }
+    return parent.axios.post(BaseURL + '/setjsdj', jslist)
   }
 }

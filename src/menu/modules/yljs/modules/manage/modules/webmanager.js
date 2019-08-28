@@ -19,6 +19,9 @@ const getChildren = function (user) {
     if (user.hasAnyPermission([user.Permissions.技术修改])) {
       rst.push({ path: `${Constants.BaseUrl}/manage/js/updatejs`, title: '修改医疗技术' })
     }
+    if (user.hasAnyPermission([user.Permissions.技术修改])) {
+      rst.push({ path: `${Constants.BaseUrl}/manage/js/setjsdj`, title: '批量修改技术等级' })
+    }
     if (user.hasAnyPermission([user.Permissions.人员修改])) {
       rst.push({ path: `${Constants.BaseUrl}/manage/ry/updatery`, title: '修改人员信息' })
     }

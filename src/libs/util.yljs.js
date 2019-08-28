@@ -144,5 +144,25 @@ export default {
       default:
         return '未知'
     }
+  },
+  formartKSType (t) {
+    switch (t) {
+      case 1:
+        return '临床科室'
+      case 2:
+        return '医技科室'
+      case 4:
+        return '门诊部门'
+      case 8:
+        return '护理部门'
+      case 16:
+        return '临床附属科室'
+      case 32:
+        return '行政科室'
+      case 64:
+        return '后勤部门'
+      default:
+        return '-'
+    }
   }
 }
