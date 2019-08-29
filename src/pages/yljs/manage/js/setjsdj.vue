@@ -3,7 +3,7 @@
     <div slot="header">
       <strong>批量设置技术等级</strong>
     </div>
-    <div>数据量较大时，操作耗时将较长。默认等待 <strong>30</strong> 秒。</div>
+    <div>数据量较大时，操作耗时将较长。默认等待 <strong>{{timeout}}</strong> 秒。</div>
     <div>
       <ol>
         <li>从Excel导入预览数据，匹配要导入的数据</li>
@@ -61,7 +61,8 @@ export default {
       djHeader: null,
       // lbHeader: null,
       loading: false,
-      faildList: null
+      faildList: null,
+      timeout: 180
     }
   },
   methods: {
@@ -92,7 +93,7 @@ export default {
       let rst = sd.map(v => { return { BM: bmHeader ? v[bmHeader] : null, DJ: djHeader ? parseInt(v[djHeader]) : 0 } })
 
       this.loading = true
-      jsapi.setjsdj(rst).then(res => {
+      jsapi.setjsdj(rst, this.timeout * 1000).then(res => {
         this.loading = false
         if (res.code === 1) {
           this.$message.success('操作成功')

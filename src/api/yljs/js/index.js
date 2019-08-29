@@ -81,10 +81,10 @@ export default {
     }
     return parent.axios.post(BaseURL + '/update', js)
   },
-  setjsdj (jslist) {
+  setjsdj (jslist, timeout) {
     if (!Array.isArray(jslist)) {
       return reject('jslist不能为空')
     }
-    return parent.axios.post(BaseURL + '/setjsdj', jslist)
+    return parent.axios.post(BaseURL + '/setjsdj', jslist, { timeout })
   }
 }
