@@ -39,12 +39,12 @@
       <template v-if="showProfile">
         <el-table-column label="岗位">
           <template slot-scope="scope">
-            <span>{{formartGW(scope.row.profile.gw)}}</span>
+            <span>{{formartGW(scope.row.profile)}}</span>
           </template>
         </el-table-column>
         <el-table-column label="性别">
           <template slot-scope="scope">
-            <span>{{formartXB(scope.row.profile.xb)}}</span>
+            <span>{{formartXB(scope.row.profile)}}</span>
           </template>
         </el-table-column>
         <el-table-column label="账号是否禁用">
@@ -80,8 +80,12 @@ export default {
       selected: 'xm' }
   },
   methods: {
-    formartGW: util.formartGW,
-    formartXB: util.formartXB,
+    formartGW (profile) {
+      return profile ? util.formartGW(profile.gw) : ''
+    },
+    formartXB (profile) {
+      return profile ? util.formartXB(profile.xb) : ''
+    },
     getuser () {
       if (!this.name) {
         this.$message.warning('搜索内容不能为空')
