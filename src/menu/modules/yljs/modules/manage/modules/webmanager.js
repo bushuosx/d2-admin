@@ -33,6 +33,7 @@ const getChildren = function (user) {
     if (user.hasAnyPermission([user.Permissions.医院角色管理权限, user.Permissions.网站角色管理权限, user.Permissions.超级管理权限])) {
       rst.push({ path: `${Constants.BaseUrl}/manage/ry/getemployees`, title: '查询员工' })
       rst.push({ path: `${Constants.BaseUrl}/manage/ry/setksmanager`, title: '设置科室管理员' })
+      rst.push({ path: `${Constants.BaseUrl}/manage/ryjssync`, title: '人员技术HIS同步' })
     }
 
     // if (rst.length === 0) {

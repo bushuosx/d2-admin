@@ -70,7 +70,6 @@ export default {
         { label: '护理实习生', value: 20 },
         { label: '进修护士', value: 21 },
         { label: '未知', value: 0 }
-
       ],
       xbOptions: [
         { label: '男', value: 1 },

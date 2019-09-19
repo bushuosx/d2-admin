@@ -139,7 +139,6 @@ div.imageDiv {
 }
 div.imageDiv-header {
   font-size: 1.5em;
-  //font: bold;
 }
 div.cropper {
   width: 640px;

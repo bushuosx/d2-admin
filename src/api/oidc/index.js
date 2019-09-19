@@ -29,6 +29,10 @@ export default {
   getUser: function () {
     return mgr.getUser()
   },
+  async relogin () {
+    await mgr.removeUser()
+    return mgr.signinRedirect()
+  },
   login () {
     return mgr.signinRedirect()
   },

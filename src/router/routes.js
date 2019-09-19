@@ -342,6 +342,7 @@ const frameIn = [
       { path: 'manage/js/updatejs', name: `${pre}manage-js-updatejs`, component: () => import('@/pages/yljs/manage/js/updatejs.vue'), meta: { ...meta, title: '编辑医疗技术' } },
       { path: 'manage/js/setjsdj', name: `${pre}manage-js-setjsdj`, component: () => import('@/pages/yljs/manage/js/setjsdj.vue'), meta: { ...meta, title: '批量修改技术等级' } },
       { path: 'manage/ry/updatery', name: `${pre}manage-ry-updatery`, component: () => import('@/pages/yljs/manage/ry/updatery.vue'), meta: { ...meta, title: '编辑人员信息' } },
+      { path: 'manage/ryjssync', name: `${pre}manage-ryjssync-index`, component: () => import('@/pages/yljs/manage/ryjssync/index.vue'), meta: { ...meta, title: '人员技术HIS同步' } },
 
       { path: `report/ksryreport`, name: `${pre}report-ksryreport`, component: () => import('@/pages/yljs/report/ksryreport.vue'), meta: { ...meta, title: '医院人员信息完善情况报表' } },
       { path: `report/jsreport`, name: `${pre}report-jsreport`, component: () => import('@/pages/yljs/report/jsreport.vue'), meta: { ...meta, title: '全院技术统计' } },

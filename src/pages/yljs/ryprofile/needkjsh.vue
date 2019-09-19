@@ -2,7 +2,8 @@
   <d2-container>
     <div slot="header"><strong>需要审核档案的人员</strong></div>
     <template v-if="ryList">
-      <ry-table :ryList="ryList">
+      <ry-table :ryList="ryList"
+                :options="{hideDefaultActioner:true}">
         <el-button slot="actioner"
                    slot-scope="scope"
                    @click="handClick(scope.ry.id)"

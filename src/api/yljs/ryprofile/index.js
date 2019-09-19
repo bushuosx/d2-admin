@@ -22,16 +22,40 @@ export default {
     }
     return parent.axios.get(BaseURL + '/' + ryprofileid)
   },
-  updatePhoto (fileid) {
-    if (!fileid) {
-      return reject('fileid不能为空')
+  update (profile) {
+    if (!profile) {
+      return reject('profile不能为空')
     }
-    return parent.axios.patch(BaseURL + '/updatephoto/' + fileid)
+    return parent.axios.put(BaseURL + '/updateinfo', profile)
   },
-  delryphoto (ryid) {
-    if (!ryid) {
-      return reject('人员ID不能为空')
+  approve (ksid, id) {
+    if (!id) {
+      return reject('id不能为空')
     }
-    return parent.axios.patch(BaseURL + '/delryphoto/' + ryid)
+    return parent.axios.put(BaseURL + '/approvekjsh/' + ksid, { id })
+  },
+  reject (ksid, id) {
+    if (!id) {
+      return reject('id不能为空')
+    }
+    return parent.axios.put(BaseURL + '/rejectkjsh/' + ksid, { id })
+  },
+  reedit (id) {
+    if (!id) {
+      return reject('id不能为空')
+    }
+    return parent.axios.put(BaseURL + '/reedit/' + id)
   }
+  // updatePhoto (fileid) {
+  //   if (!fileid) {
+  //     return reject('fileid不能为空')
+  //   }
+  //   return parent.axios.patch(BaseURL + '/updatephoto/' + fileid)
+  // },
+  // delryphoto (ryid) {
+  //   if (!ryid) {
+  //     return reject('人员ID不能为空')
+  //   }
+  //   return parent.axios.patch(BaseURL + '/delryphoto/' + ryid)
+  // }
 }

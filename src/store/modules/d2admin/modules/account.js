@@ -81,6 +81,13 @@ export default {
         util.cookies.set('redirect', redirectUrl)
       }
       return Oidc.login()
+    },
+    relogin ({ commit }, { vm, redirectUrl }) {
+      if (redirectUrl) {
+        util.cookies.set('redirect', redirectUrl)
+      }
+      util.cookies.remove('userid')
+      return Oidc.relogin()
     }
   },
   mutations: {

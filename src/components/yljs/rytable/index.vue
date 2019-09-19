@@ -22,7 +22,7 @@
       <el-table-column label="岗位"
                        width="80px">
         <template slot-scope="scope">
-          <span v-if="scope.row.gw !== 0">{{formartGW(scope.row.gw)}}</span>
+          <span v-if="scope.row.profile">{{formartGW(scope.row.profile.gw)}}</span>
         </template>
       </el-table-column>
       <el-table-column v-if="options && options.hideActioner!==true"

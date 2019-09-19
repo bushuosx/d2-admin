@@ -1,20 +1,96 @@
+const ZCObject = {
+  '初级': 1,
+  '中级': 2,
+  '副高级': 3,
+  '正高级': 4
+}
+const XLObject = {
+  '小学学历': 1,
+  '初中学历': 2,
+  '高中学历': 3,
+  '专科学历': 4,
+  '本科学历': 5,
+  '硕士学历': 6,
+  '博士学历': 7
+}
+const XWObject = {
+  '学士学位': 5,
+  '硕士学位': 6,
+  '博士学位': 7
+}
+const SHStateObject = {
+  '待提交': 0,
+  '待审核': 1,
+  '已审核': 2,
+  '已驳回': 3
+}
+const GWObject = {
+  '医师': 1,
+  '护士': 2,
+  '技师': 3,
+  '行政人员': 4,
+  '后勤人员': 5,
+
+  '医学实习生': 10,
+  '进修医师': 11,
+  '规培医师': 12,
+
+  '护理实习生': 20,
+  '进修护士': 21
+}
+const KSObject = {
+  '临床科室': 1,
+  '医技科室': 2,
+  '门诊部门': 4,
+  '护理部门': 8,
+  '临床附属科室': 16,
+  '行政科室': 32,
+  '后勤部门': 64
+}
+const XBObject = {
+  '男': 1,
+  '女': 2
+}
+
+const undefinedTag = ' -undefined- '
+
+const GetKey = function (value, keyValueObject, showUndefinedTag) {
+  for (let k in keyValueObject) {
+    if (keyValueObject[k] === value) {
+      return k
+    }
+  }
+  if (showUndefinedTag === true) return undefinedTag
+}
+
+const GetKeyValueArray = function (keyValueObject, noUndefinedTag) {
+  let rst = []
+  for (let k in keyValueObject) {
+    rst.push({ key: k, value: keyValueObject[k] })
+  }
+  if (noUndefinedTag !== true) {
+    if (rst.findIndex(x => x.value === 0) === -1) {
+      rst.push({ key: undefinedTag, value: 0 })
+    }
+  }
+  return rst
+}
+
 export default {
   isString (obj) { // 判断对象是否是字符串
     return !!obj && Object.prototype.toString.call(obj) === '[object String]'
   },
+  GWObject,
+  XBObject,
+  ZCObject,
+  XLObject,
+  XWObject,
+  KSObject,
+  SHStateObject,
+  GetKeyValueArray,
+  GetKey,
   formartZcLevel (zclevel) {
-    switch (zclevel) {
-      case 1:
-        return '初级'
-      case 2:
-        return '中级'
-      case 3:
-        return '副高级'
-      case 4:
-        return '正高级'
-      default:
-        return '未知'
-    }
+    return GetKey(zclevel, ZCObject)
   },
   formartZC (zc) {
     return this.formartZcLevel(zc)
@@ -51,50 +127,13 @@ export default {
     return year > 0 ? `${year} 年 ${month} 月` : `${month} 月`
   },
   formartXL (xl) {
-    switch (xl) {
-      case 1:
-        return '小学学历'
-      case 2:
-        return '初中学历'
-      case 3:
-        return '高中学历'
-      case 4:
-        return '大专学历'
-      case 5:
-        return '本科学历'
-      case 6:
-        return '硕士学历'
-      case 7:
-        return '博士学历'
-      default:
-        return '未知'
-    }
+    return GetKey(xl, XLObject)
   },
   formartXW (xw) {
-    switch (xw) {
-      case 5:
-        return '学士学位'
-      case 6:
-        return '硕士学位'
-      case 7:
-        return '博士学位'
-      default:
-        return '未知'
-    }
+    return GetKey(xw, XWObject)
   },
-  formartSH (shStatus) {
-    switch (shStatus) {
-      case 0:
-        return '待提交'
-      case 1:
-        return '待审核'
-      case 2:
-        return '已审核'
-      case 3:
-        return '已驳回'
-      default:
-        return '未知'
-    }
+  formartSH (shState) {
+    return GetKey(shState, SHStateObject)
   },
   formartZYLB (zylb) {
     if (zylb && zylb.bm && zylb.mc) {
@@ -110,59 +149,12 @@ export default {
     return kslist.map(x => x.mc).join('，')
   },
   formartGW (gw) {
-    switch (gw) {
-      case 1:
-        return '医师'
-      case 2:
-        return '护士'
-      case 3:
-        return '技士'
-      case 4:
-        return '行政人员'
-      case 5:
-        return '后勤人员'
-      case 10:
-        return '医学实习生'
-      case 11:
-        return '进修医师'
-      case 12:
-        return '规培医师'
-      case 20:
-        return '护理实习生'
-      case 21:
-        return '进修护师'
-      default:
-        return '未知'
-    }
+    return GetKey(gw, GWObject)
   },
   formartXB (xb) {
-    switch (xb) {
-      case 1:
-        return '男'
-      case 2:
-        return '女'
-      default:
-        return '未知'
-    }
+    return GetKey(xb, XBObject)
   },
   formartKSType (t) {
-    switch (t) {
-      case 1:
-        return '临床科室'
-      case 2:
-        return '医技科室'
-      case 4:
-        return '门诊部门'
-      case 8:
-        return '护理部门'
-      case 16:
-        return '临床附属科室'
-      case 32:
-        return '行政科室'
-      case 64:
-        return '后勤部门'
-      default:
-        return '-'
-    }
+    return GetKey(t, KSObject)
   }
 }

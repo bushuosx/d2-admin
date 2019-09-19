@@ -19,25 +19,48 @@
               <el-col :span="4"><span>科室：</span></el-col>
               <el-col :span="8">{{formartKS(ryInfo.ksList)}}</el-col>
             </el-row>
-            <el-row v-if="ryInfo.profile">
-              <el-col :span="4"><span>岗位：</span></el-col>
-              <el-col :span="8">{{formartGW(ryInfo.profile.gw)}}</el-col>
-            </el-row>
+            <template v-if="canShowProfile">
+              <el-row v-if="ryInfo.profile">
+                <el-col :span="4"><span>岗位：</span></el-col>
+                <el-col :span="8">{{formartGW(ryInfo.profile.gw)}}</el-col>
+              </el-row>
+              <el-row v-if="isMe && canEdit">
+                <el-col :span="4">
+                  <el-button @click="editDialogVisible=true"
+                             type="primary"
+                             plain>编辑个人基本信息</el-button>
+                </el-col>
+              </el-row>
+              <el-row v-if="isKSManager && canKJSH">
+                <el-col :span="4">
+                  <el-button @click="detailDialogVisible=true"
+                             type="primary"
+                             plain>审核科室人员基本信息</el-button>
+                </el-col>
+              </el-row>
+              <el-row v-if="isMe || (isKJManager && !canKJSH)">
+                <el-col :span="4">
+                  <el-button @click="detailDialogVisible=true"
+                             plain>查看详细</el-button>
+                </el-col>
+              </el-row>
+            </template>
           </el-col>
           <el-col :span="8">
-            <div>
-              <template v-if="ryInfo.profile && ryInfo.profile.photo">
-                <div>照片</div>
-                <img :style="photoSize"
-                     :src="getUrl(ryInfo.profile.photo.id)"
-                     alt="正在加载照片">
-              </template>
-              <el-button v-else-if="isMe"
-                         @click="photoDialogVisible=true">上传个人照片</el-button>
-            </div>
+            <el-row>
+              <el-col :span="4">
+                <div>照片：</div>
+              </el-col>
+              <el-col :span="12">
+                <template v-if="canShowProfile && ryInfo.profile && ryInfo.profile.photo">
+                  <img :style="photoSize"
+                       :src="ryInfo.profile.photo.filedata ? ryInfo.profile.photo.filedata : getUrl(ryInfo.profile.photo.id)"
+                       alt="正在加载照片">
+                </template>
+              </el-col>
+            </el-row>
           </el-col>
         </el-row>
-
       </template>
     </el-card>
     <div v-if="activeTabName ==='0'"><i class="el-icon-caret-bottom"></i>点击以下标签可查看内容<i class="el-icon-caret-bottom"></i></div>
@@ -70,10 +93,20 @@
       </el-tab-pane>
     </el-tabs>
 
-    <el-dialog :visible.sync="photoDialogVisible"
-               title="上传个人照片"
-               width="80%">
-      <image-uploader @Upload-Success="handlePhotoUploadSuccess"></image-uploader>
+    <el-dialog :visible.sync="editDialogVisible">
+      <ryprofile-edit :ry="ryInfo"
+                      @edit-cancel="editDialogVisible=false"
+                      @edit-save="handleEditSave" />
+    </el-dialog>
+
+    <el-dialog :visible.sync="detailDialogVisible">
+      <ryprofile-detail :ry="ryInfo"
+                        :showKJSH="canKJSH && isKSManager"
+                        :canReedit="isApproved && isRYManager"
+                        @detail-cancel="detailDialogVisible=false"
+                        @detail-approve="handleDetailApprove"
+                        @detail-reject="handleDetailReject"
+                        @detail-reedit="handleDetailReedit" />
     </el-dialog>
   </d2-container>
 </template>
@@ -92,7 +125,8 @@ export default {
     'ryzg-table': () => import('@/components/yljs/ryzgtable'),
     'ryxl-table': () => import('@/components/yljs/ryxltable'),
     'ryxw-table': () => import('@/components/yljs/ryxwtable'),
-    'image-uploader': () => import('@/components/image-uploader')
+    'ryprofile-edit': () => import('@/components/yljs/ryprofile/edit'),
+    'ryprofile-detail': () => import('@/components/yljs/ryprofile/detail')
   },
   props: {
     ryid: {
@@ -110,8 +144,9 @@ export default {
       loading: true,
       activeTabName: null,
       initedTab: {},
-      photoDialogVisible: false,
-      photoData: null, // 临时照片数据
+      editDialogVisible: false,
+      detailDialogVisible: false,
+      // photoData: null, // 临时照片数据
       photoSize: {
         height: 413 / 2 + 'px',
         width: 295 / 2 + 'px'
@@ -132,6 +167,24 @@ export default {
     },
     isMe () {
       return this.ryid === this.user.id
+    },
+    isKSManager () {
+      return !!this.user && this.user.isKSManager(this.ksid)
+    },
+    isRYManager () {
+      return !!this.user && this.user.hasAnyPermission([this.user.Permissions.人员修改])
+    },
+    canEdit () {
+      return !!this.ryInfo && !!this.ryInfo.profile && !!this.ryInfo.profile.kjshInfo && (this.ryInfo.profile.kjshInfo.operateCode === 0 || this.ryInfo.profile.kjshInfo.operateCode === 3)
+    },
+    canKJSH () {
+      return !!this.ryInfo && !!this.ryInfo.profile && !!this.ryInfo.profile.kjshInfo && this.ryInfo.profile.kjshInfo.operateCode === 1
+    },
+    isApproved () {
+      return !!this.ryInfo && !!this.ryInfo.profile && !!this.ryInfo.profile.kjshInfo && this.ryInfo.profile.kjshInfo.operateCode === 2
+    },
+    canShowProfile () {
+      return !!this.isMe || !!this.isKSManager || !!this.isApproved
     }
   },
   methods: {
@@ -194,22 +247,74 @@ export default {
     handleTabClick () {
       this.initedTab[this.activeTabName] = true
     },
-    handlePhotoUploadSuccess (fileid, filedata) {
-      this.photoDialogVisible = false
-      // 更新ryprofile
-      this.loading = true
-      ryprofileapi.updatePhoto(fileid).then(res => {
-        this.loading = false
+    handleEditSave (val) {
+      this.editDialogVisible = false
+      // console.log(val)
+      // val.profile.kjshInfo.operateCode = 1
+      ryprofileapi.update(val.profile).then(res => {
         if (res.code === 1) {
-          this.photoData = filedata
-          this.ryInfo.profile.photo = res.data.photo
+          val.profile.kjshInfo = res.data.kjshInfo
+          this.$message.success('修改成功，等待管理员审核')
         } else {
           this.$message.error(res.msg)
         }
-      }).catch(() => {
-        this.loading = false
+      })
+    },
+    handleDetailApprove (val) {
+      this.detailDialogVisible = false
+      // console.log(val)
+      // val.profile.kjshInfo.operateCode = 2
+      ryprofileapi.approve(this.ksid, val.profile.id).then(res => {
+        if (res.code === 1) {
+          val.profile.kjshInfo = res.data.kjshInfo
+          this.$message.success('审核成功')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    handleDetailReject (val) {
+      this.detailDialogVisible = false
+      // console.log(val)
+      // val.profile.kjshInfo.operateCode = 3
+      ryprofileapi.reject(this.ksid, val.profile.id).then(res => {
+        if (res.code === 1) {
+          val.profile.kjshInfo = res.data.kjshInfo
+          this.$message.success('驳回成功')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    handleDetailReedit (val) {
+      this.detailDialogVisible = false
+      // console.log(val)
+      // val.profile.kjshInfo.operateCode = 3
+      ryprofileapi.reedit(val.profile.id).then(res => {
+        if (res.code === 1) {
+          val.profile.kjshInfo = res.data.kjshInfo
+          this.$message.success('强制驳回成功')
+        } else {
+          this.$message.error(res.msg)
+        }
       })
     }
+    // handlePhotoUploadSuccess (fileid, filedata) {
+    //   this.photoDialogVisible = false
+    //   // 更新ryprofile
+    //   this.loading = true
+    //   ryprofileapi.updatePhoto(fileid).then(res => {
+    //     this.loading = false
+    //     if (res.code === 1) {
+    //       this.photoData = filedata
+    //       this.ryInfo.profile.photo = res.data.photo
+    //     } else {
+    //       this.$message.error(res.msg)
+    //     }
+    //   }).catch(() => {
+    //     this.loading = false
+    //   })
+    // }
     // ,
     // downloadPhoto () {
     //   if (!this.ryInfo || !this.ryInfo.profile || !this.ryInfo.profile.photo) {
