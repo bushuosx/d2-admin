@@ -8,7 +8,7 @@ const XLObject = {
   '小学学历': 1,
   '初中学历': 2,
   '高中学历': 3,
-  '专科学历': 4,
+  '大专学历': 4,
   '本科学历': 5,
   '硕士学历': 6,
   '博士学历': 7
@@ -54,13 +54,13 @@ const XBObject = {
 
 const undefinedTag = ' -undefined- '
 
-const GetKey = function (value, keyValueObject, showUndefinedTag) {
+const GetKey = function (value, keyValueObject, noShowUndefinedTag) {
   for (let k in keyValueObject) {
     if (keyValueObject[k] === value) {
       return k
     }
   }
-  if (showUndefinedTag === true) return undefinedTag
+  if (noShowUndefinedTag !== true) return undefinedTag
 }
 
 const GetKeyValueArray = function (keyValueObject, noUndefinedTag) {

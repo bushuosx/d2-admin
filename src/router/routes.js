@@ -334,6 +334,7 @@ const frameIn = [
       { path: 'manage/ry/delryphoto', name: `${pre}manage-ry-delryphoto`, component: () => import('@/pages/yljs/manage/ry/delryphoto.vue'), meta: { ...meta, title: '删除人员照片' } },
       { path: 'manage/ryks/banryks', name: `${pre}manage-ryks-banryks`, component: () => import('@/pages/yljs/manage/ryks/banryks.vue'), meta: { ...meta, title: '禁用人员科室' } },
       { path: 'manage/ryks/updatezw', name: `${pre}manage-ryks-updatezw`, component: () => import('@/pages/yljs/manage/ryks/updatezw.vue'), meta: { ...meta, title: '设置人员职务' } },
+      { path: 'manage/ryks/setksryzw', name: `${pre}manage-ryks-setksryzw`, component: () => import('@/pages/yljs/manage/ryks/setksryzw.vue'), meta: { ...meta, title: '设置科室的人员职务' } },
       { path: 'manage/ks/importks', name: `${pre}manage-ks-importks`, component: () => import('@/pages/yljs/manage/ks/importks.vue'), meta: { ...meta, title: '导入科室列表' } },
       { path: `manage/zylb/import`, name: `${pre}manage-zylb-import`, component: () => import('@/pages/yljs/manage/zylb/import.vue'), meta: { ...meta, title: '导入专业类别' } },
       { path: `manage/js/importjs`, name: `${pre}manage-js-importjs`, component: () => import('@/pages/yljs/manage/js/importjs.vue'), meta: { ...meta, title: '导入技术' } },

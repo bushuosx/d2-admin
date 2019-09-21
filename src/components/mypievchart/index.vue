@@ -1,17 +1,16 @@
 <template>
-  <VePie :data="tmpdata" :events="chartEvents"></VePie>
+  <VePie :data="tmpdata"
+         :events="chartEvents"></VePie>
 </template>
 
 <script>
 import { VePie } from 'v-charts'
 
 function sortmethod (a, b) {
-  if (!a.index || !b.index || a.index === b.index) {
+  if (a.index === null || a.index === undefined || b.index === null || b.index === undefined) {
     return 0
-  } else if (a.index < b.index) {
-    return -1
-  } else if (a.index > b.index) {
-    return 1
+  } else {
+    return b.index - a.index
   }
 }
 export default {

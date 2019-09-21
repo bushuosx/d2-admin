@@ -1,16 +1,13 @@
 <template>
   <div>
-    <el-table :data="ksList">
+    <el-table v-if="ksList && ksList.length > 0"
+              :data="ksList">
       <el-table-column v-if="showDetail"
                        prop="bm"
                        label="编码">
       </el-table-column>
-      <el-table-column label="名称">
-        <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)"
-                     type="primary"
-                     plain>{{scope.row.mc}}</el-button>
-        </template>
+      <el-table-column label="名称"
+                       prop="mc">
       </el-table-column>
       <el-table-column v-if="showDetail"
                        label="专业">
@@ -25,9 +22,10 @@
         </template>
       </el-table-column>
       <el-table-column v-if="showActioner">
-        <slot slot-scope="scope"
-              name="actioner"
-              :ks="scope.row"></slot>
+        <template slot-scope="scope">
+          <slot name="actioner"
+                :ks="scope.row"></slot>
+        </template>
       </el-table-column>
     </el-table>
   </div>

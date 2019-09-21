@@ -140,10 +140,16 @@ export default {
     if (!ksid) {
       return reject('ksid不能为空')
     }
-    if (!zw) {
+    if (zw === null || zw === undefined) {
       return reject('zw不能为空')
     }
 
     return parent.axios.put(BaseURL + '/updatezw', { ryid, ksid, zw })
+  },
+  getrykslistbyks (ksid) {
+    if (!ksid) {
+      return reject('ksid不能为空')
+    }
+    return parent.axios.get(BaseURL + '/getrykslistbyks/' + ksid)
   }
 }
